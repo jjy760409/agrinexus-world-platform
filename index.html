@@ -3,24 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World - 스마트팜 통합 플랫폼</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>AgriNexus World - PWA</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2b6cb0" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
 </head>
 <body>
-  <h1>🌍 AgriNexus World</h1>
-  <p>스마트팜 AI 기반 글로벌 플랫폼에 오신 것을 환영합니다.</p>
-
-  <section>
-    <h2>📂 주요 기능</h2>
-    <ul>
-      <li><a href="/report/">📑 보고서 생성기</a></li>
-      <li><a href="/contract/">📝 계약서 생성기</a></li>
-      <li><a href="/admin/">🔐 관리자 대시보드</a></li>
-    </ul>
-  </section>
-
+  <h1>🌱 AgriNexus World</h1>
+  <p>이 사이트는 설치 가능한 PWA 앱입니다.</p>
+  <ul>
+    <li><a href="/report/">📑 보고서</a></li>
+    <li><a href="/contract/">📝 계약서</a></li>
+    <li><a href="/admin/">🔐 관리자</a></li>
+  </ul>
   <footer>
-    <p>© 2025 AgriNexus World | Powered by GPT, Firebase, Netlify</p>
+    <p>© 2025 AgriNexus World</p>
   </footer>
 </body>
 </html>
