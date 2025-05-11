@@ -2,23 +2,23 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World - 통합 SaaS</title>
+  <title>AgriNexus World - LIVE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="manifest.json">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
-  </script>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1a202c" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>🌍 AgriNexus World | 통합형 스마트팜 플랫폼</h1>
-  <p>250단계 자동화 기능이 하나의 플랫폼에 통합되었습니다.</p>
-  <ul>
-    <li><a href="/report/">📑 보고서 생성</a></li>
-    <li><a href="/contract/">📝 계약서 자동화</a></li>
-    <li><a href="/admin/">📊 관리자 대시보드</a></li>
-    <li><a href="/login/">🔐 관리자 로그인</a></li>
-  </ul>
+  <div class="container">
+    <h1 id="greeting">환영합니다, AgriNexus World</h1>
+    <p id="suggestion">환경에 따라 변화하는 스마트 플랫폼입니다.</p>
+    <nav>
+      <a href="/report/">📑 보고서</a>
+      <a href="/contract/">📄 계약서</a>
+      <a href="/login/">🔐 로그인</a>
+      <a href="/admin/">📊 관리자</a>
+    </nav>
+  </div>
 </body>
 </html>

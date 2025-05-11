@@ -1,14 +1,12 @@
-self.addEventListener('install', function(e) {
+self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open('agrinexus').then(function(cache) {
-      return cache.addAll(['/', '/index.html']);
+    caches.open('agrinexus-live').then(cache => {
+      return cache.addAll(['/index.html', '/style.css', '/script.js']);
     })
   );
 });
-self.addEventListener('fetch', function(e) {
+self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
-    })
+    caches.match(e.request).then(response => response || fetch(e.request))
   );
 });
