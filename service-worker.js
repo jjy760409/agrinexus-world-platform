@@ -1,7 +1,7 @@
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('agrinexus-live').then(cache => {
-      return cache.addAll(['/index.html', '/style.css', '/script.js']);
+      return cache.addAll(['/', '/index.html', '/style.css', '/script.js']);
     })
   );
 });
