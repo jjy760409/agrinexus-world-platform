@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>AgriNexus 관리자 로그인</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus Email Sender</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script>
-    async function sendEmail() {
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
       const email = document.getElementById('email').value;
-      if (!email || !email.includes('@')) {
-        alert('유효한 이메일 주소를 입력하세요.');
-        return;
-      }
-      alert(`📧 ${email} 주소로 보고서 전송 요청됨 (샘플용 UI)`); // 실제는 API 호출 필요
+      const pw = document.getElementById('password').value;
+      firebase.auth().signInWithEmailAndPassword(email, pw)
+        .then(() => alert('✅ 로그인 성공'))
+        .catch(err => alert('❌ 로그인 실패: ' + err.message));
     }
   </script>
 </head>
 <body>
-  <h1>📬 이메일 전송 시스템</h1>
-  <p>이메일 주소를 입력하면 보고서/계약서를 전송합니다.</p>
-  <input type="email" id="email" placeholder="you@example.com" />
-  <button onclick="sendEmail()">메일 전송</button>
+  <h1>🔐 관리자 로그인</h1>
+  <input type="email" id="email" placeholder="이메일" /><br><br>
+  <input type="password" id="password" placeholder="비밀번호" /><br><br>
+  <button onclick="login()">로그인</button>
 </body>
 </html>
