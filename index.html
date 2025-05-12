@@ -2,62 +2,35 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>👤 사용자별 대시보드</title>
+  <title>💰 수익 정산 보고서</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB....",
-      authDomain: "agrinexus-world.firebaseapp.com",
-      projectId: "agrinexus-world",
-      storageBucket: "agrinexus-world.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcde123456"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    function filterByUser(userId) {
-      const output = document.getElementById("logs");
-      const logRef = ref(db, "agrinexus_logs/");
-      onValue(logRef, (snapshot) => {
-        output.innerHTML = "";
-        const data = snapshot.val();
-        for (let key in data) {
-          const val = data[key].value || "";
-          if (val.includes(userId)) {
-            const row = `<tr><td>${data[key].timestamp}</td><td>${val}</td></tr>`;
-            output.innerHTML += row;
-          }
-        }
-      });
-    }
-
-    window.onload = () => {
-      document.getElementById("search").addEventListener("click", () => {
-        const userId = document.getElementById("user").value;
-        filterByUser(userId);
-      });
-    };
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; }
-    input { padding: 0.5rem; width: 200px; }
-    button { padding: 0.5rem; background: #2563eb; color: white; border: none; }
-    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
-    th, td { padding: 0.5rem; border: 1px solid #ccc; }
+    body { font-family: sans-serif; text-align: center; background: #f9f9fb; padding: 2rem; }
+    input, textarea { padding: 0.6rem; width: 300px; margin: 0.5rem; }
+    button { padding: 0.6rem 1rem; background: #16a34a; color: white; border: none; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>👤 사용자별 제출 내역 조회</h1>
-  <input id="user" placeholder="사용자 ID 또는 이름 입력" />
-  <button id="search">조회</button>
-  <table>
-    <thead><tr><th>시간</th><th>내용</th></tr></thead>
-    <tbody id="logs"><tr><td colspan="2">조회 대기 중...</td></tr></tbody>
-  </table>
+  <h1>💰 수익 정산 보고서 생성기</h1>
+  <input id="sales" placeholder="총 매출 입력 (₩)" /><br/>
+  <input id="costs" placeholder="총 비용 입력 (₩)" /><br/>
+  <textarea id="notes" rows="4" placeholder="비고 또는 메모 입력"></textarea><br/>
+  <button onclick="generateReport()">📄 PDF 보고서 생성</button>
+
+  <script>
+    function generateReport() {
+      const sales = parseInt(document.getElementById("sales").value || 0);
+      const costs = parseInt(document.getElementById("costs").value || 0);
+      const profit = sales - costs;
+      const notes = document.getElementById("notes").value;
+      const report = `💼 AgriNexus 수익 정산 보고서\n\n총 매출: ₩${sales.toLocaleString()}\n총 비용: ₩${costs.toLocaleString()}\n순이익: ₩${profit.toLocaleString()}\n\n비고:\n${notes}`;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text(report, 10, 20);
+      doc.save("revenue_report.pdf");
+    }
+  </script>
 </body>
 </html>
