@@ -1,36 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📑 계약서 / 세금계산서 자동 생성</title>
+  <meta charset="UTF-8" />
+  <title>🌐 AgriNexus 통합 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: sans-serif; background: #fef3c7; text-align: center; padding: 2rem; }
-    input, textarea { width: 300px; padding: 0.6rem; margin: 0.5rem 0; }
-    button { padding: 0.6rem 1.2rem; background: #f59e0b; color: white; border: none; cursor: pointer; }
+    body { font-family: sans-serif; background: #f1f5f9; text-align: center; padding: 2rem; }
+    h1 { color: #1e3a8a; margin-bottom: 1rem; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 900px; margin: auto; }
+    a {
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.4rem;
+      border-radius: 8px;
+      display: inline-block;
+      min-width: 250px;
+    }
+    a:hover { background: #1e40af; }
   </style>
 </head>
 <body>
-  <h1>📑 계약서 / 세금계산서 자동 생성</h1>
-  <input id="client" placeholder="고객명 / 회사명" /><br/>
-  <input id="item" placeholder="계약 항목 / 품목명" /><br/>
-  <input id="amount" placeholder="계약 금액 (₩)" /><br/>
-  <textarea id="memo" rows="4" placeholder="비고 또는 특이사항"></textarea><br/>
-  <button onclick="generate()">PDF 생성</button>
-
-  <script>
-    function generate() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const name = document.getElementById("client").value;
-      const item = document.getElementById("item").value;
-      const amount = document.getElementById("amount").value;
-      const memo = document.getElementById("memo").value;
-      const text = `📄 계약서 / 세금계산서\n\n고객명: ${name}\n계약 항목: ${item}\n계약 금액: ₩${amount}\n\n비고:\n${memo}`;
-      doc.text(text, 10, 20);
-      doc.save("agrinexus_contract.pdf");
-    }
-  </script>
+  <h1>🌐 AgriNexus 운영자용 대시보드</h1>
+  <nav>
+    <a href="/routes">📂 전체 기능 메뉴</a>
+    <a href="/login">🔐 관리자 로그인</a>
+    <a href="/admin-panel">📊 관리자 대시보드</a>
+    <a href="/admin-report">📋 관리자 리포트 탭</a>
+    <a href="/data-visualization">📈 통계 차트</a>
+    <a href="/user-dashboard">👤 사용자 이력 조회</a>
+    <a href="/upload">📤 사용자 파일 업로드</a>
+    <a href="/contract-pdf">📑 계약서/세금계산서 생성</a>
+    <a href="/revenue-report">💰 수익 계산기</a>
+    <a href="/forecast-report">📈 수익 예측 리포트</a>
+    <a href="/csv-download">📥 CSV 다운로드</a>
+    <a href="/pdf-report">📄 일반 PDF 출력</a>
+    <a href="/alert">📬 관리자 알림</a>
+    <a href="/lang-detect">🌐 언어 감지</a>
+    <a href="/client-view">🌿 사용자 대시보드</a>
+    <a href="/pwa/manifest.json">📱 PWA 설치 파일</a>
+  </nav>
 </body>
 </html>
