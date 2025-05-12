@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📈 수익 예측 + 자동 리포트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #fefce8; padding: 2rem; }
+    input { padding: 0.6rem; width: 250px; margin: 0.3rem; }
+    button { padding: 0.6rem 1.2rem; background: #f59e0b; color: white; border: none; cursor: pointer; }
+    textarea { width: 90%; margin-top: 1rem; height: 120px; }
+  </style>
+</head>
+<body>
+  <h1>📈 수익 예측 + 자동 리포트</h1>
+  <input id="today" placeholder="오늘 매출 (₩)" /><br/>
+  <input id="avg" placeholder="일 평균 매출 (₩)" /><br/>
+  <input id="days" placeholder="예상 운영 일수" /><br/>
+  <button onclick="generate()">리포트 생성</button>
+  <textarea id="output" readonly></textarea><br/>
+  <button onclick="download()">📄 PDF 다운로드</button>
+
+<script>
+function generate() {
+  const t = parseInt(document.getElementById("today").value || 0);
+  const a = parseInt(document.getElementById("avg").value || 0);
+  const d = parseInt(document.getElementById("days").value || 0);
+  const forecast = a * d;
+  const text = `📊 수익 예측 보고서\n\n▶ 오늘 매출: ₩${t.toLocaleString()}\n▶ 평균 매출: ₩${a.toLocaleString()}\n▶ 예상 기간: ${d}일\n▶ 예상 총 수익: ₩${forecast.toLocaleString()}`;
+  document.getElementById("output").value = text;
+}
+
+function download() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const report = document.getElementById("output").value;
+  doc.text(report, 10, 20);
+  doc.save("forecast_report.pdf");
+}
+</script>
+</body>
+</html>
