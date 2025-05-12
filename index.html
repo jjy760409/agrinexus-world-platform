@@ -2,35 +2,41 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>💰 수익 정산 보고서</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <title>AgriNexus World 통합 운영 시스템</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: sans-serif; text-align: center; background: #f9f9fb; padding: 2rem; }
-    input, textarea { padding: 0.6rem; width: 300px; margin: 0.5rem; }
-    button { padding: 0.6rem 1rem; background: #16a34a; color: white; border: none; cursor: pointer; }
+    body { font-family: sans-serif; background: #f0f4f8; text-align: center; padding: 2rem; }
+    h1 { color: #1e3a8a; }
+    nav { margin: 2rem auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    a {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      min-width: 200px;
+    }
+    a:hover { background: #1e40af; }
   </style>
 </head>
 <body>
-  <h1>💰 수익 정산 보고서 생성기</h1>
-  <input id="sales" placeholder="총 매출 입력 (₩)" /><br/>
-  <input id="costs" placeholder="총 비용 입력 (₩)" /><br/>
-  <textarea id="notes" rows="4" placeholder="비고 또는 메모 입력"></textarea><br/>
-  <button onclick="generateReport()">📄 PDF 보고서 생성</button>
-
-  <script>
-    function generateReport() {
-      const sales = parseInt(document.getElementById("sales").value || 0);
-      const costs = parseInt(document.getElementById("costs").value || 0);
-      const profit = sales - costs;
-      const notes = document.getElementById("notes").value;
-      const report = `💼 AgriNexus 수익 정산 보고서\n\n총 매출: ₩${sales.toLocaleString()}\n총 비용: ₩${costs.toLocaleString()}\n순이익: ₩${profit.toLocaleString()}\n\n비고:\n${notes}`;
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text(report, 10, 20);
-      doc.save("revenue_report.pdf");
-    }
-  </script>
+  <h1>🌍 AgriNexus World 운영 메뉴</h1>
+  <nav>
+    <a href="/routes">📂 전체 기능 메뉴</a>
+    <a href="/login">🔐 관리자 로그인</a>
+    <a href="/admin-panel">📊 관리자 대시보드</a>
+    <a href="/user-dashboard">👤 사용자 이력 조회</a>
+    <a href="/data-visualization">📈 통계 시각화</a>
+    <a href="/csv-download">📥 CSV 다운로드</a>
+    <a href="/pdf-report">📄 PDF 변환</a>
+    <a href="/revenue-report">💰 수익 계산기</a>
+    <a href="/forecast-report">📈 수익 예측 리포트</a>
+    <a href="/alert">📬 관리자 알림</a>
+    <a href="/chart">📊 차트 대시보드</a>
+    <a href="/pwa/manifest.json">📱 PWA 설치 설정</a>
+    <a href="/lang-detect">🌐 언어 자동감지</a>
+  </nav>
 </body>
 </html>
