@@ -2,21 +2,18 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📊 관리자 제출 로그</title>
+  <title>📊 관리자 제출 내역 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyB....",
-      authDomain: "agrinexus-world.firebaseapp.com",
-      projectId: "agrinexus-world",
-      storageBucket: "agrinexus-world.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcde123456"
+      apiKey: "YOUR_FIREBASE_API_KEY",
+      authDomain: "YOUR_FIREBASE_DOMAIN",
+      databaseURL: "YOUR_FIREBASE_DB",
+      projectId: "YOUR_PROJECT_ID"
     };
-
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
@@ -41,7 +38,7 @@
   </style>
 </head>
 <body>
-  <h1>📊 관리자 제출 로그</h1>
+  <h1>📊 관리자 제출 내역 대시보드</h1>
   <table>
     <thead><tr><th>제출 시간</th><th>제출 내용</th></tr></thead>
     <tbody id="logs">
