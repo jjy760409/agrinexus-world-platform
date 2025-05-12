@@ -1,20 +1,47 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>contract</title><link rel="stylesheet" href="../style.css" /></head><body><h1>📄 계약서 자동화</h1>
-<p>계약 내용을 입력하세요:</p>
-<input id="contract" placeholder="예: 온실 설치 계약">
-<br><button onclick="make()">생성</button>
-<div id="output"></div>
-<a id="download" style="display:none" download="contract.txt">📥 계약서 다운로드</a>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📄 계약서 자동 생성</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>📄 계약서 자동 생성</h1>
+  <input id="val" placeholder="예: 스마트팜 설치 계약">
+  <br>
+  <button onclick="generate()">📝 내용 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
-function make() {
-  const v = document.getElementById('contract').value;
-  if (v.trim() === '') {
-    document.getElementById('output').innerText = "❗ 내용을 입력하세요.";
-    document.getElementById('download').style.display = 'none';
-  } else {
-    document.getElementById('output').innerText = `📄 "${v}" 계약서가 생성되었습니다.`;
-    const blob = new Blob([v + "\n계약 자동 생성 완료"], { type: 'text/plain' });
-    document.getElementById('download').href = URL.createObjectURL(blob);
-    document.getElementById('download').style.display = 'inline-block';
-  }
+let content = "";
+function generate() {
+  const v = document.getElementById('val').value;
+  content = `계약 항목: ${v}\n- 조건: 스마트팜 설치\n- 기간: 1년\n- 비용: 협의`; document.getElementById("output").innerText = content;
 }
-</script></body></html>
+
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("contract.pdf");
+}
+
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
+}
+</script>
+</body>
+</html>

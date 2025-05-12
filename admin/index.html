@@ -1,6 +1,47 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>admin</title><link rel="stylesheet" href="../style.css" /></head><body><h1>📊 관리자 대시보드</h1>
-<ul style="text-align:left; display:inline-block;">
-  <li>오늘 수익: ₩1,000,000</li>
-  <li>방문자 수: 317명</li>
-  <li>AI 추천 작물: 스마트 리프, 온실 토마토</li>
-</ul></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 관리자 요약 리포트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>📊 관리자 요약 리포트</h1>
+  <input id="val" placeholder="예: 보고서 요청 키워드">
+  <br>
+  <button onclick="generate()">📝 내용 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
+<script>
+let content = "";
+function generate() {
+  const v = document.getElementById('val').value;
+  content = `📊 오늘 수익: 2,000,000\n📈 방문자 수: 489\n📌 최근 요청: ${v}`; document.getElementById("output").innerText = content;
+}
+
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("admin-report.pdf");
+}
+
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
+}
+</script>
+</body>
+</html>

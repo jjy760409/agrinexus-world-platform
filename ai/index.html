@@ -1,16 +1,47 @@
-<!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8"><title>🤖 AI 추천 시스템</title>
-<link rel="stylesheet" href="../style.css" /></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>🤖 AI 추천 시스템</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
 <body>
-<h1>🤖 AI 추천 시스템</h1>
-<input id="val" placeholder="입력하세요">
-<br><button onclick="generate()">실행</button>
-<div id="output"></div>
-<a id="download" style="display:none" download="ai.txt">📥 저장</a>
+  <h1>🤖 AI 추천 시스템</h1>
+  <input id="val" placeholder="예: 제주 온실">
+  <br>
+  <button onclick="generate()">📝 내용 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
+let content = "";
 function generate() {
   const v = document.getElementById('val').value;
-  const crops = ["온실 토마토", "스마트 리프", "유기농 상추"];
-  document.getElementById('output').innerText = `✅ "${v}" 환경에는 "${crops[Math.floor(Math.random()*crops.length)]}" 추천됩니다.`;
-}</script>
-</body></html>
+  const crops = ["스마트 토마토", "AI 리프", "하이브리드 상추"]; content = `추천 작물: ${crops[Math.floor(Math.random()*crops.length)]}`; document.getElementById("output").innerText = content;
+}
+
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("ai-recommendation.pdf");
+}
+
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
+}
+</script>
+</body>
+</html>
