@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🔐 사용자 권한 관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f0fdf4; }
+    input, select { padding: 0.6rem; margin: 0.5rem; width: 250px; }
+    button { padding: 0.6rem 1rem; background: #0ea5e9; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <h1>🔐 사용자별 권한 설정</h1>
+  <input id="username" placeholder="사용자 ID 또는 이메일" /><br/>
+  <select id="role">
+    <option value="user">일반 사용자</option>
+    <option value="manager">매니저</option>
+    <option value="admin">관리자</option>
+  </select><br/>
+  <button onclick="assignRole()">역할 지정</button>
+  <p id="status"></p>
+
+<script>
+function assignRole() {
+  const user = document.getElementById("username").value;
+  const role = document.getElementById("role").value;
+  if (user && role) {
+    document.getElementById("status").innerText = `✅ ${user} → ${role} 권한이 설정되었습니다 (시뮬레이션)`;
+  } else {
+    document.getElementById("status").innerText = "❗ 사용자 ID와 권한을 모두 입력하세요.";
+  }
+}
+</script>
+</body>
+</html>

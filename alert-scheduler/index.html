@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>⏰ 자동 알림 스케줄러</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f0fdf9; }
+    input, select { padding: 0.6rem; margin: 0.5rem; width: 250px; }
+    button { padding: 0.6rem 1rem; background: #14b8a6; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <h1>⏰ 자동 알림 스케줄 설정</h1>
+  <input type="email" placeholder="알림 수신자 이메일" /><br/>
+  <select>
+    <option>매일 오전 9시</option>
+    <option>매주 월요일</option>
+    <option>매월 1일</option>
+  </select><br/>
+  <button onclick="simulate()">스케줄 등록</button>
+  <p id="result"></p>
+
+<script>
+function simulate() {
+  document.getElementById("result").innerText = "✅ 알림 스케줄이 등록되었습니다 (시뮬레이션)";
+}
+</script>
+</body>
+</html>
