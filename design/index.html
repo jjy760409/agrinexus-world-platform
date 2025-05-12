@@ -1,21 +1,48 @@
-<!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8">
-<title>🏗️ 설계 자동화</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" href="../style.css" /></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏗️ 스마트팜 설계 견적기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
 <body>
-<h1>🏗️ 스마트팜 설계 자동화</h1>
-<input id="design" placeholder="예: 유리온실 200㎡">
-<br><button onclick="generate()">견적 생성</button>
-<div id="output"></div>
+  <h1>🏗️ 스마트팜 설계 견적기</h1>
+  <input id="val" placeholder="예: 유리 온실 100평">
+  <br>
+  <button onclick="generate()">📝 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
+let content = "";
 function generate() {
-  const v = document.getElementById("design").value;
-  const signup = localStorage.getItem("signup_name") || "고객";
-  const result = `${signup} 님의 ${v} 설계 견적:\n- 자동온도\n- 자동환기\n- 견적가 약 4천만원`;
-  localStorage.setItem("design_result", result);
-  document.getElementById("output").innerText = result;
-  setTimeout(() => window.location.href = "/contract/index.html", 3000);
+  const v = document.getElementById('val').value;
+  content = `${v} 설계 기준:\n- 프레임: 알루미늄\n- 자동 제어 포함\n- 예상 비용: 5천만원`;
+document.getElementById("output").innerText = content;
+}
+
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("design.pdf");
+}
+
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
 }
 </script>
-</body></html>
+</body>
+</html>

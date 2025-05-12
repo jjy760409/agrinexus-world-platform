@@ -2,16 +2,16 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🤖 AI 추천 시스템</title>
+  <title>🤖 작물 추천 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <h1>🤖 AI 추천 시스템</h1>
-  <input id="val" placeholder="예: 제주 온실">
+  <h1>🤖 작물 추천 시스템</h1>
+  <input id="val" placeholder="예: 온실 위치">
   <br>
-  <button onclick="generate()">📝 내용 생성</button>
+  <button onclick="generate()">📝 생성</button>
   <div id="output"></div>
   <div class="actions">
     <button onclick="download()">📥 PDF 저장</button>
@@ -22,7 +22,7 @@
 let content = "";
 function generate() {
   const v = document.getElementById('val').value;
-  const crops = ["스마트 토마토", "AI 리프", "하이브리드 상추"]; content = `추천 작물: ${crops[Math.floor(Math.random()*crops.length)]}`; document.getElementById("output").innerText = content;
+  const crops = ["AI 토마토", "하이브리드 상추", "지능형 바질"]; content = `추천 작물: ${crops[Math.floor(Math.random()*crops.length)]}`; document.getElementById("output").innerText = content;
 }
 
 function download() {
@@ -30,7 +30,7 @@ function download() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   doc.text(content, 10, 20);
-  doc.save("ai-recommendation.pdf");
+  doc.save("ai.pdf");
 }
 
 function sendEmail() {

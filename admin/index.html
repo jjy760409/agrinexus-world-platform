@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <title>📊 관리자 요약 리포트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <h1>📊 관리자 요약 리포트</h1>
-  <input id="val" placeholder="예: 보고서 요청 키워드">
+  <input id="val" placeholder="예: 최근 문의 내용">
   <br>
-  <button onclick="generate()">📝 내용 생성</button>
+  <button onclick="generate()">📝 생성</button>
   <div id="output"></div>
   <div class="actions">
     <button onclick="download()">📥 PDF 저장</button>
@@ -22,7 +22,8 @@
 let content = "";
 function generate() {
   const v = document.getElementById('val').value;
-  content = `📊 오늘 수익: 2,000,000\n📈 방문자 수: 489\n📌 최근 요청: ${v}`; document.getElementById("output").innerText = content;
+  content = `📊 오늘 수익: 2,000,000\n📈 방문자 수: 320\n📌 최근 요청: ${v}`;
+document.getElementById("output").innerText = content;
 }
 
 function download() {
@@ -30,7 +31,7 @@ function download() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   doc.text(content, 10, 20);
-  doc.save("admin-report.pdf");
+  doc.save("admin.pdf");
 }
 
 function sendEmail() {

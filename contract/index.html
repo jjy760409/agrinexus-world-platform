@@ -1,36 +1,48 @@
-<!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8">
-<title>📄 계약서 자동 구성</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" href="../style.css" />
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📄 계약서 자동 생성기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
 <body>
-<h1>📄 계약서</h1>
-<input id="contract" placeholder="예: 스마트팜 자동화 계약">
-<br><button onclick="create()">계약 생성</button>
-<div id="output"></div>
-<div class="actions">
-  <button onclick="download()">📥 PDF 저장</button>
-  <button onclick="store()">💾 관리자 저장</button>
-</div>
+  <h1>📄 계약서 자동 생성기</h1>
+  <input id="val" placeholder="예: 스마트팜 계약">
+  <br>
+  <button onclick="generate()">📝 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
 let content = "";
-function create() {
-  const signup = localStorage.getItem("signup_name") || "고객";
-  const design = localStorage.getItem("design_result") || "설계 정보 없음";
-  const v = document.getElementById("contract").value;
-  content = `계약서: ${v}\n고객명: ${signup}\n설계 요약: ${design}\n계약 완료일: 오늘`;
-  document.getElementById("output").innerText = content;
+function generate() {
+  const v = document.getElementById('val').value;
+  content = `계약 항목: ${v}\n조건: 스마트팜 자동화\n기간: 1년\n비용: 협의`;
+document.getElementById("output").innerText = content;
 }
+
 function download() {
-  if (!content) return alert("먼저 계약서를 생성하세요.");
+  if (!content) return alert("먼저 내용을 생성하세요.");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   doc.text(content, 10, 20);
   doc.save("contract.pdf");
 }
+
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+
 function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
   alert("✅ 관리자 저장 완료 (시뮬레이션)");
 }
 </script>
-</body></html>
+</body>
+</html>

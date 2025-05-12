@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <title>🚚 배송 요금 예측기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <h1>🚚 배송 요금 예측기</h1>
   <input id="val" placeholder="예: 20 (kg)">
   <br>
-  <button onclick="generate()">📝 정보 분석</button>
+  <button onclick="generate()">📝 생성</button>
   <div id="output"></div>
   <div class="actions">
     <button onclick="download()">📥 PDF 저장</button>
@@ -22,8 +22,9 @@
 let content = "";
 function generate() {
   const v = document.getElementById('val').value;
-  const fee = parseInt(v) * 150; content = `예상 배송요금: ₩${fee}`; document.getElementById("output").innerText = content;
+  const fee = parseInt(v) * 150; content = `예상 배송 요금: ₩${fee}`; document.getElementById("output").innerText = content;
 }
+
 function download() {
   if (!content) return alert("먼저 내용을 생성하세요.");
   const { jsPDF } = window.jspdf;
@@ -31,10 +32,12 @@ function download() {
   doc.text(content, 10, 20);
   doc.save("delivery.pdf");
 }
+
 function sendEmail() {
   if (!content) return alert("먼저 내용을 생성하세요.");
   alert("📨 이메일 제출 완료 (시뮬레이션)");
 }
+
 function store() {
   if (!content) return alert("먼저 내용을 생성하세요.");
   alert("✅ 관리자 저장 완료 (시뮬레이션)");
