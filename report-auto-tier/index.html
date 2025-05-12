@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📬 자동 보고서 전송 + 등급 분류</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #f0fdf4; padding: 2rem; color: #111827; }
+    input, select, textarea { width: 80%; max-width: 400px; padding: 0.6rem; margin: 0.5rem; }
+    button { padding: 0.6rem 1.2rem; background: #0ea5e9; color: white; border: none; cursor: pointer; }
+    .highlight { font-weight: bold; color: #047857; }
+  </style>
+</head>
+<body>
+  <h1>📬 자동 보고서 전송 + 고객 등급 분류</h1>
+  <input type="email" id="email" placeholder="수신자 이메일 주소" /><br/>
+  <select id="tier">
+    <option value="Bronze">Bronze</option>
+    <option value="Silver">Silver</option>
+    <option value="Gold">Gold</option>
+    <option value="VIP">VIP</option>
+  </select><br/>
+  <textarea id="report" rows="5" placeholder="전송할 보고서 내용을 입력하세요"></textarea><br/>
+  <button onclick="send()">전송</button>
+  <p id="msg"></p>
+
+  <script>
+    function send() {
+      const email = document.getElementById("email").value;
+      const tier = document.getElementById("tier").value;
+      const report = document.getElementById("report").value;
+      if (!email || !report) {
+        document.getElementById("msg").innerText = "❗ 이메일과 내용을 모두 입력하세요.";
+        return;
+      }
+      document.getElementById("msg").innerHTML = `✅ <span class='highlight'>${tier} 고객</span>에게 자동 보고서 전송 완료 (시뮬레이션)`;
+    }
+  </script>
+</body>
+</html>
