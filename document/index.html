@@ -1,18 +1,18 @@
 <!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8"><title>📑 보고서 생성</title>
+<head><meta charset="UTF-8"><title>📄 제안서 문서 생성기</title>
 <link rel="stylesheet" href="../style.css" /></head>
 <body>
-<h1>📑 보고서 생성</h1>
+<h1>📄 제안서 문서 생성기</h1>
 <input id="val" placeholder="입력하세요">
 <br><button onclick="generate()">실행</button>
 <div id="output"></div>
-<a id="download" style="display:none" download="report.txt">📥 저장</a>
+<a id="download" style="display:none" download="document.txt">📥 저장</a>
 <script>
 function generate() {
   const v = document.getElementById('val').value;
-  const text = `🔎 "${v}"에 대한 스마트팜 분석 보고서입니다.\n- 성장 전략\n- 지역 기반 수요\n- 환경 대응 방안`;
-  document.getElementById('output').innerText = text;
-  const blob = new Blob([text], {type: 'text/plain'});
+  const doc = `제안 대상: ${v}\n- 배경과 목적\n- 구성 및 기대효과\n- 실행 전략`;
+  document.getElementById('output').innerText = doc;
+  const blob = new Blob([doc], {type: 'text/plain'});
   document.getElementById('download').href = URL.createObjectURL(blob);
   document.getElementById('download').style.display = "inline-block";
 }</script>

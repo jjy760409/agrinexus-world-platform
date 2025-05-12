@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="ko">
+<head><meta charset="UTF-8"><title>📝 신청서 접수</title>
+<link rel="stylesheet" href="../style.css" /></head>
+<body>
+<h1>📝 신청서 접수</h1>
+<input id="val" placeholder="입력하세요">
+<br><button onclick="generate()">실행</button>
+<div id="output"></div>
+<a id="download" style="display:none" download="signup.txt">📥 저장</a>
+<script>
+function generate() {
+  const name = document.getElementById('val').value;
+  document.getElementById('output').innerText = `✅ ${name} 님의 신청이 접수되었습니다.`;
+}</script>
+</body></html>

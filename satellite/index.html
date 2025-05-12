@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="ko">
+<head><meta charset="UTF-8"><title>🛰️ 위성 기반 설치</title>
+<link rel="stylesheet" href="../style.css" /></head>
+<body>
+<h1>🛰️ 위성 기반 설치</h1>
+<input id="val" placeholder="입력하세요">
+<br><button onclick="generate()">실행</button>
+<div id="output"></div>
+<a id="download" style="display:none" download="satellite.txt">📥 저장</a>
+<script>
+function generate() {
+  const lat = document.getElementById('val').value;
+  document.getElementById('output').innerText = `🌍 위도 "${lat}" 기준 위성 이미지 분석 준비 완료`;
+}</script>
+</body></html>

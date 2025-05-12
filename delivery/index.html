@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="ko">
+<head><meta charset="UTF-8"><title>🚚 물류 자동 추천</title>
+<link rel="stylesheet" href="../style.css" /></head>
+<body>
+<h1>🚚 물류 자동 추천</h1>
+<input id="val" placeholder="입력하세요">
+<br><button onclick="generate()">실행</button>
+<div id="output"></div>
+<a id="download" style="display:none" download="delivery.txt">📥 저장</a>
+<script>
+function generate() {
+  const w = document.getElementById('val').value;
+  const fee = parseInt(w) * 120;
+  document.getElementById('output').innerText = `📦 예상 배송 요금: ₩${fee}`;
+}</script>
+</body></html>

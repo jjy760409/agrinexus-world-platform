@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="ko">
+<head><meta charset="UTF-8"><title>🤖 AI 추천 시스템</title>
+<link rel="stylesheet" href="../style.css" /></head>
+<body>
+<h1>🤖 AI 추천 시스템</h1>
+<input id="val" placeholder="입력하세요">
+<br><button onclick="generate()">실행</button>
+<div id="output"></div>
+<a id="download" style="display:none" download="ai.txt">📥 저장</a>
+<script>
+function generate() {
+  const v = document.getElementById('val').value;
+  const crops = ["온실 토마토", "스마트 리프", "유기농 상추"];
+  document.getElementById('output').innerText = `✅ "${v}" 환경에는 "${crops[Math.floor(Math.random()*crops.length)]}" 추천됩니다.`;
+}</script>
+</body></html>
