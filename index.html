@@ -2,54 +2,37 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 통합 고객 포털</title>
+  <title>AgriNexus 글로벌 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Analytics 예시 스크립트 (Tracking ID 교체 필요) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
   <style>
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; }
-    header { background: #1d4ed8; color: white; padding: 1.5rem; text-align: center; font-size: 1.5rem; }
-    main { padding: 2rem; text-align: center; }
-    section { background: white; margin: 1rem auto; max-width: 900px; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    h2 { color: #2563eb; margin-bottom: 1rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .card { background: #f1f5f9; padding: 1rem; border-radius: 8px; text-align: center; }
-    .card a { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; }
-    footer { text-align: center; padding: 2rem; font-size: 0.85rem; color: #6b7280; }
+    body { font-family: sans-serif; background: #f9fafb; color: #111827; padding: 2rem; text-align: center; }
+    h1 { color: #1d4ed8; font-size: 2rem; }
+    a {
+      display: inline-block;
+      margin: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
-  <header>🌍 AgriNexus 고객 포털 – 지금 바로 사용해보세요</header>
-  <main>
+  <h1>🌍 AgriNexus 시스템 전체 통합 접속 포털</h1>
+  <p>이 페이지는 GA 기반 방문자 추적과 전체 파일 통합 구조를 지원합니다.</p>
 
-    <section>
-      <h2>🧠 핵심 기능 바로가기</h2>
-      <div class="grid">
-        <div class="card"><h3>계약서 자동 생성</h3><p>계약 입력 → PDF 출력</p><a href="/contract-pdf">이동</a></div>
-        <div class="card"><h3>수익 예측 리포트</h3><p>수익 분석 자동 보고서</p><a href="/forecast-report">이동</a></div>
-        <div class="card"><h3>AI 계약 요약</h3><p>계약서를 자동 요약합니다</p><a href="/ai-contract-summary">이동</a></div>
-        <div class="card"><h3>고객 대시보드</h3><p>업로드, 이력, 요청 보기</p><a href="/client-view">이동</a></div>
-        <div class="card"><h3>언어 번역</h3><p>AI 기반 다국어 번역기</p><a href="/ai-translator">이동</a></div>
-        <div class="card"><h3>PWA 앱 설치</h3><p>모바일 앱처럼 설치 사용</p><a href="/pwa/install.html">이동</a></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>🏢 회사 소개 & 투자 자료</h2>
-      <div class="grid">
-        <div class="card"><h3>회사 소개 페이지</h3><p>AgriNexus World란?</p><a href="/company.html">회사소개</a></div>
-        <div class="card"><h3>IR 리포트</h3><p>PDF 기반 투자 설명서</p><a href="/ir.html">IR 보기</a></div>
-        <div class="card"><h3>랜딩 페이지</h3><p>외부 마케팅 전용 페이지</p><a href="/landing.html">랜딩 접속</a></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>🚀 실시간 연결 질문/응답 시스템</h2>
-      <div class="grid">
-        <div class="card"><h3>기능 추천 시스템</h3><p>입력하면 기능 제시</p><a href="/smart-recommend">시작</a></div>
-        <div class="card"><h3>챗봇 흐름 시스템</h3><p>연속형 질문/답변</p><a href="/chat-flow">실행</a></div>
-      </div>
-    </section>
-
-  </main>
-  <footer>ⓒ 2025 AgriNexus World. All Rights Reserved.</footer>
+  <a href="/dashboard">기능 전체 대시보드</a>
+  <a href="/portal">고객 포털 접속</a>
+  <a href="/connect">실시간 기능 연결형</a>
+  <a href="/landing.html">광고/홍보용 랜딩페이지</a>
 </body>
 </html>
