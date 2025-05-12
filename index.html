@@ -1,57 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📡 실시간 제출 로그 대시보드</title>
+  <meta charset="UTF-8">
+  <title>📊 AgriNexus 데이터 시각화</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB....",
-      authDomain: "agrinexus-world.firebaseapp.com",
-      projectId: "agrinexus-world",
-      storageBucket: "agrinexus-world.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcde123456"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    window.onload = () => {
-      const output = document.getElementById("logs");
-      const logRef = ref(db, "agrinexus_logs/");
-      onValue(logRef, (snapshot) => {
-        output.innerHTML = "";
-        const data = snapshot.val();
-        const sorted = Object.entries(data || {}).sort((a, b) =>
-          new Date(b[1].timestamp) - new Date(a[1].timestamp)
-        );
-        for (let [key, entry] of sorted) {
-          const row = `<tr><td>${entry.timestamp}</td><td>${entry.value}</td></tr>`;
-          output.innerHTML += row;
-        }
-      });
-    };
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {{ font-family: sans-serif; background: #f4f7fa; padding: 2rem; }}
-    h1 {{ color: #2b6cb0; }}
-    table {{ width: 100%; border-collapse: collapse; margin-top: 1rem; }}
-    th, td {{ padding: 0.5rem; border: 1px solid #ccc; text-align: left; }}
-    th {{ background: #e2e8f0; }}
+    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f0f4f8; }
+    canvas { max-width: 600px; margin: 2rem auto; }
   </style>
 </head>
 <body>
-  <h1>📡 실시간 제출 로그 대시보드</h1>
-  <p>가장 최근 제출 내용이 상단에 자동으로 업데이트됩니다.</p>
-  <table>
-    <thead><tr><th>제출 시간</th><th>내용</th></tr></thead>
-    <tbody id="logs">
-      <tr><td colspan="2">로딩 중...</td></tr>
-    </tbody>
-  </table>
+  <h1>📊 제출 유형 및 시간대별 통계</h1>
+
+  <canvas id="typeChart"></canvas>
+  <canvas id="timeChart"></canvas>
+
+  <script>
+    const ctx1 = document.getElementById('typeChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'pie',
+      data: {
+        labels: ['계약서', '보고서', '설계요청', '신청서'],
+        datasets: [{
+          label: '제출 유형 비율',
+          data: [12, 18, 9, 14],
+          backgroundColor: ['#60a5fa','#34d399','#facc15','#f87171']
+        }]
+      }
+    });
+
+    const ctx2 = document.getElementById('timeChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: ['08시', '10시', '12시', '14시', '16시', '18시'],
+        datasets: [{
+          label: '시간대별 제출 수',
+          data: [1, 5, 9, 6, 4, 2],
+          fill: false,
+          borderColor: '#2563eb',
+          tension: 0.3
+        }]
+      }
+    });
+  </script>
 </body>
 </html>
