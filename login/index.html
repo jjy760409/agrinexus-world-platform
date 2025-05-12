@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><link rel='stylesheet' href='../style.css'></head><body><h1>🔐 로그인</h1>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>login</title><link rel="stylesheet" href="../style.css" /></head><body><h1>🔐 로그인</h1>
 <input id="email" placeholder="이메일"><br>
 <input id="pw" type="password" placeholder="비밀번호"><br>
 <button onclick="login()">로그인</button>
@@ -8,7 +8,7 @@ function login() {
   const e = document.getElementById('email').value;
   const p = document.getElementById('pw').value;
   if (!e.includes("@") || p.length < 4) {
-    document.getElementById('output').innerText = "❌ 올바른 정보를 입력하세요.";
+    document.getElementById('output').innerText = "❌ 이메일 또는 비밀번호 형식이 올바르지 않습니다.";
   } else {
     document.getElementById('output').innerText = "✅ 로그인 시도 중...";
   }

@@ -1,11 +1,20 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><link rel='stylesheet' href='../style.css'></head><body><h1>📄 계약서 자동화</h1>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>contract</title><link rel="stylesheet" href="../style.css" /></head><body><h1>📄 계약서 자동화</h1>
 <p>계약 내용을 입력하세요:</p>
-<input id="contract"><br>
-<button onclick="make()">생성</button>
+<input id="contract" placeholder="예: 온실 설치 계약">
+<br><button onclick="make()">생성</button>
 <div id="output"></div>
+<a id="download" style="display:none" download="contract.txt">📥 계약서 다운로드</a>
 <script>
 function make() {
   const v = document.getElementById('contract').value;
-  document.getElementById('output').innerText = `📄 계약 "${v}" 항목이 자동 생성되었습니다.`;
+  if (v.trim() === '') {
+    document.getElementById('output').innerText = "❗ 내용을 입력하세요.";
+    document.getElementById('download').style.display = 'none';
+  } else {
+    document.getElementById('output').innerText = `📄 "${v}" 계약서가 생성되었습니다.`;
+    const blob = new Blob([v + "\n계약 자동 생성 완료"], { type: 'text/plain' });
+    document.getElementById('download').href = URL.createObjectURL(blob);
+    document.getElementById('download').style.display = 'inline-block';
+  }
 }
 </script></body></html>
