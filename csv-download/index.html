@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📥 CSV 다운로드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>
+function downloadCSV() {
+  const data = document.getElementById("data").value;
+  const rows = data.split("\n").map(row => row.split(","));
+  let csv = rows.map(e => e.join(",")).join("\n");
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.setAttribute("hidden", "");
+  a.setAttribute("href", url);
+  a.setAttribute("download", "agrinexus_data.csv");
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+  </script>
+</head>
+<body style="text-align:center;font-family:sans-serif;padding:2rem">
+  <h1>📥 CSV 다운로드 생성기</h1>
+  <textarea id="data" rows="6" cols="60" placeholder="항목1,항목2\n값1,값2"></textarea><br/>
+  <button onclick="downloadCSV()">CSV 다운로드</button>
+</body>
+</html>

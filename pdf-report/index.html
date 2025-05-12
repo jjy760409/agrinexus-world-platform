@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📄 자동 PDF 보고서</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body style="text-align:center;font-family:sans-serif;padding:2rem">
+  <h1>📄 자동 PDF 보고서 생성</h1>
+  <textarea id="report" rows="6" cols="60" placeholder="보고서 내용을 입력하세요"></textarea><br/>
+  <button onclick="generatePDF()">PDF 생성 및 다운로드</button>
+  <script>
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const text = document.getElementById("report").value;
+  doc.text(text, 10, 20);
+  doc.save("report.pdf");
+}
+  </script>
+</body>
+</html>
