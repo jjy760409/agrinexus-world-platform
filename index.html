@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 AgriNexus 데이터 시각화</title>
+  <meta charset="UTF-8" />
+  <title>👤 사용자별 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB....",
+      authDomain: "agrinexus-world.firebaseapp.com",
+      projectId: "agrinexus-world",
+      storageBucket: "agrinexus-world.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcde123456"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    function filterByUser(userId) {
+      const output = document.getElementById("logs");
+      const logRef = ref(db, "agrinexus_logs/");
+      onValue(logRef, (snapshot) => {
+        output.innerHTML = "";
+        const data = snapshot.val();
+        for (let key in data) {
+          const val = data[key].value || "";
+          if (val.includes(userId)) {
+            const row = `<tr><td>${data[key].timestamp}</td><td>${val}</td></tr>`;
+            output.innerHTML += row;
+          }
+        }
+      });
+    }
+
+    window.onload = () => {
+      document.getElementById("search").addEventListener("click", () => {
+        const userId = document.getElementById("user").value;
+        filterByUser(userId);
+      });
+    };
+  </script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f0f4f8; }
-    canvas { max-width: 600px; margin: 2rem auto; }
+    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; }
+    input { padding: 0.5rem; width: 200px; }
+    button { padding: 0.5rem; background: #2563eb; color: white; border: none; }
+    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+    th, td { padding: 0.5rem; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
-  <h1>📊 제출 유형 및 시간대별 통계</h1>
-
-  <canvas id="typeChart"></canvas>
-  <canvas id="timeChart"></canvas>
-
-  <script>
-    const ctx1 = document.getElementById('typeChart').getContext('2d');
-    new Chart(ctx1, {
-      type: 'pie',
-      data: {
-        labels: ['계약서', '보고서', '설계요청', '신청서'],
-        datasets: [{
-          label: '제출 유형 비율',
-          data: [12, 18, 9, 14],
-          backgroundColor: ['#60a5fa','#34d399','#facc15','#f87171']
-        }]
-      }
-    });
-
-    const ctx2 = document.getElementById('timeChart').getContext('2d');
-    new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: ['08시', '10시', '12시', '14시', '16시', '18시'],
-        datasets: [{
-          label: '시간대별 제출 수',
-          data: [1, 5, 9, 6, 4, 2],
-          fill: false,
-          borderColor: '#2563eb',
-          tension: 0.3
-        }]
-      }
-    });
-  </script>
+  <h1>👤 사용자별 제출 내역 조회</h1>
+  <input id="user" placeholder="사용자 ID 또는 이름 입력" />
+  <button id="search">조회</button>
+  <table>
+    <thead><tr><th>시간</th><th>내용</th></tr></thead>
+    <tbody id="logs"><tr><td colspan="2">조회 대기 중...</td></tr></tbody>
+  </table>
 </body>
 </html>
