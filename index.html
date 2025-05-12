@@ -2,28 +2,52 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World - 전략적 메인 V2</title>
+  <title>📑 보고서 생성 + 제출</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>🌍 AgriNexus World</h1>
-    <p>AI 기반 농업 자동화의 글로벌 표준</p>
-  </header>
-  <section class="grid">
-    <div class="card"><h3>📑 보고서 생성</h3><p>AI 기반 보고서를 자동으로 생성합니다.</p><a href="/report/">바로가기</a></div>
-    <div class="card"><h3>📄 계약서 자동화</h3><p>입력만 하면 자동으로 계약서가 완성됩니다.</p><a href="/contract/">바로가기</a></div>
-    <div class="card"><h3>📊 관리자 대시보드</h3><p>실시간 수익, 방문자, 추천 정보를 시각화합니다.</p><a href="/admin/">바로가기</a></div>
-    <div class="card"><h3>🔐 로그인</h3><p>Firebase 인증 시스템</p><a href="/login/">바로가기</a></div>
-    <div class="card"><h3>🤖 AI 추천 시스템</h3><p>위치, 계절, 환경 기반 스마트 작물 추천</p><a href="#">준비 중</a></div>
-    <div class="card"><h3>🚚 자동화 물류 연동</h3><p>설치부터 배송까지 전자동 연계</p><a href="#">준비 중</a></div>
-    <div class="card"><h3>🛰️ 위성 기반 설치</h3><p>설치 부지 자동 분석 및 시뮬레이션</p><a href="#">준비 중</a></div>
-    <div class="card"><h3>💼 투자사 전용</h3><p>IR 자료 및 전용 보고서 열람</p><a href="#">준비 중</a></div>
-    <div class="card"><h3>📲 앱 설치 안내</h3><p>PWA 기반 설치형 앱 제공</p><a href="#">설치 안내</a></div>
-  </section>
-  <footer>
-    <p>© 2025 AgriNexus World | AI 기반 농업 자동화의 글로벌 표준</p>
-  </footer>
+  <h1>📑 보고서 생성</h1>
+  <input id="val" placeholder="예: 스마트팜 설계">
+  <br>
+  <button onclick="generate()">📝 보고서 생성</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
+<script>
+let reportText = "";
+
+function generate() {
+  const v = document.getElementById('val').value;
+  if (!v.trim()) {
+    document.getElementById('output').innerText = "❗ 키워드를 입력해주세요.";
+    return;
+  }
+  reportText = `📘 "${v}"에 대한 보고서\n\n- 시장 분석\n- 기술 적용\n- 기대 수익`;
+  document.getElementById('output').innerText = reportText;
+}
+
+function download() {
+  if (!reportText) return alert("먼저 보고서를 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(reportText, 10, 20);
+  doc.save("report.pdf");
+}
+
+function sendEmail() {
+  if (!reportText) return alert("먼저 보고서를 생성하세요.");
+  alert("📨 이메일 제출이 완료되었습니다. (연결 준비 중)");
+}
+
+function store() {
+  if (!reportText) return alert("먼저 보고서를 생성하세요.");
+  alert("✅ 관리자 서버에 저장 완료 (시뮬레이션)");
+}
+</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  background: #f9fafb;
+  background: #f7fafc;
   color: #1a202c;
   margin: 0;
   padding: 2rem;
@@ -33,4 +33,7 @@ button:hover {
   margin-top: 1rem;
   font-weight: bold;
   color: #38a169;
+}
+.actions {
+  margin-top: 2rem;
 }
