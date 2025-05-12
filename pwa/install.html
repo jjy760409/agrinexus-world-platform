@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📱 PWA 설치 안내</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#2b6cb0" />
+  <link rel="manifest" href="/pwa/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/pwa/service-worker.js');
+    }
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('install-btn').style.display = 'inline-block';
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+        });
+      }
+    }
+  </script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f3f4f6; }
+    button { padding: 1rem 2rem; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; display: none; }
+  </style>
+</head>
+<body>
+  <h1>📱 AgriNexus 앱을 설치해보세요!</h1>
+  <button id="install-btn" onclick="installApp()">📲 홈화면에 설치</button>
+</body>
+</html>
