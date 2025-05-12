@@ -1,11 +1,27 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><link rel='stylesheet' href='../style.css'></head><body><h1>📑 보고서 생성</h1>
-<p>키워드를 입력하세요:</p>
-<input id="keyword"><br>
-<button onclick="generate()">생성</button>
-<div id="output"></div>
-<script>
-function generate() {
-  const v = document.getElementById('keyword').value;
-  document.getElementById('output').innerText = `📘 "${v}"에 대한 보고서가 생성되었습니다.`;
-}
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📑 보고서 생성</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <h1>📑 보고서 생성</h1>
+  <p>키워드를 입력하세요:</p>
+  <input id="keyword" placeholder="예: 스마트팜 설계">
+  <br>
+  <button onclick="generate()">생성</button>
+  <div id="output"></div>
+  <script>
+    function generate() {
+      const v = document.getElementById('keyword').value;
+      if (v.trim() === '') {
+        document.getElementById('output').innerText = "❗ 키워드를 입력해주세요.";
+      } else {
+        document.getElementById('output').innerText = `📘 "${v}"에 대한 보고서가 생성되었습니다.`;
+      }
+    }
+  </script>
+</body>
+</html>
