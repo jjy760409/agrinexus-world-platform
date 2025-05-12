@@ -2,51 +2,55 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📑 보고서 생성 + 제출</title>
+  <title>📄 AgriNexus 자동 보고서 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+<script type="text/javascript">
+(function(){
+  emailjs.init("_Unfnkj7SMCOXw3yY");
+})();
+function sendEmail(content) {
+  emailjs.send("service_0sdhn4f", "template_edhsuq5", {
+    message: content,
+    email: "agrinexusworld@gmail.com"
+  }).then(function(response) {
+    alert("📨 이메일 전송 완료!");
+  }, function(error) {
+    alert("❌ 이메일 전송 실패: " + JSON.stringify(error));
+  });
+}
+</script>
+
 </head>
 <body>
-  <h1>📑 보고서 생성</h1>
-  <input id="val" placeholder="예: 스마트팜 설계">
-  <br>
-  <button onclick="generate()">📝 보고서 생성</button>
+  <h1>📄 보고서 자동 생성 + 이메일 전송</h1>
+  <textarea id="val" placeholder="보고서 내용을 입력하세요..."></textarea><br/>
+  <button onclick="generate()">📝 내용 생성</button>
   <div id="output"></div>
   <div class="actions">
     <button onclick="download()">📥 PDF 저장</button>
-    <button onclick="sendEmail()">✉️ 이메일 제출</button>
-    <button onclick="store()">💾 관리자 저장</button>
+    <button onclick="send()">✉️ 이메일 제출</button>
   </div>
 <script>
-let reportText = "";
-
+let content = "";
 function generate() {
-  const v = document.getElementById('val').value;
-  if (!v.trim()) {
-    document.getElementById('output').innerText = "❗ 키워드를 입력해주세요.";
-    return;
-  }
-  reportText = `📘 "${v}"에 대한 보고서\n\n- 시장 분석\n- 기술 적용\n- 기대 수익`;
-  document.getElementById('output').innerText = reportText;
+  const v = document.getElementById("val").value;
+  content = `제출된 보고서 내용:\n${v}`;
+  document.getElementById("output").innerText = content;
 }
-
 function download() {
-  if (!reportText) return alert("먼저 보고서를 생성하세요.");
+  if (!content) return alert("내용을 먼저 생성하세요.");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  doc.text(reportText, 10, 20);
-  doc.save("report.pdf");
+  doc.text(content, 10, 20);
+  doc.save("agrinexus_report.pdf");
 }
-
-function sendEmail() {
-  if (!reportText) return alert("먼저 보고서를 생성하세요.");
-  alert("📨 이메일 제출이 완료되었습니다. (연결 준비 중)");
-}
-
-function store() {
-  if (!reportText) return alert("먼저 보고서를 생성하세요.");
-  alert("✅ 관리자 서버에 저장 완료 (시뮬레이션)");
+function send() {
+  if (!content) return alert("내용을 먼저 생성하세요.");
+  sendEmail(content);
 }
 </script>
 </body>
