@@ -2,19 +2,56 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus Platform</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json">
+  <title>📡 실시간 제출 로그 대시보드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB....",
+      authDomain: "agrinexus-world.firebaseapp.com",
+      projectId: "agrinexus-world",
+      storageBucket: "agrinexus-world.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcde123456"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.onload = () => {
+      const output = document.getElementById("logs");
+      const logRef = ref(db, "agrinexus_logs/");
+      onValue(logRef, (snapshot) => {
+        output.innerHTML = "";
+        const data = snapshot.val();
+        const sorted = Object.entries(data || {}).sort((a, b) =>
+          new Date(b[1].timestamp) - new Date(a[1].timestamp)
+        );
+        for (let [key, entry] of sorted) {
+          const row = `<tr><td>${entry.timestamp}</td><td>${entry.value}</td></tr>`;
+          output.innerHTML += row;
+        }
+      });
+    };
+  </script>
+  <style>
+    body {{ font-family: sans-serif; background: #f4f7fa; padding: 2rem; }}
+    h1 {{ color: #2b6cb0; }}
+    table {{ width: 100%; border-collapse: collapse; margin-top: 1rem; }}
+    th, td {{ padding: 0.5rem; border: 1px solid #ccc; text-align: left; }}
+    th {{ background: #e2e8f0; }}
+  </style>
 </head>
 <body>
-  <h1>AgriNexus World 통합 플랫폼</h1>
-  <p>모든 기능은 아래 경로 또는 메뉴에서 이동 가능합니다.</p>
-  <ul>
-    <li><a href="/dashboard">대시보드</a></li>
-    <li><a href="/ai-api-suggestion">AI 작물 추천</a></li>
-    <li><a href="/lang-detect">다국어 감지</a></li>
-    <li><a href="/log-dashboard">제출 로그</a></li>
-    <li><a href="/pwa-install">모바일 설치</a></li>
-  </ul>
+  <h1>📡 실시간 제출 로그 대시보드</h1>
+  <p>가장 최근 제출 내용이 상단에 자동으로 업데이트됩니다.</p>
+  <table>
+    <thead><tr><th>제출 시간</th><th>내용</th></tr></thead>
+    <tbody id="logs">
+      <tr><td colspan="2">로딩 중...</td></tr>
+    </tbody>
+  </table>
 </body>
 </html>
