@@ -2,29 +2,34 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📤 사용자 파일 업로드</title>
+  <title>📑 계약서 / 세금계산서 자동 생성</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; background: #f1f5f9; padding: 2rem; }
-    input { margin: 1rem auto; display: block; }
-    button { padding: 0.6rem 1rem; background: #3b82f6; color: white; border: none; }
+    body { font-family: sans-serif; background: #fef3c7; text-align: center; padding: 2rem; }
+    input, textarea { width: 300px; padding: 0.6rem; margin: 0.5rem 0; }
+    button { padding: 0.6rem 1.2rem; background: #f59e0b; color: white; border: none; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>📤 사용자 업로드 (관리자 확인용)</h1>
-  <p>업로드된 파일은 관리자 페이지에서 확인됩니다 (시뮬레이션).</p>
-  <input type="file" id="upload" />
-  <button onclick="simulateUpload()">업로드</button>
-  <p id="msg"></p>
+  <h1>📑 계약서 / 세금계산서 자동 생성</h1>
+  <input id="client" placeholder="고객명 / 회사명" /><br/>
+  <input id="item" placeholder="계약 항목 / 품목명" /><br/>
+  <input id="amount" placeholder="계약 금액 (₩)" /><br/>
+  <textarea id="memo" rows="4" placeholder="비고 또는 특이사항"></textarea><br/>
+  <button onclick="generate()">PDF 생성</button>
 
   <script>
-    function simulateUpload() {
-      const file = document.getElementById("upload").files[0];
-      if (file) {
-        document.getElementById("msg").innerText = "✅ 업로드 완료됨 (시뮬레이션)";
-      } else {
-        document.getElementById("msg").innerText = "❗ 파일을 선택해주세요.";
-      }
+    function generate() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const name = document.getElementById("client").value;
+      const item = document.getElementById("item").value;
+      const amount = document.getElementById("amount").value;
+      const memo = document.getElementById("memo").value;
+      const text = `📄 계약서 / 세금계산서\n\n고객명: ${name}\n계약 항목: ${item}\n계약 금액: ₩${amount}\n\n비고:\n${memo}`;
+      doc.text(text, 10, 20);
+      doc.save("agrinexus_contract.pdf");
     }
   </script>
 </body>
