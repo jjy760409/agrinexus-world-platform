@@ -1,15 +1,45 @@
-<!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8"><title>🛰️ 위성 기반 설치</title>
-<link rel="stylesheet" href="../style.css" /></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>🛰️ 위성 위치 분석</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
 <body>
-<h1>🛰️ 위성 기반 설치</h1>
-<input id="val" placeholder="입력하세요">
-<br><button onclick="generate()">실행</button>
-<div id="output"></div>
-<a id="download" style="display:none" download="satellite.txt">📥 저장</a>
+  <h1>🛰️ 위성 위치 분석</h1>
+  <input id="val" placeholder="예: 37.123,127.456">
+  <br>
+  <button onclick="generate()">📝 정보 분석</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
+let content = "";
 function generate() {
-  const lat = document.getElementById('val').value;
-  document.getElementById('output').innerText = `🌍 위도 "${lat}" 기준 위성 이미지 분석 준비 완료`;
-}</script>
-</body></html>
+  const v = document.getElementById('val').value;
+  content = `위도/경도 ${v} → 설치 적합 지역: 충북 괴산`;
+document.getElementById("output").innerText = content;
+}
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("satellite.pdf");
+}
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
+}
+</script>
+</body>
+</html>

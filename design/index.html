@@ -1,19 +1,45 @@
-<!DOCTYPE html><html lang="ko">
-<head><meta charset="UTF-8"><title>🏗️ 스마트팜 설계 자동화</title>
-<link rel="stylesheet" href="../style.css" /></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏗️ 스마트팜 설계 견적</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
 <body>
-<h1>🏗️ 스마트팜 설계 자동화</h1>
-<input id="val" placeholder="입력하세요">
-<br><button onclick="generate()">실행</button>
-<div id="output"></div>
-<a id="download" style="display:none" download="design.txt">📥 저장</a>
+  <h1>🏗️ 스마트팜 설계 견적</h1>
+  <input id="val" placeholder="예: 토마토 재배용">
+  <br>
+  <button onclick="generate()">📝 정보 분석</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="sendEmail()">✉️ 이메일 제출</button>
+    <button onclick="store()">💾 관리자 저장</button>
+  </div>
 <script>
+let content = "";
 function generate() {
   const v = document.getElementById('val').value;
-  const design = `${v} 설계 항목:\n- 면적: 200㎡\n- 구조: 알루미늄 하우징\n- 환경: 자동 조절`;
-  document.getElementById('output').innerText = design;
-  const blob = new Blob([design], {type: 'text/plain'});
-  document.getElementById('download').href = URL.createObjectURL(blob);
-  document.getElementById('download').style.display = "inline-block";
-}</script>
-</body></html>
+  content = `${v} 기준 자동 설계 구성:\n- 구조: 알루미늄 프레임\n- 온도 제어: 자동\n- 견적: 약 4천만원`;
+document.getElementById("output").innerText = content;
+}
+function download() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("design.pdf");
+}
+function sendEmail() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("📨 이메일 제출 완료 (시뮬레이션)");
+}
+function store() {
+  if (!content) return alert("먼저 내용을 생성하세요.");
+  alert("✅ 관리자 저장 완료 (시뮬레이션)");
+}
+</script>
+</body>
+</html>
