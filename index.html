@@ -2,65 +2,61 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📌 기능 흐름형 UX 인터페이스</title>
+  <title>🧠 실시간 연결형 질문 · 분석 · 실행 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f9fafb; color: #1f2937; padding: 2rem; text-align: center; }
-    h1 { color: #2563eb; margin-bottom: 2rem; }
-    section { margin-bottom: 2rem; max-width: 700px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    textarea, input { width: 90%; max-width: 500px; padding: 0.6rem; margin: 0.5rem 0; }
-    button { padding: 0.6rem 1rem; margin-top: 1rem; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
-    .hidden { display: none; }
-    #result { font-weight: bold; color: #10b981; margin-top: 1rem; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; padding: 2rem; text-align: center; color: #1f2937; }
+    h1 { color: #1e40af; margin-bottom: 2rem; }
+    textarea, input { width: 90%; max-width: 600px; padding: 0.75rem; margin: 0.5rem 0; }
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .output { margin-top: 1rem; font-weight: bold; color: #10b981; white-space: pre-wrap; }
   </style>
 </head>
 <body>
-  <h1>🧠 전자동 기능 흐름형 UX</h1>
+  <h1>🧠 무엇이든 질문하세요</h1>
 
-  <section>
-    <h2>① 기능 소개</h2>
-    <p>이 기능은 사용자가 계약 목적을 입력하면,<br/>자동으로 AI 기반 요약 + 수익 예측 + PDF 생성까지 연결되는 흐름형 UX입니다.</p>
-    <button onclick="nextStep('step2')">계속 진행</button>
-  </section>
+  <div class="card">
+    <p>질문을 입력하면 → AI가 분석하고 → 필요한 기능을 자동으로 연결해드립니다.</p>
+    <textarea id="question" rows="4" placeholder="예: 스마트팜 수익 예측이 필요해요."></textarea>
+    <button onclick="analyze()">질문 실행</button>
+    <div class="output" id="answer"></div>
+  </div>
 
-  <section id="step2" class="hidden">
-    <h2>② 어떤 목적의 계약인가요?</h2>
-    <input id="purpose" placeholder="예: 스마트팜 설치 계약 / 수출 공급 계약" />
-    <button onclick="nextStep('step3')">입력 완료</button>
-  </section>
-
-  <section id="step3" class="hidden">
-    <h2>③ 예상 수익은 얼마인가요?</h2>
-    <input id="revenue" placeholder="예: 3,000,000 (₩)" />
-    <button onclick="generate()">결과 생성</button>
-  </section>
-
-  <section id="step4" class="hidden">
-    <h2>④ 분석 결과</h2>
-    <p id="result">로딩 중...</p>
-    <button onclick="downloadPDF()">📄 PDF 저장</button>
-  </section>
-
-  <script>
-    function nextStep(id) {
-      document.getElementById(id).classList.remove("hidden");
-    }
-
-    function generate() {
-      const purpose = document.getElementById("purpose").value;
-      const revenue = document.getElementById("revenue").value;
-      const summary = `📝 계약 요약: ${purpose}\n💰 예상 수익: ₩${revenue}\n📌 분석 완료: 스마트팜 ROI 145% / 계약 진행 추천`;
-      document.getElementById("result").innerText = summary;
-      document.getElementById("step4").classList.remove("hidden");
-    }
-
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text(document.getElementById("result").innerText, 10, 20);
-      doc.save("agrinexus_analysis.pdf");
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script>
+function analyze() {
+  const q = document.getElementById("question").value.toLowerCase();
+  let response = "❗ 질문 내용을 확인하세요.";
+  if (q.includes("수익") || q.includes("예측")) {
+    response = "🔗 '수익 계산기' 기능과 '수익 예측 리포트'를 추천합니다.\n👉 [수익 계산기로 이동](/revenue-report)\n👉 [예측 리포트 보기](/forecast-report)";
+  } else if (q.includes("계약") || q.includes("요약")) {
+    response = "🔗 '계약서 생성기'와 'AI 계약 요약' 기능을 연결합니다.\n👉 [계약서 PDF](/contract-pdf)\n👉 [AI 요약 실행](/ai-contract-summary)";
+  } else if (q.includes("고객") || q.includes("이력")) {
+    response = "🔗 '고객 대시보드'와 '사용자 통계 분석'이 도움이 될 수 있어요.\n👉 [고객 뷰](/client-view)\n👉 [이력 분석](/user-stats)";
+  } else if (q.includes("언어") || q.includes("번역")) {
+    response = "🔗 '언어 감지'와 'AI 번역기'를 추천합니다.\n👉 [언어 감지 실행](/lang-detect)\n👉 [AI 번역기](/ai-translator)";
+  } else {
+    response = "🧠 질문을 분석 중입니다...\n더 구체적으로 질문해 주세요! 예: 계약서 요약 보여줘.";
+  }
+  document.getElementById("answer").innerText = response;
+}
+</script>
 </body>
 </html>
