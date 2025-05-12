@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI-API-SUGGESTION - AgriNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+<script type="text/javascript">
+(function(){
+  emailjs.init("_Unfnkj7SMCOXw3yY");
+})();
+function sendEmail(content) {
+  emailjs.send("service_0sdhn4f", "template_edhsuq5", {
+    message: content,
+    email: "agrinexusworld@gmail.com"
+  }).then(function(response) {
+    alert("📨 이메일 전송 완료!");
+  }, function(error) {
+    alert("❌ 이메일 전송 실패: " + JSON.stringify(error));
+  });
+}
+</script>
+
+</head>
+<body>
+  <h1>AI-API-SUGGESTION</h1>
+  <textarea id="val" placeholder="실제 AI 추천 API와 연결될 사용자의 요청 내용을 입력하세요. 예: 토마토 재배 적합 여부"></textarea><br/>
+  <button onclick="generate()">🧠 내용 분석</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="send()">✉️ 이메일 제출</button>
+  </div>
+<script>
+let content = "";
+function generate() {
+  const v = document.getElementById("val").value;
+  content = `AI-API-SUGGESTION 결과:\n${v}`;
+  document.getElementById("output").innerText = content;
+}
+function download() {
+  if (!content) return alert("내용을 먼저 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("ai-api-suggestion.pdf");
+}
+function send() {
+  if (!content) return alert("내용을 먼저 생성하세요.");
+  sendEmail(content);
+}
+</script>
+</body>
+</html>

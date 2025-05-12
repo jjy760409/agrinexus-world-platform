@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>LOG-DASHBOARD - AgriNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+<script type="text/javascript">
+(function(){
+  emailjs.init("_Unfnkj7SMCOXw3yY");
+})();
+function sendEmail(content) {
+  emailjs.send("service_0sdhn4f", "template_edhsuq5", {
+    message: content,
+    email: "agrinexusworld@gmail.com"
+  }).then(function(response) {
+    alert("📨 이메일 전송 완료!");
+  }, function(error) {
+    alert("❌ 이메일 전송 실패: " + JSON.stringify(error));
+  });
+}
+</script>
+
+</head>
+<body>
+  <h1>LOG-DASHBOARD</h1>
+  <textarea id="val" placeholder="제출된 계약/보고서/신청 내역이 이곳에 누적되어 실시간 표시됩니다. 예시로 입력하세요."></textarea><br/>
+  <button onclick="generate()">🧠 내용 분석</button>
+  <div id="output"></div>
+  <div class="actions">
+    <button onclick="download()">📥 PDF 저장</button>
+    <button onclick="send()">✉️ 이메일 제출</button>
+  </div>
+<script>
+let content = "";
+function generate() {
+  const v = document.getElementById("val").value;
+  content = `LOG-DASHBOARD 결과:\n${v}`;
+  document.getElementById("output").innerText = content;
+}
+function download() {
+  if (!content) return alert("내용을 먼저 생성하세요.");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(content, 10, 20);
+  doc.save("log-dashboard.pdf");
+}
+function send() {
+  if (!content) return alert("내용을 먼저 생성하세요.");
+  sendEmail(content);
+}
+</script>
+</body>
+</html>
