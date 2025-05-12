@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📱 PWA 설치 안내</title>
+  <title>📱 AgriNexus 앱 설치 안내</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#2b6cb0" />
   <link rel="manifest" href="/pwa/manifest.json">
@@ -28,12 +28,32 @@
     }
   </script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f3f4f6; }
-    button { padding: 1rem 2rem; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; display: none; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f9fafb; padding: 2rem; text-align: center; color: #1f2937; }
+    h1 { color: #2563eb; font-size: 1.8rem; margin-bottom: 1rem; }
+    p { max-width: 500px; margin: auto; font-size: 1rem; color: #374151; }
+    button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: #2563eb;
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      display: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e40af;
+    }
   </style>
 </head>
 <body>
-  <h1>📱 AgriNexus 앱을 설치해보세요!</h1>
-  <button id="install-btn" onclick="installApp()">📲 홈화면에 설치</button>
+  <h1>📱 AgriNexus 모바일 앱 설치 안내</h1>
+  <p>
+    이 앱은 AgriNexus 플랫폼을 모바일에서도 빠르고 편리하게 사용할 수 있도록 설계되었습니다.<br/>
+    홈화면에 추가하여 언제든지 빠르게 접속하세요!<br/><br/>
+    설치 버튼이 보이면 눌러서 앱을 설치해보세요.
+  </p>
+  <button id="install-btn" onclick="installApp()">📲 AgriNexus 앱 설치하기</button>
 </body>
 </html>
