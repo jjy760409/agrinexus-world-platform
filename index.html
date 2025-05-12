@@ -2,47 +2,109 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🌐 AgriNexus 전자동 운영 대시보드</title>
+  <title>🌍 AgriNexus World – 전자동 통합 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #f8fafc; text-align: center; padding: 2rem; }
-    h1 { color: #1d4ed8; margin-bottom: 1.5rem; }
-    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 1000px; margin: auto; }
-    a {
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+      scroll-behavior: smooth;
+    }
+    section {
+      padding: 4rem 2rem;
+      min-height: 100vh;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #1d4ed8;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #2563eb;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .menu a {
       background: #2563eb;
       color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
       text-decoration: none;
-      padding: 1rem 1.5rem;
-      border-radius: 10px;
-      display: inline-block;
-      min-width: 250px;
+      min-width: 200px;
     }
-    a:hover { background: #1e40af; }
+    .menu a:hover {
+      background: #1e40af;
+    }
   </style>
 </head>
 <body>
-  <h1>🌐 AgriNexus 자동화 통합 대시보드</h1>
-  <nav>
-    <a href="/routes">📂 전체 기능 메뉴</a>
-    <a href="/login">🔐 관리자 로그인</a>
-    <a href="/admin-panel">📊 관리자 대시보드</a>
-    <a href="/admin-report">📋 관리자 리포트</a>
-    <a href="/data-visualization">📈 통계 차트</a>
-    <a href="/user-dashboard">👤 사용자 이력</a>
-    <a href="/upload">📤 파일 업로드</a>
-    <a href="/contract-pdf">📑 계약서 생성</a>
-    <a href="/revenue-report">💰 수익 계산</a>
-    <a href="/forecast-report">📈 수익 예측</a>
-    <a href="/csv-download">📥 CSV 출력</a>
-    <a href="/pdf-report">📄 일반 PDF 출력</a>
-    <a href="/alert">📬 관리자 알림</a>
-    <a href="/email-report">📬 리포트 이메일 전송</a>
-    <a href="/lang-detect">🌐 언어 감지</a>
-    <a href="/client-view">🌿 고객 대시보드</a>
-    <a href="/user-role">🔐 사용자 권한 설정</a>
-    <a href="/alert-scheduler">⏰ 알림 스케줄러</a>
-    <a href="/ai-contract-summary">🤖 계약서 AI 요약</a>
-    <a href="/pwa/manifest.json">📱 PWA 설치 설정</a>
-  </nav>
+
+  <section>
+    <h1>🌍 AgriNexus World 통합 대시보드</h1>
+    <p>AI, 계약, 수익, 보고서, 고객, 언어 감지, 관리자 도구까지<br/>
+    모든 기능이 통합된 글로벌 전자동 스마트팜 플랫폼입니다.</p>
+  </section>
+
+  <section>
+    <h2>📊 관리자 기능</h2>
+    <div class="menu">
+      <a href="/login">관리자 로그인</a>
+      <a href="/admin-panel">대시보드</a>
+      <a href="/admin-report">리포트 탭</a>
+      <a href="/user-role">권한 설정</a>
+      <a href="/alert-scheduler">알림 스케줄러</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>📈 통계 / 수익 / 보고서</h2>
+    <div class="menu">
+      <a href="/data-visualization">제출 통계</a>
+      <a href="/revenue-report">수익 계산기</a>
+      <a href="/forecast-report">수익 예측 리포트</a>
+      <a href="/csv-download">CSV 출력</a>
+      <a href="/pdf-report">PDF 출력</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>📑 계약 관리</h2>
+    <div class="menu">
+      <a href="/contract-pdf">계약서/세금계산서</a>
+      <a href="/ai-contract-summary">AI 계약 요약</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>👤 사용자 / 고객 기능</h2>
+    <div class="menu">
+      <a href="/client-view">고객 대시보드</a>
+      <a href="/upload">파일 업로드</a>
+      <a href="/user-dashboard">제출 이력</a>
+      <a href="/report-auto-tier">보고서 자동 전송</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🌐 글로벌 대응 기능</h2>
+    <div class="menu">
+      <a href="/lang-detect">언어 감지</a>
+      <a href="/ai-translator">AI 다국어 번역</a>
+      <a href="/pwa/install.html">PWA 설치 안내</a>
+      <a href="/email-report">이메일 리포트 발송</a>
+    </div>
+  </section>
+
 </body>
 </html>
