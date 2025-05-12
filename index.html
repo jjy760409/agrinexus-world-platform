@@ -2,78 +2,80 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus 실시간 통합 플랫폼</title>
+  <title>AgriNexus SaaS 포털</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
+  <script>
+    function setLang(lang) {
+      const sections = document.querySelectorAll("[data-lang]");
+      sections.forEach(el => {
+        el.style.display = el.getAttribute("data-lang") === lang ? "block" : "none";
+      });
+    }
+    window.onload = () => {
+      const userLang = navigator.language.startsWith("ko") ? "ko" : "en";
+      setLang(userLang);
+    };
+  </script>
 </head>
 <body>
 
 <header>
-  <h1>🌱 AgriNexus World – 살아있는 자동 플랫폼</h1>
-  <p>지금 이 시스템은 계속 진화하며, 사용자의 질문에 반응하고 스스로 연결하며 업데이트됩니다.</p>
+  <h1>🌱 AgriNexus 전자동 SaaS 플랫폼</h1>
+  <select onchange="setLang(this.value)">
+    <option value="ko">한국어</option>
+    <option value="en">English</option>
+  </select>
 </header>
 
 <main>
+  <section data-lang="ko">
+    <h2>📌 기능 사용 안내</h2>
+    <form onsubmit="return false">
+      <label>계약 항목 입력:</label><br/>
+      <input type="text" placeholder="예: 스마트팜 공급 계약" /><br/>
+      <label>예상 수익 입력:</label><br/>
+      <input type="number" placeholder="₩ 금액 입력" /><br/>
+      <button>PDF 리포트 생성</button>
+    </form>
+  </section>
+
+  <section data-lang="en" style="display:none">
+    <h2>📌 Feature Input Guide</h2>
+    <form onsubmit="return false">
+      <label>Enter Contract Topic:</label><br/>
+      <input type="text" placeholder="e.g. Smartfarm Distribution" /><br/>
+      <label>Enter Estimated Profit:</label><br/>
+      <input type="number" placeholder="Amount in ₩" /><br/>
+      <button>Generate PDF Report</button>
+    </form>
+  </section>
+
   <section>
-    <h2>📍 핵심 기능 흐름</h2>
-    <div class="menu">
-      <a href="/join">회원가입</a>
-      <a href="/dashboard">기능 전체</a>
-      <a href="/portal">고객포털</a>
-      <a href="/contract-pdf">계약 생성</a>
-      <a href="/revenue-report">수익 계산</a>
-      <a href="/forecast-report">수익 예측</a>
+    <h2>🔐 관리자 전용</h2>
+    <div class="admin-box">
+      <p>관리자 로그인 후 다음 경로로 이동하세요:</p>
+      <ul>
+        <li><a href="/admin-panel">📊 관리자 대시보드</a></li>
+        <li><a href="/admin-report">📋 관리자 리포트</a></li>
+        <li><a href="/user-stats">📈 사용자 통계</a></li>
+      </ul>
     </div>
   </section>
 
   <section>
-    <h2>📡 실시간 응답형 시스템</h2>
-    <div class="menu">
-      <a href="/connect">실시간 질문 연결</a>
-      <a href="/chat-flow">챗봇 인터페이스</a>
-      <a href="/smart-recommend">기능 추천기</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>📊 분석 · 번역 · AI</h2>
-    <div class="menu">
-      <a href="/ai-contract-summary">AI 계약 요약</a>
-      <a href="/ai-translator">다국어 번역</a>
-      <a href="/user-stats">사용자 통계 분석</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>📤 고객 · 업로드 · 리포트</h2>
-    <div class="menu">
-      <a href="/client-view">고객 보기</a>
-      <a href="/upload">파일 제출</a>
-      <a href="/email-report">이메일 보고서</a>
-      <a href="/report-auto-tier">고객 등급</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>🌐 기타 · 연결 · 설치</h2>
-    <div class="menu">
-      <a href="/lang-detect">언어 감지</a>
-      <a href="/pwa/install.html">앱 설치</a>
-      <a href="/landing.html">랜딩</a>
-      <a href="/generate">자동 생성 페이지</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>🧭 지금도 확장 중인 기능</h2>
-    <p>시스템은 질문/행동에 따라 새로운 메뉴를 생성하며 계속 진화 중입니다. <br/>
-    더 많은 기능은 접속자 활동에 따라 자동으로 이곳에 반영됩니다.</p>
+    <h2>🧩 사용자 전용 서비스</h2>
+    <ul class="user-links">
+      <li><a href="/client-view">🌿 고객 대시보드</a></li>
+      <li><a href="/ai-translator">🌐 번역기</a></li>
+      <li><a href="/upload">📤 업로드</a></li>
+      <li><a href="/connect">🤖 질문 연결 시스템</a></li>
+    </ul>
   </section>
 </main>
 
 <footer>
-  ⓒ 2025 AgriNexus World — 전자동화 시스템은 지금도 성장 중입니다.
+  ⓒ 2025 AgriNexus World. 실시간 전자동 업데이트 시스템 연동됨.
 </footer>
-
 </body>
 </html>
