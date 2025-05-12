@@ -2,48 +2,30 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📋 관리자 전용 리포트 탭</title>
+  <title>📤 사용자 파일 업로드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f8fafc; }
-    h1 { color: #1e3a8a; }
-    canvas { max-width: 600px; margin: 2rem auto; }
+    body { font-family: sans-serif; text-align: center; background: #f1f5f9; padding: 2rem; }
+    input { margin: 1rem auto; display: block; }
+    button { padding: 0.6rem 1rem; background: #3b82f6; color: white; border: none; }
   </style>
 </head>
 <body>
-  <h1>📋 관리자 리포트</h1>
-  <canvas id="activityChart"></canvas>
-  <canvas id="revenueChart"></canvas>
+  <h1>📤 사용자 업로드 (관리자 확인용)</h1>
+  <p>업로드된 파일은 관리자 페이지에서 확인됩니다 (시뮬레이션).</p>
+  <input type="file" id="upload" />
+  <button onclick="simulateUpload()">업로드</button>
+  <p id="msg"></p>
 
   <script>
-    const ctx1 = document.getElementById('activityChart').getContext('2d');
-    new Chart(ctx1, {
-      type: 'bar',
-      data: {
-        labels: ['1월', '2월', '3월', '4월'],
-        datasets: [{
-          label: '제출 건수',
-          data: [20, 30, 18, 40],
-          backgroundColor: '#60a5fa'
-        }]
+    function simulateUpload() {
+      const file = document.getElementById("upload").files[0];
+      if (file) {
+        document.getElementById("msg").innerText = "✅ 업로드 완료됨 (시뮬레이션)";
+      } else {
+        document.getElementById("msg").innerText = "❗ 파일을 선택해주세요.";
       }
-    });
-
-    const ctx2 = document.getElementById('revenueChart').getContext('2d');
-    new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: ['1월', '2월', '3월', '4월'],
-        datasets: [{
-          label: '예상 수익 추이 (₩)',
-          data: [2000000, 2800000, 2600000, 3400000],
-          borderColor: '#10b981',
-          fill: false,
-          tension: 0.3
-        }]
-      }
-    });
+    }
   </script>
 </body>
 </html>
