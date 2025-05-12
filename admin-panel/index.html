@@ -1,53 +1,34 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 관리자 로그 (보호됨)</title>
+  <meta charset="UTF-8" />
+  <title>📊 관리자 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script type="module">
-    if (localStorage.getItem("auth") !== "ok") {
-      alert("접근 권한이 없습니다. 로그인하세요.");
-      location.href = "/login/index.html";
+  <script>
+    function checkAuth() {
+      const cookies = document.cookie.split(';').map(c => c.trim());
+      const auth = cookies.find(c => c.startsWith("admin_auth="));
+      if (!auth || auth.split("=")[1] !== "ok") {
+        alert("관리자 인증이 필요합니다.");
+        location.href = "/login/index.html";
+      }
     }
-  </script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyB....",
-      authDomain: "agrinexus-world.firebaseapp.com",
-      projectId: "agrinexus-world",
-      storageBucket: "agrinexus-world.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcde123456"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    window.onload = () => {
-      const output = document.getElementById("logs");
-      const logRef = ref(db, "agrinexus_logs/");
-      onValue(logRef, (snapshot) => {
-        output.innerHTML = "";
-        const data = snapshot.val();
-        for (let key in data) {
-          const row = `<tr><td>${data[key].timestamp}</td><td>${data[key].value}</td></tr>`;
-          output.innerHTML += row;
-        }
-      });
-    };
+    checkAuth();
   </script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: left; }
-    th { background: #e2e8f0; }
+    body { font-family: sans-serif; padding: 2rem; text-align: center; }
+    h1 { color: #2b6cb0; }
   </style>
 </head>
 <body>
-  <h1>📊 관리자 로그 대시보드</h1>
-  <table>
-    <thead><tr><th>제출 시간</th><th>내용</th></tr></thead>
-    <tbody id="logs"><tr><td colspan="2">불러오는 중...</td></tr></tbody>
-  </table>
+  <h1>📊 관리자 전용 페이지</h1>
+  <p>이 페이지는 인증된 관리자만 볼 수 있습니다.</p>
+  <button onclick="logout()">로그아웃</button>
+  <script>
+    function logout() {
+      document.cookie = "admin_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      location.href = "/login/index.html";
+    }
+  </script>
 </body>
 </html>

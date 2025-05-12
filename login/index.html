@@ -2,34 +2,35 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🔐 관리자 로그인</title>
+  <title>🔐 관리자 로그인 (보안 강화)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 3rem; background: #f5f7fa; }
-    input { padding: 0.6rem; width: 250px; margin: 0.5rem; }
-    button { padding: 0.6rem 1rem; background: #2b6cb0; color: white; border: none; cursor: pointer; }
+    body { font-family: sans-serif; background: #f3f4f6; text-align: center; padding: 3rem; }
     .box { background: white; padding: 2rem; display: inline-block; border-radius: 10px; }
+    input { padding: 0.6rem; margin: 0.5rem; width: 200px; }
+    button { padding: 0.6rem 1rem; background: #2563eb; color: white; border: none; }
+    p { color: red; }
   </style>
 </head>
 <body>
   <div class="box">
-    <h1>관리자 로그인</h1>
+    <h1>🔐 관리자 로그인</h1>
     <input id="id" placeholder="ID"><br/>
     <input id="pw" type="password" placeholder="Password"><br/>
     <button onclick="login()">로그인</button>
     <p id="msg"></p>
   </div>
 <script>
-function login() {
-  const id = document.getElementById("id").value;
-  const pw = document.getElementById("pw").value;
-  if (id === "admin" && pw === "agrinexus123") {
-    localStorage.setItem("auth", "ok");
-    window.location.href = "/admin-panel/index.html";
-  } else {
-    document.getElementById("msg").innerText = "❌ 로그인 실패";
+  function login() {
+    const id = document.getElementById("id").value;
+    const pw = document.getElementById("pw").value;
+    if (id === "admin" && pw === "agrinexus123") {
+      document.cookie = "admin_auth=ok; path=/; max-age=3600";
+      window.location.href = "/admin-panel/index.html";
+    } else {
+      document.getElementById("msg").innerText = "❌ 로그인 실패";
+    }
   }
-}
 </script>
 </body>
 </html>
