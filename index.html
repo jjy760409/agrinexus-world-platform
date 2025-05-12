@@ -1,107 +1,98 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus 메인 포털 - 전자동 기능</title>
+  <meta charset="UTF-8">
+  <title>📊 사용자 이력 분석 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: #f9fafb; color: #1f2937; }
-    header {
-      position: sticky; top: 0;
-      background: #1d4ed8; color: white; padding: 1rem; text-align: center;
-      z-index: 999;
-    }
-    section {
-      padding: 4rem 2rem;
-      min-height: 100vh;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: center;
-    }
-    h1, h2 { margin-bottom: 1rem; }
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.5rem; color: #2563eb; }
-    .menu {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
-      max-width: 1000px; margin: auto;
-    }
-    .menu a {
-      background: #2563eb;
-      color: white;
-      padding: 1rem 1.5rem;
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      min-width: 240px;
-    }
-    .menu a:hover {
-      background: #1e40af;
-    }
-    .admin-only {
-      display: none;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding: 2rem; text-align: center; color: #111827; }
+    h1 { color: #1d4ed8; margin-bottom: 2rem; }
+    section { margin-bottom: 4rem; }
+    canvas { max-width: 700px; margin: 2rem auto; display: block; }
   </style>
 </head>
 <body>
-
-  <header>
-    🌱 AgriNexus 스마트 플랫폼 – 전자동 통합 서비스
-  </header>
+  <h1>📊 사용자 이력 분석 · 통계 시각화</h1>
 
   <section>
-    <h1>🚀 주요 기능</h1>
-    <p>계약 관리, 수익 분석, 다국어 대응, 자동화 보고서까지<br/>
-    완벽하게 통합된 글로벌 스마트팜 운영 플랫폼입니다.</p>
+    <h2>🗓 일일 / 주간 / 월간 이용자 수</h2>
+    <canvas id="dailyChart"></canvas>
+    <canvas id="weeklyChart"></canvas>
+    <canvas id="monthlyChart"></canvas>
   </section>
 
   <section>
-    <h2>📈 수익 · 계약 · 분석</h2>
-    <div class="menu">
-      <a href="/contract-pdf">📑 계약서 PDF 생성</a>
-      <a href="/revenue-report">💰 수익 계산기</a>
-      <a href="/forecast-report">📈 수익 예측 리포트</a>
-      <a href="/ai-contract-summary">🤖 계약서 AI 요약</a>
-    </div>
+    <h2>🌍 국가별 접속 분포</h2>
+    <canvas id="countryChart"></canvas>
   </section>
 
   <section>
-    <h2>🧠 AI · 글로벌 · 자동화</h2>
-    <div class="menu">
-      <a href="/lang-detect">🌐 언어 감지</a>
-      <a href="/ai-translator">🌎 다국어 번역</a>
-      <a href="/email-report">📬 이메일 리포트 전송</a>
-      <a href="/alert-scheduler">⏰ 알림 스케줄러</a>
-    </div>
+    <h2>🕒 시간대별 활동 통계</h2>
+    <canvas id="hourlyChart"></canvas>
   </section>
 
-  <section>
-    <h2>👤 사용자 · 고객 대시보드</h2>
-    <div class="menu">
-      <a href="/client-view">🌿 고객 뷰</a>
-      <a href="/upload">📤 사용자 업로드</a>
-      <a href="/user-dashboard">🧾 사용자 제출 이력</a>
-      <a href="/report-auto-tier">📬 고객 등급 보고서</a>
-    </div>
-  </section>
+  <script>
+    const daily = new Chart(document.getElementById('dailyChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: '일일 접속 수',
+          data: [120, 150, 180, 200, 170, 90, 60],
+          borderColor: '#3b82f6',
+          fill: false,
+          tension: 0.3
+        }]
+      }
+    });
 
-  <section class="admin-only">
-    <h2>🔐 관리자 기능</h2>
-    <div class="menu">
-      <a href="/login">🔐 관리자 로그인</a>
-      <a href="/admin-panel">📊 관리자 대시보드</a>
-      <a href="/admin-report">📋 리포트 통계</a>
-      <a href="/user-role">🛠 사용자 권한</a>
-    </div>
-  </section>
+    const weekly = new Chart(document.getElementById('weeklyChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['1주차', '2주차', '3주차', '4주차'],
+        datasets: [{
+          label: '주간 접속 수',
+          data: [780, 820, 950, 1030],
+          backgroundColor: '#60a5fa'
+        }]
+      }
+    });
 
-  <section>
-    <h2>📦 기타 기능</h2>
-    <div class="menu">
-      <a href="/data-visualization">📈 데이터 차트</a>
-      <a href="/csv-download">📥 CSV 출력</a>
-      <a href="/pdf-report">📄 일반 PDF 변환</a>
-      <a href="/pwa/install.html">📱 앱 설치 (PWA)</a>
-    </div>
-  </section>
+    const monthly = new Chart(document.getElementById('monthlyChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['1월', '2월', '3월', '4월'],
+        datasets: [{
+          label: '월간 접속 수',
+          data: [3200, 4100, 3900, 4700],
+          backgroundColor: '#38bdf8'
+        }]
+      }
+    });
 
+    const country = new Chart(document.getElementById('countryChart').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['🇰🇷 Korea', '🇺🇸 USA', '🇯🇵 Japan', '🇨🇳 China', '🇻🇳 Vietnam'],
+        datasets: [{
+          data: [1200, 800, 500, 300, 200],
+          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6366f1']
+        }]
+      }
+    });
+
+    const hourly = new Chart(document.getElementById('hourlyChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['0시', '3시', '6시', '9시', '12시', '15시', '18시', '21시'],
+        datasets: [{
+          label: '시간대별 접속 수',
+          data: [20, 30, 80, 140, 190, 160, 110, 60],
+          backgroundColor: '#4ade80'
+        }]
+      }
+    });
+  </script>
 </body>
 </html>
