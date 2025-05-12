@@ -2,45 +2,44 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📬 리포트 이메일 자동 전송</title>
+  <title>🌐 AgriNexus 전체 기능 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f9f9fb; }
-    textarea, input { width: 80%; padding: 0.6rem; margin: 0.5rem auto; display: block; }
-    button { padding: 0.6rem 1.2rem; background: #16a34a; color: white; border: none; cursor: pointer; }
-    p { margin-top: 1rem; font-weight: bold; }
+    body { font-family: sans-serif; background: #f8fafc; text-align: center; padding: 2rem; }
+    h1 { color: #1d4ed8; margin-bottom: 1.5rem; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 1000px; margin: auto; }
+    a {
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      display: inline-block;
+      min-width: 250px;
+    }
+    a:hover { background: #1e40af; }
   </style>
 </head>
 <body>
-  <h1>📬 자동 이메일 리포트 전송</h1>
-  <input type="email" id="email" placeholder="수신자 이메일 주소 입력" />
-  <textarea id="content" rows="6" placeholder="전송할 요약 보고서 내용을 입력하세요"></textarea>
-  <button onclick="sendReport()">전송하기</button>
-  <p id="status"></p>
-
-<script>
-  (function() {
-    emailjs.init("_Unfnkj7SMCOXw3yY"); // 실제 Public Key로 교체
-  })();
-
-  function sendReport() {
-    const email = document.getElementById("email").value;
-    const content = document.getElementById("content").value;
-    if (!email || !content) {
-      document.getElementById("status").innerText = "❗ 이메일 주소와 내용을 모두 입력하세요.";
-      return;
-    }
-
-    emailjs.send("service_0sdhn4f", "template_edhsuq5", {
-      message: content,
-      email: email
-    }).then(() => {
-      document.getElementById("status").innerText = "✅ 이메일 전송 완료!";
-    }).catch(err => {
-      document.getElementById("status").innerText = "❌ 오류 발생: " + JSON.stringify(err);
-    });
-  }
-</script>
+  <h1>🌐 AgriNexus 운영 대시보드 – 고급 기능 전체 연결</h1>
+  <nav>
+    <a href="/routes">📂 전체 기능 메뉴</a>
+    <a href="/login">🔐 관리자 로그인</a>
+    <a href="/admin-panel">📊 관리자 대시보드</a>
+    <a href="/admin-report">📋 관리자 리포트</a>
+    <a href="/data-visualization">📈 통계 차트</a>
+    <a href="/user-dashboard">👤 사용자 이력</a>
+    <a href="/upload">📤 파일 업로드</a>
+    <a href="/contract-pdf">📑 계약서 생성</a>
+    <a href="/revenue-report">💰 수익 계산</a>
+    <a href="/forecast-report">📈 수익 예측</a>
+    <a href="/csv-download">📥 CSV 출력</a>
+    <a href="/pdf-report">📄 일반 PDF 출력</a>
+    <a href="/alert">📬 관리자 알림</a>
+    <a href="/email-report">📬 리포트 이메일 전송</a>
+    <a href="/lang-detect">🌐 언어 감지</a>
+    <a href="/client-view">🌿 고객 대시보드</a>
+    <a href="/pwa/manifest.json">📱 PWA 설정</a>
+  </nav>
 </body>
 </html>
