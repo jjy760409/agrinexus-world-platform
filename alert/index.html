@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📬 관리자 알림 테스트</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function(){ emailjs.init("_Unfnkj7SMCOXw3yY"); })();
+    function sendAlert() {
+      const msg = document.getElementById("msg").value;
+      emailjs.send("service_0sdhn4f", "template_edhsuq5", {
+        message: msg,
+        email: "agrinexusworld@gmail.com"
+      }).then(() => alert("📬 알림 전송 완료"));
+    }
+  </script>
+</head>
+<body style="text-align:center;padding:2rem;font-family:sans-serif">
+  <h1>📬 관리자 알림 전송</h1>
+  <textarea id="msg" rows="6" cols="40" placeholder="관리자에게 보낼 메시지를 입력하세요"></textarea><br/>
+  <button onclick="sendAlert()">✉️ 알림 전송</button>
+</body>
+</html>

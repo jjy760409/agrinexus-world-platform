@@ -1,16 +1,35 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>login</title><link rel="stylesheet" href="../style.css" /></head><body><h1>🔐 로그인</h1>
-<input id="email" placeholder="이메일"><br>
-<input id="pw" type="password" placeholder="비밀번호"><br>
-<button onclick="login()">로그인</button>
-<div id="output"></div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔐 관리자 로그인</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 3rem; background: #f5f7fa; }
+    input { padding: 0.6rem; width: 250px; margin: 0.5rem; }
+    button { padding: 0.6rem 1rem; background: #2b6cb0; color: white; border: none; cursor: pointer; }
+    .box { background: white; padding: 2rem; display: inline-block; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>관리자 로그인</h1>
+    <input id="id" placeholder="ID"><br/>
+    <input id="pw" type="password" placeholder="Password"><br/>
+    <button onclick="login()">로그인</button>
+    <p id="msg"></p>
+  </div>
 <script>
 function login() {
-  const e = document.getElementById('email').value;
-  const p = document.getElementById('pw').value;
-  if (!e.includes("@") || p.length < 4) {
-    document.getElementById('output').innerText = "❌ 이메일 또는 비밀번호 형식이 올바르지 않습니다.";
+  const id = document.getElementById("id").value;
+  const pw = document.getElementById("pw").value;
+  if (id === "admin" && pw === "agrinexus123") {
+    localStorage.setItem("auth", "ok");
+    window.location.href = "/admin-panel/index.html";
   } else {
-    document.getElementById('output').innerText = "✅ 로그인 시도 중...";
+    document.getElementById("msg").innerText = "❌ 로그인 실패";
   }
 }
-</script></body></html>
+</script>
+</body>
+</html>

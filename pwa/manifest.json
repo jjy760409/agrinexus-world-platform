@@ -1,0 +1,15 @@
+{
+  "name": "AgriNexus Admin",
+  "short_name": "AgriNexus",
+  "start_url": "/admin-panel/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2b6cb0",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
