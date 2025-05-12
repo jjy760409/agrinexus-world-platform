@@ -1,46 +1,96 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>LOG-DASHBOARD - AgriNexus</title>
+  <meta charset="UTF-8">
+  <title>📊 관리자 로그 기록 시스템 - AgriNexus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../style.css">
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
-<script type="text/javascript">
-(function(){
-  emailjs.init("_Unfnkj7SMCOXw3yY");
-})();
-function sendEmail(content) {
-  emailjs.send("service_0sdhn4f", "template_edhsuq5", {
+<script type="module">
+import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {{ getDatabase, ref, push }} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+const firebaseConfig = {{
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_FIREBASE_DOMAIN",
+  databaseURL: "YOUR_FIREBASE_DB",
+  projectId: "YOUR_PROJECT_ID"
+}};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+emailjs.init("_Unfnkj7SMCOXw3yY");
+
+function sendEmail(content) {{
+  emailjs.send("service_0sdhn4f", "template_edhsuq5", {{
     message: content,
     email: "agrinexusworld@gmail.com"
-  }).then(function(response) {
-    alert("📨 이메일 전송 완료!");
-  }, function(error) {
-    alert("❌ 이메일 전송 실패: " + JSON.stringify(error));
-  });
-}
+  }});
+}}
+
+function saveToFirebase(content) {{
+  push(ref(db, "agrinexus_logs/"), {{
+    value: content,
+    timestamp: new Date().toISOString()
+  }});
+}}
+
+async function callGPT(content) {{
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {{
+    method: "POST",
+    headers: {{
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+    }},
+    body: JSON.stringify({{
+      model: "gpt-3.5-turbo",
+      messages: [{{ role: "user", content }}]
+    }})
+  }});
+  const result = await response.json();
+  return result.choices?.[0]?.message?.content || "추천 결과 없음";
+}}
 </script>
 
 </head>
 <body>
-  <h1>LOG-DASHBOARD</h1>
-  <textarea id="val" placeholder="제출된 계약/보고서/신청 내역이 이곳에 누적되어 실시간 표시됩니다. 예시로 입력하세요."></textarea><br/>
-  <button onclick="generate()">🧠 내용 분석</button>
-  <div id="output"></div>
-  <div class="actions">
-    <button onclick="download()">📥 PDF 저장</button>
-    <button onclick="send()">✉️ 이메일 제출</button>
-  </div>
+<h1>📊 관리자 로그 기록 시스템</h1>
+<textarea id="val" placeholder="이곳에 제출 내용을 입력하면 Firebase에 저장됩니다."></textarea><br/>
+<button onclick="generate()">🧠 처리 시작</button>
+<div id="output"></div>
+<div class="actions">
+  <button onclick="download()">📥 PDF 저장</button>
+  <button onclick="send()">✉️ 이메일 전송</button>
+</div>
 <script>
 let content = "";
+
 function generate() {
   const v = document.getElementById("val").value;
-  content = `LOG-DASHBOARD 결과:\n${v}`;
+  content = `📊 관리자 로그 기록 시스템 결과:\n${v}`;
   document.getElementById("output").innerText = content;
+
+  // 자동 감지 실행 (lang-detect용 예시)
+  if (location.pathname.includes("lang-detect")) {
+    const lang = navigator.language || navigator.userLanguage;
+    content += `\n[자동감지 언어]: ${lang}`;
+    document.getElementById("output").innerText = content;
+  }
+
+  // GPT 호출 (ai-api-suggestion)
+  if (location.pathname.includes("ai-api-suggestion")) {
+    callGPT(v).then(res => {
+      content += `\n\n[AI 추천 결과]:\n` + res;
+      document.getElementById("output").innerText = content;
+    });
+  }
+
+  // Firebase 저장 (log-dashboard)
+  if (location.pathname.includes("log-dashboard")) {
+    saveToFirebase(v);
+  }
 }
+
 function download() {
   if (!content) return alert("내용을 먼저 생성하세요.");
   const { jsPDF } = window.jspdf;
@@ -48,6 +98,7 @@ function download() {
   doc.text(content, 10, 20);
   doc.save("log-dashboard.pdf");
 }
+
 function send() {
   if (!content) return alert("내용을 먼저 생성하세요.");
   sendEmail(content);
