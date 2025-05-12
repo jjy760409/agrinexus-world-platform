@@ -1,110 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus 통합 운영 포털</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <title>AgriNexus 통합 고객 포털</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f3f4f6; color: #1f2937; }
-    header { background: #1d4ed8; color: white; padding: 1.2rem; text-align: center; font-size: 1.4rem; }
-    .container { display: flex; flex-direction: row; min-height: 100vh; }
-    .menu { width: 250px; background: white; padding: 1rem; border-right: 1px solid #e5e7eb; }
-    .menu h2 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2563eb; }
-    .menu ul { list-style: none; padding: 0; }
-    .menu li { margin: 0.3rem 0; }
-    .menu a { color: #1e40af; text-decoration: none; }
-    .menu a:hover { text-decoration: underline; }
-
-    .main { flex: 1; padding: 2rem; overflow-y: auto; }
-    .section { margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-
-    .chatbox {
-      background: #f1f5f9;
-      padding: 1rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      margin-top: 1rem;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.6rem 1rem;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; }
+    header { background: #1d4ed8; color: white; padding: 1.5rem; text-align: center; font-size: 1.5rem; }
+    main { padding: 2rem; text-align: center; }
+    section { background: white; margin: 1rem auto; max-width: 900px; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    h2 { color: #2563eb; margin-bottom: 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .card { background: #f1f5f9; padding: 1rem; border-radius: 8px; text-align: center; }
+    .card a { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; }
+    footer { text-align: center; padding: 2rem; font-size: 0.85rem; color: #6b7280; }
   </style>
 </head>
 <body>
+  <header>🌍 AgriNexus 고객 포털 – 지금 바로 사용해보세요</header>
+  <main>
 
-<header>AgriNexus Global Platform | 전자동 흐름 포털</header>
-
-<div class="container">
-  <nav class="menu">
-    <h2>📌 핵심 메뉴</h2>
-    <ul>
-      <li><a href="#guide">회원가입·이용안내</a></li>
-      <li><a href="#recommend">실시간 기능 추천</a></li>
-      <li><a href="#chat">질문/챗봇 응답</a></li>
-      <li><a href="/dashboard">기능 전체 대시보드 →</a></li>
-    </ul>
-  </nav>
-
-  <main class="main">
-    <section id="guide" class="section">
-      <h2>🔐 회원가입 / 결제 안내</h2>
-      <p><strong>무료 이용:</strong> 7일 / <strong>결제 계좌:</strong> 카카오뱅크 3333-17-4744532 (정재윤)</p>
-      <p><strong>탈퇴:</strong> 관리자 이메일 요청 즉시 처리</p>
-      <p><strong>기능별 요금 안내:</strong> 계약/AI/수익 리포트는 유료, 나머지 기본형 무료</p>
+    <section>
+      <h2>🧠 핵심 기능 바로가기</h2>
+      <div class="grid">
+        <div class="card"><h3>계약서 자동 생성</h3><p>계약 입력 → PDF 출력</p><a href="/contract-pdf">이동</a></div>
+        <div class="card"><h3>수익 예측 리포트</h3><p>수익 분석 자동 보고서</p><a href="/forecast-report">이동</a></div>
+        <div class="card"><h3>AI 계약 요약</h3><p>계약서를 자동 요약합니다</p><a href="/ai-contract-summary">이동</a></div>
+        <div class="card"><h3>고객 대시보드</h3><p>업로드, 이력, 요청 보기</p><a href="/client-view">이동</a></div>
+        <div class="card"><h3>언어 번역</h3><p>AI 기반 다국어 번역기</p><a href="/ai-translator">이동</a></div>
+        <div class="card"><h3>PWA 앱 설치</h3><p>모바일 앱처럼 설치 사용</p><a href="/pwa/install.html">이동</a></div>
+      </div>
     </section>
 
-    <section id="recommend" class="section">
-      <h2>📲 실시간 기능 추천 시스템</h2>
-      <input id="reco" placeholder="예: 계약서 작성, 수익 예측, 번역 등 입력해보세요" />
-      <button onclick="recommend()">추천 실행</button>
-      <div class="chatbox" id="reco-result">👉 관련 기능이 여기에 나타납니다.</div>
+    <section>
+      <h2>🏢 회사 소개 & 투자 자료</h2>
+      <div class="grid">
+        <div class="card"><h3>회사 소개 페이지</h3><p>AgriNexus World란?</p><a href="/company.html">회사소개</a></div>
+        <div class="card"><h3>IR 리포트</h3><p>PDF 기반 투자 설명서</p><a href="/ir.html">IR 보기</a></div>
+        <div class="card"><h3>랜딩 페이지</h3><p>외부 마케팅 전용 페이지</p><a href="/landing.html">랜딩 접속</a></div>
+      </div>
     </section>
 
-    <section id="chat" class="section">
-      <h2>💬 질문 기반 챗 응답 시스템</h2>
-      <textarea id="ask" rows="4" placeholder="예: 고객이 올린 파일은 어디서 확인하나요?"></textarea>
-      <button onclick="chat()">답변 받기</button>
-      <div class="chatbox" id="chat-result">🤖 여기 답변이 나옵니다.</div>
+    <section>
+      <h2>🚀 실시간 연결 질문/응답 시스템</h2>
+      <div class="grid">
+        <div class="card"><h3>기능 추천 시스템</h3><p>입력하면 기능 제시</p><a href="/smart-recommend">시작</a></div>
+        <div class="card"><h3>챗봇 흐름 시스템</h3><p>연속형 질문/답변</p><a href="/chat-flow">실행</a></div>
+      </div>
     </section>
+
   </main>
-</div>
-
-<script>
-function recommend() {
-  const text = document.getElementById("reco").value.toLowerCase();
-  let res = "❗ 더 구체적으로 입력해주세요.";
-  if (text.includes("계약")) res = "📑 추천 기능: 계약서 생성기 (/contract-pdf)";
-  else if (text.includes("수익") || text.includes("리포트")) res = "💰 추천 기능: 수익 계산기 (/revenue-report)";
-  else if (text.includes("ai") || text.includes("요약")) res = "🤖 추천 기능: AI 요약 분석 (/ai-contract-summary)";
-  else if (text.includes("번역") || text.includes("언어")) res = "🌐 추천 기능: 언어 감지 + 번역기 (/ai-translator)";
-  else if (text.includes("고객")) res = "🌿 추천 기능: 고객 뷰 (/client-view)";
-  document.getElementById("reco-result").innerText = res;
-}
-
-function chat() {
-  const input = document.getElementById("ask").value.toLowerCase();
-  let reply = "❓ 질문을 다시 입력해주세요.";
-  if (input.includes("파일")) reply = "📤 업로드 파일은 관리자 대시보드에서 확인 가능합니다.";
-  else if (input.includes("언제")) reply = "⏰ 대부분 기능은 24시간 자동 응답 및 다운로드 가능합니다.";
-  else if (input.includes("결제")) reply = "💳 계좌이체만 가능하며, 결제 후 바로 사용됩니다.";
-  else reply = "🤖 답변 생성 중... 더 구체적인 질문을 부탁드려요!";
-  document.getElementById("chat-result").innerText = reply;
-}
-</script>
-
+  <footer>ⓒ 2025 AgriNexus World. All Rights Reserved.</footer>
 </body>
 </html>
