@@ -1,1 +1,11 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>report</title><link rel='stylesheet' href='../style.css'></head><body class='container'><h1>📑 보고서 생성</h1><p>키워드를 입력하세요.</p><input/><button>생성</button></body></html>
+<!DOCTYPE html><html><head><meta charset='UTF-8'><link rel='stylesheet' href='../style.css'></head><body><h1>📑 보고서 생성</h1>
+<p>키워드를 입력하세요:</p>
+<input id="keyword"><br>
+<button onclick="generate()">생성</button>
+<div id="output"></div>
+<script>
+function generate() {
+  const v = document.getElementById('keyword').value;
+  document.getElementById('output').innerText = `📘 "${v}"에 대한 보고서가 생성되었습니다.`;
+}
+</script></body></html>

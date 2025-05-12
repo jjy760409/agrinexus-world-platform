@@ -1,1 +1,11 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>contract</title><link rel='stylesheet' href='../style.css'></head><body class='container'><h1>📄 계약서 자동화</h1><p>계약 내용을 입력하고 자동 생성합니다.</p><input/><button>생성</button></body></html>
+<!DOCTYPE html><html><head><meta charset='UTF-8'><link rel='stylesheet' href='../style.css'></head><body><h1>📄 계약서 자동화</h1>
+<p>계약 내용을 입력하세요:</p>
+<input id="contract"><br>
+<button onclick="make()">생성</button>
+<div id="output"></div>
+<script>
+function make() {
+  const v = document.getElementById('contract').value;
+  document.getElementById('output').innerText = `📄 계약 "${v}" 항목이 자동 생성되었습니다.`;
+}
+</script></body></html>

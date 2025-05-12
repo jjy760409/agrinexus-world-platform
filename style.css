@@ -1,22 +1,18 @@
 
 body {
-  margin: 0;
   font-family: sans-serif;
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: #f5f7fa;
+  background: #f4f6f8;
   color: #333;
-}
-.container {
+  padding: 2rem;
   text-align: center;
 }
-nav a {
-  display: inline-block;
-  margin: 1em;
-  text-decoration: none;
+input, button {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+#output {
+  margin-top: 1rem;
   font-weight: bold;
-  color: #2b6cb0;
+  color: green;
 }
