@@ -2,37 +2,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📤 랜딩 URL 생성기</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f3f4f6; padding: 2rem; text-align: center; color: #111827; }
-    h1 { color: #1d4ed8; margin-bottom: 2rem; }
-    input { padding: 0.6rem; width: 90%; max-width: 400px; margin-bottom: 1rem; }
-    button { padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }
-    .output { margin-top: 2rem; font-weight: bold; color: #10b981; }
-  </style>
+  <title>AgriNexus 자동 통합 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>📤 홍보용 랜딩 URL 생성기</h1>
-  <p>캠페인명, 채널, 코드 등을 입력하여 전용 URL을 생성하세요</p>
-  <input id="campaign" placeholder="캠페인명 (예: spring2025)" /><br/>
-  <input id="ref" placeholder="채널/참조자 (예: instagram)" /><br/>
-  <input id="utm" placeholder="추가 코드 또는 구분자 (선택)" /><br/>
-  <button onclick="generate()">URL 생성</button>
-  <div class="output" id="result">여기에 생성된 URL이 나타납니다.</div>
 
-  <script>
-    function generate() {
-      const base = "https://agrinexus.world/landing";
-      const c = document.getElementById("campaign").value.trim();
-      const r = document.getElementById("ref").value.trim();
-      const u = document.getElementById("utm").value.trim();
-      let url = base + "?";
-      if (c) url += "campaign=" + encodeURIComponent(c);
-      if (r) url += "&ref=" + encodeURIComponent(r);
-      if (u) url += "&code=" + encodeURIComponent(u);
-      document.getElementById("result").innerText = "📎 " + url;
-    }
-  </script>
+<header>
+  <h1>🌿 AgriNexus 자동 통합 시스템</h1>
+  <p>기능이 추가될 때마다 이 메인 포털에 자동 반영됩니다.</p>
+</header>
+
+<main>
+  <section>
+    <h2>📥 주요 기능 바로가기</h2>
+    <div class="menu">
+      <a href="/dashboard">대시보드</a>
+      <a href="/portal">고객포털</a>
+      <a href="/contract-pdf">계약서 생성</a>
+      <a href="/revenue-report">수익 계산기</a>
+      <a href="/forecast-report">수익 예측</a>
+      <a href="/ai-translator">다국어 번역</a>
+      <a href="/client-view">고객 대시보드</a>
+      <a href="/landing.html">랜딩 페이지</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🧠 최근 업로드된 기능 자동 반영</h2>
+    <p>업로드 후 자동 업데이트: <strong>/connect</strong>, <strong>/chat-flow</strong>, <strong>/user-stats</strong>, <strong>/smart-recommend</strong></p>
+    <div class="menu">
+      <a href="/connect">질문-기능 연결</a>
+      <a href="/smart-recommend">기능 추천</a>
+      <a href="/user-stats">이용자 통계</a>
+      <a href="/chat-flow">챗봇 인터랙션</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  ⓒ 2025 AgriNexus World. 모든 기능은 실시간 자동 반영됩니다.
+</footer>
+
 </body>
 </html>
