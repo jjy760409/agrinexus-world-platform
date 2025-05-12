@@ -2,16 +2,14 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🌍 AgriNexus World – 전자동 통합 대시보드</title>
+  <title>AgriNexus 메인 포털 - 전자동 기능</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f9fafb;
-      color: #1f2937;
-      scroll-behavior: smooth;
+    body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: #f9fafb; color: #1f2937; }
+    header {
+      position: sticky; top: 0;
+      background: #1d4ed8; color: white; padding: 1rem; text-align: center;
+      z-index: 999;
     }
     section {
       padding: 4rem 2rem;
@@ -19,90 +17,89 @@
       border-bottom: 1px solid #e5e7eb;
       text-align: center;
     }
-    h1 {
-      font-size: 2rem;
-      color: #1d4ed8;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #2563eb;
-    }
+    h1, h2 { margin-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; color: #2563eb; }
     .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1rem;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+      max-width: 1000px; margin: auto;
     }
     .menu a {
       background: #2563eb;
       color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
+      padding: 1rem 1.5rem;
       text-decoration: none;
-      min-width: 200px;
+      border-radius: 10px;
+      font-size: 1rem;
+      min-width: 240px;
     }
     .menu a:hover {
       background: #1e40af;
+    }
+    .admin-only {
+      display: none;
     }
   </style>
 </head>
 <body>
 
+  <header>
+    🌱 AgriNexus 스마트 플랫폼 – 전자동 통합 서비스
+  </header>
+
   <section>
-    <h1>🌍 AgriNexus World 통합 대시보드</h1>
-    <p>AI, 계약, 수익, 보고서, 고객, 언어 감지, 관리자 도구까지<br/>
-    모든 기능이 통합된 글로벌 전자동 스마트팜 플랫폼입니다.</p>
+    <h1>🚀 주요 기능</h1>
+    <p>계약 관리, 수익 분석, 다국어 대응, 자동화 보고서까지<br/>
+    완벽하게 통합된 글로벌 스마트팜 운영 플랫폼입니다.</p>
   </section>
 
   <section>
-    <h2>📊 관리자 기능</h2>
+    <h2>📈 수익 · 계약 · 분석</h2>
     <div class="menu">
-      <a href="/login">관리자 로그인</a>
-      <a href="/admin-panel">대시보드</a>
-      <a href="/admin-report">리포트 탭</a>
-      <a href="/user-role">권한 설정</a>
-      <a href="/alert-scheduler">알림 스케줄러</a>
+      <a href="/contract-pdf">📑 계약서 PDF 생성</a>
+      <a href="/revenue-report">💰 수익 계산기</a>
+      <a href="/forecast-report">📈 수익 예측 리포트</a>
+      <a href="/ai-contract-summary">🤖 계약서 AI 요약</a>
     </div>
   </section>
 
   <section>
-    <h2>📈 통계 / 수익 / 보고서</h2>
+    <h2>🧠 AI · 글로벌 · 자동화</h2>
     <div class="menu">
-      <a href="/data-visualization">제출 통계</a>
-      <a href="/revenue-report">수익 계산기</a>
-      <a href="/forecast-report">수익 예측 리포트</a>
-      <a href="/csv-download">CSV 출력</a>
-      <a href="/pdf-report">PDF 출력</a>
+      <a href="/lang-detect">🌐 언어 감지</a>
+      <a href="/ai-translator">🌎 다국어 번역</a>
+      <a href="/email-report">📬 이메일 리포트 전송</a>
+      <a href="/alert-scheduler">⏰ 알림 스케줄러</a>
     </div>
   </section>
 
   <section>
-    <h2>📑 계약 관리</h2>
+    <h2>👤 사용자 · 고객 대시보드</h2>
     <div class="menu">
-      <a href="/contract-pdf">계약서/세금계산서</a>
-      <a href="/ai-contract-summary">AI 계약 요약</a>
+      <a href="/client-view">🌿 고객 뷰</a>
+      <a href="/upload">📤 사용자 업로드</a>
+      <a href="/user-dashboard">🧾 사용자 제출 이력</a>
+      <a href="/report-auto-tier">📬 고객 등급 보고서</a>
+    </div>
+  </section>
+
+  <section class="admin-only">
+    <h2>🔐 관리자 기능</h2>
+    <div class="menu">
+      <a href="/login">🔐 관리자 로그인</a>
+      <a href="/admin-panel">📊 관리자 대시보드</a>
+      <a href="/admin-report">📋 리포트 통계</a>
+      <a href="/user-role">🛠 사용자 권한</a>
     </div>
   </section>
 
   <section>
-    <h2>👤 사용자 / 고객 기능</h2>
+    <h2>📦 기타 기능</h2>
     <div class="menu">
-      <a href="/client-view">고객 대시보드</a>
-      <a href="/upload">파일 업로드</a>
-      <a href="/user-dashboard">제출 이력</a>
-      <a href="/report-auto-tier">보고서 자동 전송</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>🌐 글로벌 대응 기능</h2>
-    <div class="menu">
-      <a href="/lang-detect">언어 감지</a>
-      <a href="/ai-translator">AI 다국어 번역</a>
-      <a href="/pwa/install.html">PWA 설치 안내</a>
-      <a href="/email-report">이메일 리포트 발송</a>
+      <a href="/data-visualization">📈 데이터 차트</a>
+      <a href="/csv-download">📥 CSV 출력</a>
+      <a href="/pdf-report">📄 일반 PDF 변환</a>
+      <a href="/pwa/install.html">📱 앱 설치 (PWA)</a>
     </div>
   </section>
 
