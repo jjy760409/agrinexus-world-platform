@@ -1,32 +1,22 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: sans-serif;
   display: flex;
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
+  flex-direction: column;
+  background: #f5f7fa;
+  color: #333;
 }
 .container {
   text-align: center;
 }
 nav a {
   display: inline-block;
-  margin: 0 1em;
+  margin: 1em;
   text-decoration: none;
-  color: var(--link-color);
   font-weight: bold;
-}
-:root {
-  --bg-color: #ffffff;
-  --text-color: #111111;
-  --link-color: #2b6cb0;
-}
-[data-theme='night'] {
-  --bg-color: #1a202c;
-  --text-color: #f0f0f0;
-  --link-color: #63b3ed;
+  color: #2b6cb0;
 }
