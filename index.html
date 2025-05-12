@@ -1,42 +1,34 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus World 통합 운영 시스템</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>🌿 고객 전용 대시보드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #f0f4f8; text-align: center; padding: 2rem; }
-    h1 { color: #1e3a8a; }
-    nav { margin: 2rem auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-    a {
-      display: inline-block;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      min-width: 200px;
-    }
-    a:hover { background: #1e40af; }
+    body { font-family: sans-serif; padding: 2rem; text-align: center; background: #f0fdf4; }
+    h1 { color: #047857; }
+    input, textarea { width: 80%; padding: 0.6rem; margin: 0.5rem 0; }
+    button { padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>🌍 AgriNexus World 운영 메뉴</h1>
-  <nav>
-    <a href="/routes">📂 전체 기능 메뉴</a>
-    <a href="/login">🔐 관리자 로그인</a>
-    <a href="/admin-panel">📊 관리자 대시보드</a>
-    <a href="/user-dashboard">👤 사용자 이력 조회</a>
-    <a href="/data-visualization">📈 통계 시각화</a>
-    <a href="/csv-download">📥 CSV 다운로드</a>
-    <a href="/pdf-report">📄 PDF 변환</a>
-    <a href="/revenue-report">💰 수익 계산기</a>
-    <a href="/forecast-report">📈 수익 예측 리포트</a>
-    <a href="/alert">📬 관리자 알림</a>
-    <a href="/chart">📊 차트 대시보드</a>
-    <a href="/pwa/manifest.json">📱 PWA 설치 설정</a>
-    <a href="/lang-detect">🌐 언어 자동감지</a>
-  </nav>
+  <h1>🌿 고객 대시보드</h1>
+  <p>의견 또는 요청을 입력하고 파일을 첨부해주세요.</p>
+  <textarea id="comment" rows="4" placeholder="요청 내용을 입력하세요..."></textarea><br/>
+  <input type="file" id="file" /><br/>
+  <button onclick="submit()">제출</button>
+  <p id="status"></p>
+
+  <script>
+    function submit() {
+      const text = document.getElementById("comment").value;
+      const file = document.getElementById("file").files[0];
+      if (!text || !file) {
+        document.getElementById("status").innerText = "❗ 내용과 파일 모두 입력해주세요.";
+        return;
+      }
+      document.getElementById("status").innerText = "✅ 제출 완료 (시뮬레이션 저장됨)";
+    }
+  </script>
 </body>
 </html>
