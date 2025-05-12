@@ -2,37 +2,37 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 글로벌 플랫폼</title>
+  <title>📤 랜딩 URL 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Google Analytics 예시 스크립트 (Tracking ID 교체 필요) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
   <style>
-    body { font-family: sans-serif; background: #f9fafb; color: #111827; padding: 2rem; text-align: center; }
-    h1 { color: #1d4ed8; font-size: 2rem; }
-    a {
-      display: inline-block;
-      margin: 1rem;
-      padding: 0.75rem 1.5rem;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f3f4f6; padding: 2rem; text-align: center; color: #111827; }
+    h1 { color: #1d4ed8; margin-bottom: 2rem; }
+    input { padding: 0.6rem; width: 90%; max-width: 400px; margin-bottom: 1rem; }
+    button { padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .output { margin-top: 2rem; font-weight: bold; color: #10b981; }
   </style>
 </head>
 <body>
-  <h1>🌍 AgriNexus 시스템 전체 통합 접속 포털</h1>
-  <p>이 페이지는 GA 기반 방문자 추적과 전체 파일 통합 구조를 지원합니다.</p>
+  <h1>📤 홍보용 랜딩 URL 생성기</h1>
+  <p>캠페인명, 채널, 코드 등을 입력하여 전용 URL을 생성하세요</p>
+  <input id="campaign" placeholder="캠페인명 (예: spring2025)" /><br/>
+  <input id="ref" placeholder="채널/참조자 (예: instagram)" /><br/>
+  <input id="utm" placeholder="추가 코드 또는 구분자 (선택)" /><br/>
+  <button onclick="generate()">URL 생성</button>
+  <div class="output" id="result">여기에 생성된 URL이 나타납니다.</div>
 
-  <a href="/dashboard">기능 전체 대시보드</a>
-  <a href="/portal">고객 포털 접속</a>
-  <a href="/connect">실시간 기능 연결형</a>
-  <a href="/landing.html">광고/홍보용 랜딩페이지</a>
+  <script>
+    function generate() {
+      const base = "https://agrinexus.world/landing";
+      const c = document.getElementById("campaign").value.trim();
+      const r = document.getElementById("ref").value.trim();
+      const u = document.getElementById("utm").value.trim();
+      let url = base + "?";
+      if (c) url += "campaign=" + encodeURIComponent(c);
+      if (r) url += "&ref=" + encodeURIComponent(r);
+      if (u) url += "&code=" + encodeURIComponent(u);
+      document.getElementById("result").innerText = "📎 " + url;
+    }
+  </script>
 </body>
 </html>
