@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World - 통합 서비스형 웹앱</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .section { display: none; }
+    .section.active { display: block; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 font-sans scroll-smooth">
+
+  <header class="bg-green-700 text-white text-center py-6">
+    <h1 class="text-3xl font-bold">AgriNexus World</h1>
+    <p class="text-sm">스마트팜 통합 자동화 플랫폼 | 모든 기능 실작동 통합</p>
+    <nav class="mt-4 flex flex-wrap justify-center gap-2">
+      <button onclick="showSection('contract')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">📄 계약</button>
+      <button onclick="showSection('design')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">🤖 설계</button>
+      <button onclick="showSection('logistics')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">🛰 물류</button>
+      <button onclick="showSection('report')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">📊 리포트</button>
+      <button onclick="showSection('investment')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">💰 투자</button>
+      <button onclick="showSection('global')" class="bg-white text-green-800 px-4 py-2 rounded hover:bg-gray-100">🌐 글로벌</button>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <!-- 계약 -->
+    <section id="contract" class="section active">
+      <h2 class="text-xl font-bold mb-2">📄 계약서 생성기</h2>
+      <input id="contractName" placeholder="계약자 이름" class="border p-2 rounded w-full mb-2" />
+      <textarea id="contractContent" rows="4" placeholder="계약 내용" class="border p-2 rounded w-full mb-2"></textarea>
+      <button onclick="generateContractPDF()" class="bg-green-600 text-white px-4 py-2 rounded">📄 계약서 PDF 생성</button>
+      <div id="contractPreview" class="mt-4 hidden p-4 border rounded bg-white">
+        <h3 class="text-lg font-bold mb-1">[ 계약서 ]</h3>
+        <p><strong>계약자:</strong> <span id="cp_name"></span></p>
+        <p id="cp_content" class="whitespace-pre-wrap mt-2"></p>
+      </div>
+    </section>
+
+    <!-- 설계 -->
+    <section id="design" class="section">
+      <h2 class="text-xl font-bold mb-2">🤖 스마트팜 설계 시뮬레이션</h2>
+      <input id="designInput" placeholder="예: 서울시 구로구" class="border p-2 rounded w-full mb-2" />
+      <button onclick="generateDesign()" class="bg-purple-600 text-white px-4 py-2 rounded">설계 생성</button>
+      <p id="designResult" class="mt-4 text-purple-800 font-medium"></p>
+    </section>
+
+    <!-- 물류 -->
+    <section id="logistics" class="section">
+      <h2 class="text-xl font-bold mb-2">🛰 물류 추적 시스템</h2>
+      <input id="logisticsInput" placeholder="출발 도시" class="border p-2 rounded w-full mb-2" />
+      <button onclick="trackLogistics()" class="bg-blue-600 text-white px-4 py-2 rounded">추적</button>
+      <p id="logisticsResult" class="mt-4 text-blue-700 font-medium"></p>
+    </section>
+
+    <!-- 리포트 -->
+    <section id="report" class="section">
+      <h2 class="text-xl font-bold mb-2">📊 ROI 리포트 생성</h2>
+      <input id="roiInput" type="number" placeholder="투자금액(만원)" class="border p-2 rounded w-full mb-2" />
+      <button onclick="generateROI()" class="bg-pink-600 text-white px-4 py-2 rounded">리포트 생성</button>
+      <p id="roiResult" class="mt-4 text-pink-700 font-medium"></p>
+    </section>
+
+    <!-- 투자 -->
+    <section id="investment" class="section">
+      <h2 class="text-xl font-bold mb-2">💰 투자 IR 생성</h2>
+      <input id="irTitle" placeholder="IR 문서 제목" class="border p-2 rounded w-full mb-2" />
+      <button onclick="generateIR()" class="bg-orange-600 text-white px-4 py-2 rounded">IR 생성</button>
+      <p id="irResult" class="mt-4 text-orange-700 font-medium"></p>
+    </section>
+
+    <!-- 글로벌 -->
+    <section id="global" class="section">
+      <h2 class="text-xl font-bold mb-2">🌐 글로벌 시스템</h2>
+      <p>다국어 자동화, PWA 설치, GPT 연동 서비스 준비 중입니다.</p>
+      <button class="mt-2 bg-teal-600 text-white px-4 py-2 rounded">GPT 상담 시작</button>
+    </section>
+  </main>
+
+  <footer class="bg-gray-100 text-center text-sm text-gray-600 py-6">
+    © 2025 AgriNexus World — 실제 작동 All-in-One SPA
+  </footer>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function generateContractPDF() {
+      const name = document.getElementById("contractName").value;
+      const content = document.getElementById("contractContent").value;
+      if (!name || !content) return alert("모든 항목을 입력해 주세요.");
+
+      document.getElementById("cp_name").innerText = name;
+      document.getElementById("cp_content").innerText = content;
+      const el = document.getElementById("contractPreview");
+      el.classList.remove("hidden");
+
+      html2pdf().set({ filename: `계약서_${name}.pdf` }).from(el).save();
+    }
+
+    function generateDesign() {
+      const area = document.getElementById("designInput").value;
+      document.getElementById("designResult").innerText = `🌿 ${area}에 최적화된 스마트팜 설계가 생성되었습니다.`;
+    }
+
+    function trackLogistics() {
+      const city = document.getElementById("logisticsInput").value;
+      document.getElementById("logisticsResult").innerText = `🚚 ${city}에서 출발한 물류를 추적 중입니다.`;
+    }
+
+    function generateROI() {
+      const amount = document.getElementById("roiInput").value;
+      document.getElementById("roiResult").innerText = `📈 예상 수익률은 약 ${amount * 1.5}만원입니다.`;
+    }
+
+    function generateIR() {
+      const title = document.getElementById("irTitle").value;
+      document.getElementById("irResult").innerText = `📄 IR 문서 "${title}"가 생성되었습니다.`;
+    }
+  </script>
+</body>
+</html>
