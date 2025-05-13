@@ -1,71 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📈 관리자 통계 대시보드</title>
+  <meta charset="UTF-8">
+  <title>📥 계약 내역 PDF 리포트 출력</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="firebase-config.js"></script>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #111827; }
-    h1 { color: #2563eb; text-align: center; }
-    canvas { max-width: 800px; margin: 2rem auto; display: block; }
+    h1 { color: #1d4ed8; }
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>📈 계약 건수 분석 대시보드</h1>
-  <canvas id="monthlyChart"></canvas>
-  <canvas id="dailyChart"></canvas>
+  <h1>📥 계약 내역 PDF 리포트 출력</h1>
+  <button onclick="exportPDF()">PDF 저장하기</button>
 
 <script>
-  const db = firebase.firestore();
+  async function exportPDF() {
+    const db = firebase.firestore();
+    const snapshot = await db.collection("contracts").orderBy("timestamp", "desc").get();
 
-  const countBy = (arr, key) => {
-    return arr.reduce((acc, curr) => {
-      const val = curr[key];
-      acc[val] = (acc[val] || 0) + 1;
-      return acc;
-    }, {});
-  };
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let y = 20;
+    doc.text("AgriNexus 계약서 리포트", 10, y);
+    y += 10;
 
-  db.collection("contracts").get().then(snapshot => {
-    const data = [];
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      const date = new Date(d.timestamp);
-      const month = date.toISOString().slice(0,7);  // YYYY-MM
-      const day = date.toISOString().slice(0,10);   // YYYY-MM-DD
-      data.push({ month, day });
+    snapshot.forEach(docSnap => {
+      const d = docSnap.data();
+      const row = `- 고객: ${d.name}, 서명: ${d.sign}, 날짜: ${new Date(d.timestamp).toLocaleDateString()}`;
+      doc.text(row, 10, y);
+      y += 10;
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
     });
 
-    const monthCount = countBy(data, 'month');
-    const dayCount = countBy(data, 'day');
-
-    const renderChart = (id, label, labels, values, color) => {
-      new Chart(document.getElementById(id).getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label,
-            data: values,
-            backgroundColor: color
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-    };
-
-    renderChart("monthlyChart", "월별 계약 건수", Object.keys(monthCount), Object.values(monthCount), "#3b82f6");
-    renderChart("dailyChart", "일별 계약 건수", Object.keys(dayCount), Object.values(dayCount), "#16a34a");
-  });
+    doc.save("agrinexus_report.pdf");
+  }
 </script>
 </body>
 </html>
