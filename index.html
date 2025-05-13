@@ -1,58 +1,69 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📊 AgriNexus 마케팅 종합 분석 대시보드</title>
+  <meta charset="UTF-8">
+  <title>🧭 고객 행동 여정맵 시각화</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; color: #1f2937; }
-    h1 { color: #1d4ed8; text-align: center; }
-    table {
-      width: 100%;
+    body { font-family: sans-serif; background: #f0f9ff; padding: 2rem; color: #1f2937; }
+    h1 { color: #0284c7; text-align: center; }
+    .flowmap {
       max-width: 900px;
-      margin: 2rem auto;
-      border-collapse: collapse;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    th, td {
-      border: 1px solid #e5e7eb;
-      padding: 0.75rem;
-      text-align: center;
-    }
-    th {
-      background: #eff6ff;
-    }
-    tr:nth-child(even) {
-      background: #f1f5f9;
-    }
-    .summary {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
+      margin: 3rem auto;
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 2rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .step-circle {
+      min-width: 60px;
+      height: 60px;
+      background: #38bdf8;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 60px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-right: 1.5rem;
+    }
+    .step-desc {
+      font-size: 1.05rem;
     }
   </style>
 </head>
 <body>
-  <h1>📊 AgriNexus 마케팅 종합 리포트</h1>
-  <div class="summary">
-    <p><strong>총 이메일 발송 수:</strong> 426통</p>
-    <p><strong>총 추천 기능 클릭 수:</strong> 218회</p>
-    <p><strong>총 기능 전환율 평균:</strong> 11.3%</p>
+  <h1>🧭 고객 행동 흐름 여정맵 (Flow Map)</h1>
+  <div class="flowmap">
+    <div class="step">
+      <div class="step-circle">1</div>
+      <div class="step-desc">홈페이지 접속 및 가입 (로그인/회원가입)</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <div class="step-desc">계약서 생성 기능 클릭 → PDF 출력 or 이메일 전송</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <div class="step-desc">추천 기능 노출 → ROI 예측 또는 업그레이드 유도 클릭</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <div class="step-desc">고객 등급 분석 → 할인쿠폰 or IR 리포트 자동 제안</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">5</div>
+      <div class="step-desc">기능 사용 기록 저장 → 관리자 리포트 실시간 반영</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">6</div>
+      <div class="step-desc">행동 기반 추천 → 다음 기능 자동 연결 / 캠페인 이메일 발송</div>
+    </div>
   </div>
-
-  <table>
-    <thead>
-      <tr><th>추천 기능</th><th>노출 수</th><th>클릭 수</th><th>전환율</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>전자서명 기능</td><td>145</td><td>53</td><td>36.6%</td></tr>
-      <tr><td>ROI 분석 리포트</td><td>98</td><td>24</td><td>24.5%</td></tr>
-      <tr><td>IR 투자 제안</td><td>76</td><td>9</td><td>11.8%</td></tr>
-      <tr><td>기능 업그레이드 안내</td><td>107</td><td>13</td><td>12.1%</td></tr>
-    </tbody>
-  </table>
 </body>
 </html>
