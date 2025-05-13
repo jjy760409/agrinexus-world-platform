@@ -2,61 +2,92 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🔥 인기 기능 순위 리포트 (기능별 사용량)</title>
+  <title>🧠 고객 행동 예측 기반 추천 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fef2f2; color: #1f2937; }
-    h1 { color: #dc2626; }
-    table {
-      margin-top: 2rem;
-      width: 100%;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      border-collapse: collapse;
+    body { font-family: sans-serif; padding: 2rem; background: #f0f9ff; color: #1f2937; }
+    h1 { color: #0e7490; }
+    label, select, input {
+      display: block;
+      margin: 1rem 0 0.3rem;
     }
-    th, td {
+    input, select {
       padding: 0.6rem;
-      border: 1px solid #fca5a5;
-      text-align: left;
+      width: 100%;
+      max-width: 400px;
     }
-    th {
-      background: #fecaca;
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .highlight {
+      color: #0284c7;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>🔥 기능별 사용량 인기 순위</h1>
-  <table>
-    <thead>
-      <tr><th>기능명</th><th>사용 횟수</th></tr>
-    </thead>
-    <tbody id="rankTable">
-      <tr><td colspan="2">로딩 중...</td></tr>
-    </tbody>
-  </table>
+  <h1>🧠 고객 행동 예측 기반 추천 시뮬레이션</h1>
+  <label>고객 등급</label>
+  <select id="tier">
+    <option value="bronze">Bronze</option>
+    <option value="silver">Silver</option>
+    <option value="gold">Gold</option>
+    <option value="vip">VIP</option>
+  </select>
+
+  <label>최근 사용 기능</label>
+  <select id="lastFeature">
+    <option value="contract">계약서 생성</option>
+    <option value="forecast">수익 예측</option>
+    <option value="upload">업로드</option>
+    <option value="translate">번역기</option>
+  </select>
+
+  <label>최근 접속 빈도 (30일 내)</label>
+  <input id="visits" type="number" placeholder="예: 7" />
+
+  <button onclick="predict()">예측 실행</button>
+
+  <div id="result" class="result" style="display:none;"></div>
 
 <script>
-  const db = firebase.firestore();
-  const table = document.getElementById("rankTable");
+  function predict() {
+    const tier = document.getElementById("tier").value;
+    const feature = document.getElementById("lastFeature").value;
+    const visits = parseInt(document.getElementById("visits").value || 0);
 
-  db.collection("activity_logs").get().then(snapshot => {
-    const countMap = {};
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      const feature = d.feature;
-      countMap[feature] = (countMap[feature] || 0) + 1;
-    });
+    let recommendation = "";
+    if (tier === "vip" && feature === "contract" && visits > 5) {
+      recommendation = "📢 전자서명 + 자동 PDF 이메일 전송 기능 연계 추천!";
+    } else if (feature === "translate") {
+      recommendation = "🌍 글로벌 거래 대응을 위해 수출입 리포트 자동 연결을 추천합니다.";
+    } else if (feature === "forecast" && visits >= 3) {
+      recommendation = "📈 ROI 분석과 수익 예측 리포트 자동 저장을 추천합니다.";
+    } else {
+      recommendation = "🔍 다양한 기능을 추가 탐색할 수 있는 전체 메뉴 대시보드를 안내합니다.";
+    }
 
-    const sorted = Object.entries(countMap).sort((a,b) => b[1] - a[1]);
-    table.innerHTML = "";
-    sorted.forEach(([feature, count]) => {
-      table.innerHTML += `<tr><td>${feature}</td><td>${count}</td></tr>`;
-    });
-  });
+    const output = `
+      <p><span class="highlight">${tier.toUpperCase()}</span> 고객이 최근 사용한 기능은 
+      <span class="highlight">${feature}</span>이며, 30일 내 접속 수는 <span class="highlight">${visits}</span>회입니다.</p>
+      <p>👉 예측 추천: <strong>${recommendation}</strong></p>
+    `;
+    document.getElementById("result").innerHTML = output;
+    document.getElementById("result").style.display = "block";
+  }
 </script>
 </body>
 </html>
