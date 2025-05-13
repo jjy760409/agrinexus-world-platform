@@ -1,75 +1,80 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📬 자동 배너 + 추천 기능 이메일 발송</title>
+  <meta charset="UTF-8">
+  <title>🧠 조건 기반 추천 노출 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #1f2937; }
-    h1 { color: #10b981; }
+    body { font-family: sans-serif; padding: 2rem; background: #eef2ff; color: #1f2937; }
+    h1 { color: #4f46e5; }
+    label, select, input {
+      display: block;
+      margin: 1rem 0 0.3rem;
+    }
     input, select {
       padding: 0.6rem;
       width: 100%;
       max-width: 400px;
-      margin-top: 1rem;
     }
     button {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
-      background: #059669;
+      background: #6366f1;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    .popup {
+    .result {
       margin-top: 2rem;
-      background: #ecfdf5;
       padding: 1.5rem;
-      border-left: 5px solid #10b981;
+      background: white;
+      border-left: 5px solid #818cf8;
       border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
   </style>
 </head>
 <body>
-  <h1>📬 자동 추천 배너 + 이메일 발송</h1>
-
-  <input id="email" placeholder="고객 이메일 입력" />
-  <select id="recommend">
-    <option value="/contract-sign">전자서명 기능 추천</option>
-    <option value="/roi-report-email">ROI 분석 PDF 전송</option>
-    <option value="/forecast-report">수익 예측 리포트</option>
-    <option value="/ir-auto-generator">IR 투자 보고서 생성</option>
+  <h1>🧠 조건 기반 추천 노출</h1>
+  <label>고객 등급</label>
+  <select id="tier">
+    <option value="bronze">Bronze</option>
+    <option value="silver">Silver</option>
+    <option value="gold">Gold</option>
+    <option value="vip">VIP</option>
   </select>
-  <button onclick="showBanner()">배너 보기 + 이메일 발송</button>
 
-  <div class="popup" id="popupBox" style="display:none;"></div>
+  <label>최근 계약 수</label>
+  <input id="contracts" type="number" placeholder="예: 3" />
+
+  <label>최근 접속 일수</label>
+  <input id="visits" type="number" placeholder="예: 10" />
+
+  <button onclick="filterRecommend()">추천 보기</button>
+
+  <div id="output" class="result" style="display:none;"></div>
 
 <script>
-  emailjs.init("_YOUR_EMAILJS_KEY_"); // EmailJS 실제 키로 대체
+  function filterRecommend() {
+    const tier = document.getElementById("tier").value;
+    const contracts = parseInt(document.getElementById("contracts").value || 0);
+    const visits = parseInt(document.getElementById("visits").value || 0);
 
-  function showBanner() {
-    const email = document.getElementById("email").value;
-    const recommend = document.getElementById("recommend").value;
-    const linkMap = {
-      "/contract-sign": "전자서명 기능을 사용해 보세요 → /contract-sign",
-      "/roi-report-email": "ROI 분석 결과를 PDF로 받아보세요 → /roi-report-email",
-      "/forecast-report": "수익 예측 리포트를 지금 확인하세요 → /forecast-report",
-      "/ir-auto-generator": "투자자용 IR 보고서를 자동 생성하세요 → /ir-auto-generator"
-    };
+    let message = "📌 추천: ";
 
-    const msg = linkMap[recommend];
-    const html = `<strong>📢 추천 안내:</strong><br/>${msg}<br/><br/>📧 이메일 발송 완료`;
+    if (tier === "vip" && contracts >= 5 && visits >= 10) {
+      message += "전자서명 + PDF 자동 이메일 전송 ➤ /contract-sign";
+    } else if (tier === "gold" && contracts >= 3) {
+      message += "ROI 분석 + IR 보고서 추천 ➤ /ir-auto-generator";
+    } else if (tier === "silver" && visits >= 5) {
+      message += "기능 업그레이드 추천 ➤ /upgrade-cta-system";
+    } else {
+      message += "전체 대시보드에서 더 많은 기능 탐색 ➤ /dashboard";
+    }
 
-    emailjs.send("default_service", "template_xxxx", {
-      message: msg,
-      email: email
-    }).then(() => {
-      const box = document.getElementById("popupBox");
-      box.innerHTML = html;
-      box.style.display = "block";
-    });
+    document.getElementById("output").innerHTML = message;
+    document.getElementById("output").style.display = "block";
   }
 </script>
 </body>
