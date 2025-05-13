@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📈 ROI 수익 분석 시뮬레이션</title>
+  <meta charset="UTF-8" />
+  <title>📈 ROI 리포트 저장 + 이메일 전송</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #111827; }
-    h1 { color: #15803d; }
-    label { display: block; margin-top: 1rem; font-weight: bold; }
+    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
+    h1 { color: #1e40af; }
     input {
+      padding: 0.6rem;
+      margin: 0.5rem 0;
       width: 100%;
       max-width: 400px;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
     }
     button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      background: #16a34a;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #2563eb;
       color: white;
       border: none;
       border-radius: 6px;
@@ -26,43 +27,54 @@
     .output {
       margin-top: 2rem;
       background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>📈 ROI 수익 분석 시뮬레이션</h1>
-  <label>계약 총 개수</label>
-  <input id="contracts" type="number" placeholder="예: 25">
-  <label>계약당 평균 매출 (₩)</label>
-  <input id="revenue" type="number" placeholder="예: 500000">
-  <label>총 운영 비용 (₩)</label>
-  <input id="cost" type="number" placeholder="예: 3000000">
-  <button onclick="calculate()">ROI 계산하기</button>
+  <h1>📈 ROI 리포트 자동 저장 및 이메일 전송</h1>
 
-  <div id="result" class="output" style="display:none;"></div>
+  <input id="email" placeholder="수신자 이메일 입력" />
+  <input id="contracts" type="number" placeholder="계약 수" />
+  <input id="revenue" type="number" placeholder="1건당 매출" />
+  <input id="cost" type="number" placeholder="총 운영비" />
+  <button onclick="run()">PDF 저장 + 이메일 전송</button>
+
+  <div class="output" id="result">결과 리포트가 여기에 표시됩니다.</div>
 
   <script>
-    function calculate() {
-      const count = parseInt(document.getElementById("contracts").value || 0);
+    emailjs.init("_YOUR_EMAILJS_PUBLIC_KEY_"); // 사용 시 실제 키로 대체 필요
+
+    function run() {
+      const contracts = parseInt(document.getElementById("contracts").value || 0);
       const revenue = parseInt(document.getElementById("revenue").value || 0);
       const cost = parseInt(document.getElementById("cost").value || 0);
+      const email = document.getElementById("email").value;
 
-      const totalRevenue = count * revenue;
-      const roi = ((totalRevenue - cost) / cost * 100).toFixed(2);
+      const total = contracts * revenue;
+      const roi = ((total - cost) / cost * 100).toFixed(2);
+      const summary = `계약 수: ${contracts}
+1건당 매출: ₩${revenue.toLocaleString()}
+총 매출: ₩${total.toLocaleString()}
+총 운영비: ₩${cost.toLocaleString()}
+ROI 수익률: ${roi}%`;
 
-      const result = `
-        🔢 계약 수: ${count}건<br/>
-        💰 총 매출: ₩${totalRevenue.toLocaleString()}<br/>
-        💸 운영비: ₩${cost.toLocaleString()}<br/>
-        📈 ROI 수익률: <strong>${roi}%</strong>
-      `;
+      // PDF 저장
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("AgriNexus ROI 분석 리포트", 10, 20);
+      doc.text(summary, 10, 40);
+      doc.save("roi_report.pdf");
 
-      const div = document.getElementById("result");
-      div.innerHTML = result;
-      div.style.display = "block";
+      // 이메일 전송
+      emailjs.send("default_service", "template_xxxx", {
+        message: summary,
+        email: email
+      }).then(() => {
+        document.getElementById("result").innerText = `✅ PDF 저장 완료 및 이메일 전송 완료!`;
+      });
     }
   </script>
 </body>
