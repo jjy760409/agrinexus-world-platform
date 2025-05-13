@@ -2,79 +2,59 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📈 ROI 리포트 저장 + 이메일 전송</title>
+  <title>📄 AgriNexus 투자자용 IR 리포트 자동 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
-    h1 { color: #1e40af; }
-    input {
-      padding: 0.6rem;
-      margin: 0.5rem 0;
+    h1 { color: #1d4ed8; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, textarea {
       width: 100%;
-      max-width: 400px;
+      max-width: 600px;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
     }
     button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
       background: #2563eb;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    .output {
-      margin-top: 2rem;
-      background: white;
-      padding: 1rem;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
   </style>
 </head>
 <body>
-  <h1>📈 ROI 리포트 자동 저장 및 이메일 전송</h1>
-
-  <input id="email" placeholder="수신자 이메일 입력" />
-  <input id="contracts" type="number" placeholder="계약 수" />
-  <input id="revenue" type="number" placeholder="1건당 매출" />
-  <input id="cost" type="number" placeholder="총 운영비" />
-  <button onclick="run()">PDF 저장 + 이메일 전송</button>
-
-  <div class="output" id="result">결과 리포트가 여기에 표시됩니다.</div>
+  <h1>📄 AgriNexus 투자자용 IR 리포트 자동 생성</h1>
+  <label>회사 핵심 성과 요약</label>
+  <textarea id="summary" rows="4" placeholder="예: 3개월간 누적 계약 129건, 평균 계약 금액 68만원..."></textarea>
+  <label>시장 성장 전략</label>
+  <textarea id="strategy" rows="4" placeholder="예: 동남아 수출 확대, 전자서명 기반 계약 자동화 확대..."></textarea>
+  <label>추가 설명 / 주주 메시지</label>
+  <textarea id="note" rows="3" placeholder="예: 2025년 IPO 예정, ESG 기반 농업 기술 기업으로 확장 중..."></textarea>
+  <button onclick="generate()">📥 IR PDF 생성</button>
 
   <script>
-    emailjs.init("_YOUR_EMAILJS_PUBLIC_KEY_"); // 사용 시 실제 키로 대체 필요
-
-    function run() {
-      const contracts = parseInt(document.getElementById("contracts").value || 0);
-      const revenue = parseInt(document.getElementById("revenue").value || 0);
-      const cost = parseInt(document.getElementById("cost").value || 0);
-      const email = document.getElementById("email").value;
-
-      const total = contracts * revenue;
-      const roi = ((total - cost) / cost * 100).toFixed(2);
-      const summary = `계약 수: ${contracts}
-1건당 매출: ₩${revenue.toLocaleString()}
-총 매출: ₩${total.toLocaleString()}
-총 운영비: ₩${cost.toLocaleString()}
-ROI 수익률: ${roi}%`;
-
-      // PDF 저장
+    function generate() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.text("AgriNexus ROI 분석 리포트", 10, 20);
-      doc.text(summary, 10, 40);
-      doc.save("roi_report.pdf");
+      const s = document.getElementById("summary").value;
+      const st = document.getElementById("strategy").value;
+      const note = document.getElementById("note").value;
 
-      // 이메일 전송
-      emailjs.send("default_service", "template_xxxx", {
-        message: summary,
-        email: email
-      }).then(() => {
-        document.getElementById("result").innerText = `✅ PDF 저장 완료 및 이메일 전송 완료!`;
-      });
+      doc.setFontSize(14);
+      doc.text("AgriNexus IR 투자자 보고서", 10, 20);
+      doc.setFontSize(11);
+      doc.text("📌 주요 성과 요약:", 10, 35);
+      doc.text(s, 10, 42);
+      doc.text("📈 시장 전략:", 10, 65);
+      doc.text(st, 10, 72);
+      doc.text("📝 주주 메시지 / 비전:", 10, 95);
+      doc.text(note, 10, 102);
+
+      doc.save("agrinexus_ir_report.pdf");
     }
   </script>
 </body>
