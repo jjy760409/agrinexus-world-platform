@@ -2,66 +2,55 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📋 리마인더 예약 내역 관리자 모니터링</title>
+  <title>📬 리마인더 발송 상태 추적 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #ecfdf5; color: #1f2937; }
-    h1 { color: #0d9488; text-align: center; }
-    table {
-      margin-top: 2rem;
-      width: 100%;
+    body { font-family: sans-serif; background: #fef2f2; padding: 2rem; color: #1f2937; }
+    h1 { color: #dc2626; text-align: center; }
+    .table {
       max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      border-collapse: collapse;
+      margin: 2rem auto;
       background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
     }
     th, td {
       padding: 0.75rem;
-      border: 1px solid #d1fae5;
       text-align: center;
+      border: 1px solid #fca5a5;
     }
     th {
-      background: #ccfbf1;
+      background: #fee2e2;
     }
     tr:nth-child(even) {
-      background: #f0fdf4;
+      background: #fff1f2;
     }
   </style>
 </head>
 <body>
-  <h1>📋 리마인더 예약 내역 대시보드</h1>
-  <table>
-    <thead>
-      <tr><th>이메일</th><th>기능</th><th>예약일</th><th>상태</th></tr>
-    </thead>
-    <tbody id="reminderTable">
-      <tr><td colspan="4">로딩 중...</td></tr>
-    </tbody>
-  </table>
-
-<script>
-  const db = firebase.firestore();
-  const table = document.getElementById("reminderTable");
-
-  db.collection("reminders").orderBy("date").onSnapshot(snapshot => {
-    table.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      const row = `
+  <h1>📬 리마인더 이메일 반응 추적 리포트</h1>
+  <div class="table">
+    <table>
+      <thead>
         <tr>
-          <td>${d.email}</td>
-          <td>${d.feature}</td>
-          <td>${d.date}</td>
-          <td>${new Date(d.date) < new Date() ? "✅ 완료 또는 진행 중" : "⏳ 예정"}</td>
-        </tr>`;
-      table.innerHTML += row;
-    });
-  });
-</script>
+          <th>고객 이메일</th>
+          <th>기능</th>
+          <th>발송일</th>
+          <th>열람 여부</th>
+          <th>기능 클릭 여부</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>vip@agrinexus.com</td><td>ROI 분석</td><td>2024-05-15</td><td>✅ 열람</td><td>✅ 클릭함</td></tr>
+        <tr><td>gold@agrinexus.com</td><td>계약서 서명</td><td>2024-05-14</td><td>✅ 열람</td><td>❌ 미반응</td></tr>
+        <tr><td>silver@agrinexus.com</td><td>IR 리포트 제출</td><td>2024-05-10</td><td>❌ 미열람</td><td>❌ 미반응</td></tr>
+        <tr><td>test@agrinexus.com</td><td>기능 업그레이드</td><td>2024-05-12</td><td>✅ 열람</td><td>✅ 클릭함</td></tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
