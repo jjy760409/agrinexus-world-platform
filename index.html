@@ -2,99 +2,87 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriNexus World - 세부 기능 통합 사이트</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-white text-gray-800">
 
-  <header class="bg-green-900 text-white py-6 text-center shadow">
-    <h1 class="text-3xl font-bold">🌍 AgriNexus World 통합 자동화 플랫폼</h1>
-    <p class="text-sm mt-1">계약 · 설계 · 물류 · 투자 · AI · 보고서 · 자동화 · 글로벌 운영까지</p>
-  </header>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16 px-6 text-center">
+    <h1 class="text-4xl font-bold mb-4">AgriNexus World</h1>
+    <p class="text-lg max-w-2xl mx-auto">세계 최고 수준의 스마트팜 자동화 플랫폼 - 계약, 설계, 물류, 투자까지 한 번에</p>
+    <div class="mt-6 space-x-4">
+      <a href="#features" class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100">전체 기능 보기</a>
+      <a href="#contact" class="bg-green-900 px-6 py-3 rounded-full font-semibold hover:bg-green-700">상담 문의</a>
+    </div>
+  </section>
 
-  <main class="p-8 max-w-6xl mx-auto space-y-12 text-base leading-relaxed">
-    <section>
-      <h2 class="text-xl font-bold text-green-800 mb-2">📄 계약 및 문서 자동화</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>계약서 자동 생성 (조항 요약, 번역 포함)</li>
-        <li>전자서명 시스템</li>
-        <li>다국어 계약 변환</li>
-        <li>PDF 자동 저장 및 이메일 제출</li>
-        <li>보안등급, 유효기간 알림 자동 적용</li>
-        <li>관리자 제출 및 통계 저장</li>
-      </ul>
-    </section>
+  <!-- Features Section -->
+  <section id="features" class="py-16 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+      <div>
+        <h2 class="text-xl font-bold text-green-700 mb-3">📄 계약 및 문서 자동화</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>계약서 자동 생성 및 전자서명</li>
+          <li>다국어 변환 및 PDF 저장</li>
+          <li>보안등급, 유효기간 관리</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-purple-700 mb-3">🤖 AI 설계 / 시뮬레이션</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>도면 기반 설계 자동화</li>
+          <li>시뮬레이션 영상/음성 포함</li>
+          <li>IR 프레젠테이션 자동 구성</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-indigo-700 mb-3">🛰 물류 / 위성 기반 운영</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>실시간 위성 물류 추적</li>
+          <li>글로벌 배송비 비교 자동화</li>
+          <li>수출입 문서 자동 생성</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-blue-700 mb-3">📊 보고서 / 분석</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>ROI 리포트 자동화</li>
+          <li>성과 기반 대시보드</li>
+          <li>PDF + 이메일 제출 시스템</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-orange-600 mb-3">💰 투자 자동화</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>IR 자동 생성 및 제출</li>
+          <li>수익 요금제 분석 시스템</li>
+          <li>실시간 투자 제안 기능</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-pink-600 mb-3">🧠 사용자 자동화</h2>
+        <ul class="list-disc ml-5 space-y-1 text-sm">
+          <li>AI 기반 업그레이드 제안</li>
+          <li>쿠폰 / 리타겟팅 자동 발송</li>
+          <li>GPT 챗 연동 시스템</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="text-xl font-bold text-purple-700 mb-2">🤖 AI 설계 / 시뮬레이션</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>도면 기반 스마트팜 설계 자동 생성</li>
-        <li>최적 자재, 브랜드, 설비 자동 추천</li>
-        <li>3D 시뮬레이션 + 음성 내레이션 생성</li>
-        <li>IR 프레젠테이션 자동 구성</li>
-        <li>시공 단계별 비용/내구성 분석</li>
-      </ul>
-    </section>
+  <!-- Call To Action -->
+  <section class="text-center py-16 bg-white">
+    <h2 class="text-2xl font-bold mb-3 text-green-800">🌐 글로벌 확장 시스템</h2>
+    <p class="max-w-xl mx-auto mb-6 text-gray-600">PWA 앱, 다국어, 국가 인증, 투자 대응까지 모든 글로벌 서비스를 자동화된 플랫폼으로 제공합니다.</p>
+    <a href="#contact" class="bg-green-700 text-white px-8 py-3 rounded-full hover:bg-green-600">지금 시작하기</a>
+  </section>
 
-    <section>
-      <h2 class="text-xl font-bold text-indigo-800 mb-2">🛰 물류 / 위성 기반 운영</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>위성 기반 글로벌 물류 시각화</li>
-        <li>배송비 비교, 운송 최적 경로 자동 계산</li>
-        <li>실시간 배송 추적 시스템</li>
-        <li>수출입 문서, 관세 자동 생성</li>
-        <li>국가별 배송 규정 자동 반영</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-xl font-bold text-blue-800 mb-2">📊 보고서 / 분석 / 리포트</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>ROI 수익률 분석 및 자동 리포트</li>
-        <li>PDF 출력 + IR 보고서 자동화</li>
-        <li>이메일 전송 및 관리자 저장 시스템</li>
-        <li>조건별 사용자 보고서 자동 생성</li>
-        <li>성과 기반 시각 대시보드</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-xl font-bold text-orange-600 mb-2">💰 투자 / 수익 자동화</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>관리자 대시보드 (수익/비용/예측)</li>
-        <li>자동 IR 보고서 + 계약 연동</li>
-        <li>투자자 맞춤 문서 제출</li>
-        <li>수익 기반 요금제 및 가성비 분석</li>
-        <li>실시간 투자 제안 시스템</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-xl font-bold text-pink-600 mb-2">🧠 AI 기반 사용자 맞춤 자동화</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>활동 기반 업그레이드 제안</li>
-        <li>리타겟팅 / 쿠폰 / 복귀 유도 자동화</li>
-        <li>AI 고객 분석 및 채팅 시스템 연동</li>
-        <li>주간 보고서 / 알림 자동 발송</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-xl font-bold text-teal-700 mb-2">🌐 글로벌 운영 / 확장 시스템</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>PWA 모바일 앱 설치형 구성</li>
-        <li>GPT 상담 / 계약요약 / 추천시스템 연동</li>
-        <li>국가별 인증, 수출입 정책 자동 반영</li>
-        <li>다국어 계약, 보고서, UI 전환</li>
-        <li>글로벌 투자 대응 자동화</li>
-      </ul>
-    </section>
-  </main>
-
-  <footer class="bg-gray-200 text-center text-sm text-gray-600 py-4 mt-10">
-    © 2025 AgriNexus World - 세계 최고 수준 자동화 플랫폼
+  <!-- Footer -->
+  <footer id="contact" class="bg-gray-100 text-center text-sm text-gray-500 py-6">
+    © 2025 AgriNexus World — 글로벌 스마트팜 자동화 플랫폼
   </footer>
 </body>
 </html>
