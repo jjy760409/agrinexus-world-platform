@@ -2,24 +2,22 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🔁 이탈 사용자 복귀 유도 시스템</title>
+  <title>⏰ 리마인더 자동 발송 스케줄러</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #fef2f2; padding: 2rem; color: #1f2937; }
-    h1 { color: #dc2626; }
-    label, input {
+    body { font-family: sans-serif; background: #f0fdf4; padding: 2rem; color: #1f2937; }
+    h1 { color: #10b981; }
+    input, select {
       display: block;
-      margin: 1rem 0 0.3rem;
-    }
-    input {
-      padding: 0.6rem;
-      max-width: 400px;
       width: 100%;
+      max-width: 400px;
+      padding: 0.6rem;
+      margin: 1rem 0;
     }
     button {
       margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      background: #ef4444;
+      background: #059669;
       color: white;
       border: none;
       border-radius: 6px;
@@ -27,43 +25,39 @@
     }
     .result {
       margin-top: 2rem;
-      padding: 1.5rem;
       background: white;
-      border-left: 6px solid #f87171;
+      padding: 1.5rem;
+      border-left: 6px solid #10b981;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
   </style>
 </head>
 <body>
-  <h1>🔁 이탈 고객 복귀 자동 유도 시스템</h1>
+  <h1>⏰ 고객 대상 리마인더 자동 발송 예약</h1>
   <label>고객 이메일</label>
   <input id="email" placeholder="예: user@agrinexus.com" />
-  <label>마지막 접속일 (YYYY-MM-DD)</label>
-  <input id="lastVisit" type="date" />
-  <button onclick="trigger()">유도 실행</button>
+  <label>알림 대상 기능</label>
+  <select id="feature">
+    <option value="contract">계약서 재작성</option>
+    <option value="roi">ROI 분석 다시보기</option>
+    <option value="ir">IR 보고서 제출</option>
+  </select>
+  <label>알림 예약일 (YYYY-MM-DD)</label>
+  <input id="date" type="date" />
+  <button onclick="schedule()">예약하기</button>
 
-  <div class="result" id="resultBox" style="display:none;"></div>
+  <div id="output" class="result" style="display:none;"></div>
 
 <script>
-  function trigger() {
+  function schedule() {
     const email = document.getElementById("email").value;
-    const lastVisit = new Date(document.getElementById("lastVisit").value);
-    const now = new Date();
-    const diff = Math.floor((now - lastVisit) / (1000 * 60 * 60 * 24));
+    const feature = document.getElementById("feature").value;
+    const date = document.getElementById("date").value;
 
-    let message = "";
-    if (diff >= 30) {
-      message = `📬 ${email} 고객님은 ${diff}일간 미접속 상태입니다. 리마인더 캠페인 + 할인 쿠폰 전송 예정!`;
-    } else if (diff >= 14) {
-      message = `📩 ${email} 고객님에게 최근 추천 기능 안내 메일 자동 발송됨.`;
-    } else {
-      message = `👍 ${email} 고객님은 최근 접속 사용자로 유지 관리 중입니다.`;
-    }
-
-    const box = document.getElementById("resultBox");
-    box.innerHTML = message;
-    box.style.display = "block";
+    let content = `📅 ${email} 고객님께 ${date}일에 [${feature}] 기능 관련 알림이 예약되었습니다.`;
+    document.getElementById("output").innerHTML = content;
+    document.getElementById("output").style.display = "block";
   }
 </script>
 </body>
