@@ -1,1 +1,37 @@
-<h1>Admin - GPT 자동화 적용됨 ✅</h1>
+
+    <h1>📊 관리자 요약 분석</h1>
+    <input type="password" id="api-key" placeholder="🔐 OpenAI API Key 입력"><br/>
+    <textarea id="gpt-input" style="width:100%; height:100px;">AgriNexus 플랫폼의 활동, 수익, 문제 요약을 관리자 보고서 형태로 작성해줘.</textarea><br/>
+    <button onclick="askGPT()">GPT 실행</button>
+    <div id="gpt-output" style="margin-top:20px;"></div>
+    <script>
+    async function askGPT() {
+        const input = document.getElementById("gpt-input").value;
+        const apiKey = document.getElementById("api-key").value;
+        const output = document.getElementById("gpt-output");
+        if (!apiKey) {
+            output.innerHTML = "❗ API Key를 입력해주세요.";
+            return;
+        }
+        output.innerHTML = "GPT 응답 생성 중...";
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + apiKey
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o",
+                    messages: [{ role: "user", content: input }],
+                    temperature: 0.7
+                })
+            });
+            const data = await response.json();
+            output.innerHTML = data.choices?.[0]?.message?.content || "❌ 응답 오류 발생";
+        } catch (e) {
+            output.innerHTML = "❌ 네트워크 오류 또는 API 실패";
+        }
+    }
+    </script>
+    
