@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📧 A/B 이메일 캠페인 성과 비교 리포트</title>
+  <meta charset="UTF-8" />
+  <title>📉 전체 기능 전환 퍼널 분석 맵</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #f3f4f6; padding: 2rem; color: #1f2937; }
-    h1 { color: #0f172a; text-align: center; }
-    .summary {
-      max-width: 900px;
-      margin: 0 auto;
+    body { font-family: sans-serif; background: #f1f5f9; padding: 2rem; color: #1f2937; }
+    h1 { color: #1d4ed8; text-align: center; }
+    .funnel {
+      max-width: 700px;
+      margin: 3rem auto;
       background: white;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    table {
-      margin-top: 2rem;
-      width: 100%;
-      border-collapse: collapse;
+    .step {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: #e0f2fe;
+      border-left: 6px solid #60a5fa;
     }
-    th, td {
-      border: 1px solid #e5e7eb;
-      padding: 0.75rem;
-      text-align: center;
+    .step h3 {
+      margin: 0;
+      font-size: 1.1rem;
     }
-    th {
-      background: #fef9c3;
-    }
-    tr:nth-child(even) {
-      background: #fefce8;
+    .step p {
+      margin-top: 0.5rem;
+      color: #475569;
     }
   </style>
 </head>
 <body>
-  <h1>📧 이메일 템플릿 A/B 성과 리포트</h1>
-  <div class="summary">
-    <p><strong>캠페인 주제:</strong> 전자서명 기능 유도</p>
-    <p><strong>대상 고객 수:</strong> 1,000명</p>
-    <p><strong>총 전환률:</strong> 12.4%</p>
-
-    <table>
-      <thead>
-        <tr>
-          <th>그룹</th><th>템플릿 유형</th><th>발송 수</th><th>클릭 수</th><th>전환 수</th><th>전환률</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>A</td><td>텍스트 중심 이메일</td><td>500</td><td>95</td><td>34</td><td>6.8%</td>
-        </tr>
-        <tr>
-          <td>B</td><td>이미지 포함 강조형</td><td>500</td><td>162</td><td>90</td><td>18.0%</td>
-        </tr>
-      </tbody>
-    </table>
+  <h1>📉 전체 기능 전환 퍼널 분석 맵</h1>
+  <div class="funnel">
+    <div class="step">
+      <h3>1️⃣ 홈페이지 진입</h3>
+      <p>방문 수: 3,500 | 이탈률: 38%</p>
+    </div>
+    <div class="step">
+      <h3>2️⃣ 로그인 또는 회원가입</h3>
+      <p>전환 수: 2,170 | 전환율: 62%</p>
+    </div>
+    <div class="step">
+      <h3>3️⃣ 계약서 생성 기능 이용</h3>
+      <p>클릭 수: 1,430 | 전환율: 65.9%</p>
+    </div>
+    <div class="step">
+      <h3>4️⃣ 수익 분석 / ROI 예측</h3>
+      <p>사용 수: 840 | 전환율: 58.7%</p>
+    </div>
+    <div class="step">
+      <h3>5️⃣ 이메일 전송 or 업그레이드 클릭</h3>
+      <p>이메일 전송 수: 473 | 업그레이드 클릭 수: 267</p>
+    </div>
+    <div class="step">
+      <h3>✅ 최종 전환 (계약 완료 or 캠페인 참여)</h3>
+      <p>완료 수: 221 | 전체 전환률: 6.3%</p>
+    </div>
   </div>
 </body>
 </html>
