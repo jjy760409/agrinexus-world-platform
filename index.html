@@ -2,55 +2,61 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📢 실시간 관리자 알림 + 기능 사용 리포트</title>
+  <title>🔥 인기 기능 순위 리포트 (기능별 사용량)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
-    h1 { color: #1d4ed8; text-align: center; }
-    .log {
+    body { font-family: sans-serif; padding: 2rem; background: #fef2f2; color: #1f2937; }
+    h1 { color: #dc2626; }
+    table {
       margin-top: 2rem;
-      padding: 1rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
     }
-    .log-entry {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 0.75rem 0;
+    th, td {
+      padding: 0.6rem;
+      border: 1px solid #fca5a5;
+      text-align: left;
     }
-    .log-entry:last-child {
-      border-bottom: none;
-    }
-    .highlight {
-      color: #16a34a;
-      font-weight: bold;
+    th {
+      background: #fecaca;
     }
   </style>
 </head>
 <body>
-  <h1>📢 실시간 기능 사용 로그 & 관리자 알림</h1>
-  <div class="log" id="logBox">로딩 중...</div>
+  <h1>🔥 기능별 사용량 인기 순위</h1>
+  <table>
+    <thead>
+      <tr><th>기능명</th><th>사용 횟수</th></tr>
+    </thead>
+    <tbody id="rankTable">
+      <tr><td colspan="2">로딩 중...</td></tr>
+    </tbody>
+  </table>
 
 <script>
   const db = firebase.firestore();
-  const logBox = document.getElementById("logBox");
+  const table = document.getElementById("rankTable");
 
-  db.collection("activity_logs").orderBy("timestamp", "desc").limit(30)
-    .onSnapshot(snapshot => {
-      logBox.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const row = `<div class="log-entry">
-          📧 <span class='highlight'>${d.email}</span> 님이
-          🧩 <b>${d.feature}</b> 기능 사용함
-          <br/>🕒 <small>${new Date(d.timestamp).toLocaleString()}</small>
-        </div>`;
-        logBox.innerHTML += row;
-      });
+  db.collection("activity_logs").get().then(snapshot => {
+    const countMap = {};
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      const feature = d.feature;
+      countMap[feature] = (countMap[feature] || 0) + 1;
     });
+
+    const sorted = Object.entries(countMap).sort((a,b) => b[1] - a[1]);
+    table.innerHTML = "";
+    sorted.forEach(([feature, count]) => {
+      table.innerHTML += `<tr><td>${feature}</td><td>${count}</td></tr>`;
+    });
+  });
 </script>
 </body>
 </html>
