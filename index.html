@@ -1,45 +1,86 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📊 리마인더 유형별 성과 리포트</title>
+  <meta charset="UTF-8">
+  <title>🧠 스마트 리마인더 AI 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #1f2937; }
-    h1 { color: #10b981; text-align: center; }
-    table {
-      margin: 2rem auto;
+    body { font-family: sans-serif; padding: 2rem; background: #eef2ff; color: #1f2937; }
+    h1 { color: #4f46e5; text-align: center; }
+    input, select {
+      padding: 0.6rem;
+      margin-top: 0.5rem;
       width: 100%;
-      max-width: 900px;
-      border-collapse: collapse;
+      max-width: 500px;
+      display: block;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 2rem;
       background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    th, td {
-      padding: 0.75rem;
-      text-align: center;
-      border: 1px solid #d1fae5;
-    }
-    th {
-      background: #ccfbf1;
-    }
-    tr:nth-child(even) {
-      background: #ecfdf5;
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
   </style>
 </head>
 <body>
-  <h1>📊 리마인더 유형별 성과 비교 리포트</h1>
-  <table>
-    <thead>
-      <tr><th>리마인더 항목</th><th>발송 수</th><th>열람 수</th><th>클릭 수</th><th>클릭률</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>계약서 재작성</td><td>320</td><td>248</td><td>138</td><td>43.1%</td></tr>
-      <tr><td>ROI 분석 다시보기</td><td>210</td><td>159</td><td>84</td><td>40.0%</td></tr>
-      <tr><td>IR 보고서 제출 유도</td><td>186</td><td>132</td><td>54</td><td>29.0%</td></tr>
-      <tr><td>기능 업그레이드 안내</td><td>234</td><td>174</td><td>62</td><td>26.5%</td></tr>
-    </tbody>
-  </table>
+  <h1>🧠 AgriNexus 스마트 리마인더 생성기</h1>
+  <label>고객 이름</label>
+  <input id="name" placeholder="예: 홍길동" />
+  <label>최근 사용 기능</label>
+  <select id="feature">
+    <option value="contract">계약서 생성</option>
+    <option value="roi">ROI 분석</option>
+    <option value="ir">IR 보고서</option>
+    <option value="translate">번역기</option>
+  </select>
+  <label>등급</label>
+  <select id="tier">
+    <option value="bronze">Bronze</option>
+    <option value="silver">Silver</option>
+    <option value="gold">Gold</option>
+    <option value="vip">VIP</option>
+  </select>
+
+  <button onclick="generate()">AI 리마인더 생성</button>
+
+  <div id="output" class="output" style="display:none;"></div>
+
+<script>
+  function generate() {
+    const name = document.getElementById("name").value;
+    const feature = document.getElementById("feature").value;
+    const tier = document.getElementById("tier").value;
+
+    let message = "";
+
+    if (feature === "contract") {
+      message = `📄 ${name} 고객님, 최근 계약서를 작성하셨죠? 아직 전자서명이 남아있습니다. 지금 완료하시고 계약을 마무리하세요!`;
+    } else if (feature === "roi") {
+      message = `📈 ${name} 고객님, ROI 분석을 다시 실행해 더 나은 수익 전략을 확인해보세요. 리포트 PDF로도 받으실 수 있습니다.`;
+    } else if (feature === "ir") {
+      message = `📊 ${name} 고객님, IR 보고서 제출이 아직 완료되지 않았습니다. 투자자들과의 신뢰 강화를 위해 제출을 권장드립니다.`;
+    } else if (feature === "translate") {
+      message = `🌍 ${name} 고객님, 글로벌 거래를 위해 번역기 프리셋을 설정해보세요. 자동 번역이 더욱 정확해집니다.`;
+    }
+
+    if (tier === "vip") {
+      message += " 🎁 VIP 고객님께는 이번 리마인더에 보너스 혜택이 포함됩니다!";
+    }
+
+    const output = document.getElementById("output");
+    output.innerText = message;
+    output.style.display = "block";
+  }
+</script>
 </body>
 </html>
