@@ -2,79 +2,74 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>🚀 추천 기반 자동 흐름 전환 시스템</title>
+  <title>📬 자동 배너 + 추천 기능 이메일 발송</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #eef2ff; color: #1f2937; }
-    h1 { color: #4f46e5; }
-    label, select, input {
-      display: block;
-      margin: 1rem 0 0.3rem;
-    }
-    select, input {
+    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #1f2937; }
+    h1 { color: #10b981; }
+    input, select {
       padding: 0.6rem;
       width: 100%;
       max-width: 400px;
+      margin-top: 1rem;
     }
     button {
-      margin-top: 1.5rem;
+      margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      background: #6366f1;
+      background: #059669;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    .flow {
+    .popup {
       margin-top: 2rem;
+      background: #ecfdf5;
       padding: 1.5rem;
-      background: white;
-      border-left: 5px solid #818cf8;
+      border-left: 5px solid #10b981;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
   </style>
 </head>
 <body>
-  <h1>🚀 추천 기반 다음 기능 자동 전환</h1>
-  <label>최근 실행한 기능</label>
-  <select id="recent">
-    <option value="contract">계약서 생성</option>
-    <option value="forecast">수익 예측</option>
-    <option value="translate">번역기</option>
-    <option value="roi">ROI 분석</option>
-  </select>
-  <label>등급</label>
-  <select id="level">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
-  </select>
-  <button onclick="suggest()">다음 기능 추천받기</button>
+  <h1>📬 자동 추천 배너 + 이메일 발송</h1>
 
-  <div class="flow" id="flowbox" style="display:none;"></div>
+  <input id="email" placeholder="고객 이메일 입력" />
+  <select id="recommend">
+    <option value="/contract-sign">전자서명 기능 추천</option>
+    <option value="/roi-report-email">ROI 분석 PDF 전송</option>
+    <option value="/forecast-report">수익 예측 리포트</option>
+    <option value="/ir-auto-generator">IR 투자 보고서 생성</option>
+  </select>
+  <button onclick="showBanner()">배너 보기 + 이메일 발송</button>
+
+  <div class="popup" id="popupBox" style="display:none;"></div>
 
 <script>
-  function suggest() {
-    const recent = document.getElementById("recent").value;
-    const level = document.getElementById("level").value;
-    let next = "";
+  emailjs.init("_YOUR_EMAILJS_KEY_"); // EmailJS 실제 키로 대체
 
-    if (recent === "contract" && level === "vip") {
-      next = "전자서명 + 계약 자동 이메일 전송 → <a href='/contract-sign'>계속하기</a>";
-    } else if (recent === "forecast") {
-      next = "ROI 분석으로 연결 → <a href='/roi-simulation'>ROI 분석</a>";
-    } else if (recent === "translate") {
-      next = "수출입 번역 리포트 생성 → <a href='/email-report'>리포트 전송</a>";
-    } else if (recent === "roi" && level === "gold") {
-      next = "투자자용 IR 리포트 자동 생성 → <a href='/ir-auto-generator'>IR 리포트</a>";
-    } else {
-      next = "대시보드에서 다양한 기능 탐색 → <a href='/dashboard'>전체 기능 보기</a>";
-    }
+  function showBanner() {
+    const email = document.getElementById("email").value;
+    const recommend = document.getElementById("recommend").value;
+    const linkMap = {
+      "/contract-sign": "전자서명 기능을 사용해 보세요 → /contract-sign",
+      "/roi-report-email": "ROI 분석 결과를 PDF로 받아보세요 → /roi-report-email",
+      "/forecast-report": "수익 예측 리포트를 지금 확인하세요 → /forecast-report",
+      "/ir-auto-generator": "투자자용 IR 보고서를 자동 생성하세요 → /ir-auto-generator"
+    };
 
-    document.getElementById("flowbox").innerHTML = `📌 다음 추천 흐름: <strong>${next}</strong>`;
-    document.getElementById("flowbox").style.display = "block";
+    const msg = linkMap[recommend];
+    const html = `<strong>📢 추천 안내:</strong><br/>${msg}<br/><br/>📧 이메일 발송 완료`;
+
+    emailjs.send("default_service", "template_xxxx", {
+      message: msg,
+      email: email
+    }).then(() => {
+      const box = document.getElementById("popupBox");
+      box.innerHTML = html;
+      box.style.display = "block";
+    });
   }
 </script>
 </body>
