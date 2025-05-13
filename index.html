@@ -1,100 +1,65 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>🧠 마케팅 자동화 흐름 설계 시뮬레이터</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body { font-family: sans-serif; background: #f0fdf4; padding: 2rem; color: #1f2937; }
-    h1 { text-align: center; color: #059669; }
-    label, select {
-      display: block;
-      margin: 1rem 0 0.3rem;
-      max-width: 600px;
-    }
-    select {
-      padding: 0.6rem;
-      width: 100%;
-    }
-    button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      background: #10b981;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .output {
-      margin-top: 2rem;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriNexus World - 통합 허브</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>🧠 AgriNexus 마케팅 자동 흐름 설계 시뮬레이터</h1>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-green-700 text-white text-center py-6 shadow">
+    <h1 class="text-2xl font-bold">🌍 AgriNexus World 전자동화 디지털 허브</h1>
+  </header>
 
-  <label>유입 채널</label>
-  <select id="channel">
-    <option value="email">이메일</option>
-    <option value="ads">광고 클릭</option>
-    <option value="referral">추천 링크</option>
-    <option value="organic">검색 엔진</option>
-  </select>
+  <!-- Main Content -->
+  <main class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">📄 계약 자동 생성</h3>
+      <p class="text-gray-700">전자서명 포함, 다국어 계약 지원 시스템</p>
+      <a href="/contract" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">계약 모듈</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">📊 ROI / 보고서</h3>
+      <p class="text-gray-700">투자 분석 및 보고서 자동 PDF 생성</p>
+      <a href="/report" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">보고서</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">🛰 위성 물류 추적</h3>
+      <p class="text-gray-700">실시간 글로벌 배송 상태 시각화</p>
+      <a href="/satellite" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">물류</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">🤖 AI 스마트팜 설계</h3>
+      <p class="text-gray-700">환경·도면 기반 자동화 설계 및 시뮬레이션</p>
+      <a href="/ai" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">AI 설계</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">📬 이메일 제출</h3>
+      <p class="text-gray-700">계약서/리포트 이메일 제출 + 통계</p>
+      <a href="/email" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">이메일 발송</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">📈 업그레이드 추천</h3>
+      <p class="text-gray-700">사용자 맞춤 AI 기반 기능 제안</p>
+      <a href="/upgrade" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">추천 기능</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">🎯 고객 복귀 자동화</h3>
+      <p class="text-gray-700">쿠폰/리마인더 기반 이탈 사용자 복귀</p>
+      <a href="/retarget" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">CRM 리타겟팅</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6 hover:scale-[1.02] transition">
+      <h3 class="text-xl font-semibold mb-2">🚀 미래 확장 기능</h3>
+      <p class="text-gray-700">PWA 설치형 앱, GPT 제안, 자동 결제 연결</p>
+      <a href="/future" class="inline-block mt-4 px-4 py-2 bg-green-600 text-white rounded-xl">확장 영역</a>
+    </div>
+  </main>
 
-  <label>고객 등급</label>
-  <select id="tier">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
-  </select>
-
-  <label>첫 사용 기능</label>
-  <select id="entry">
-    <option value="contract">계약서 생성</option>
-    <option value="forecast">수익 분석</option>
-    <option value="translate">번역기 사용</option>
-    <option value="roi">ROI 예측</option>
-  </select>
-
-  <button onclick="simulate()">자동 흐름 생성</button>
-
-  <div id="output" class="output" style="display:none;"></div>
-
-<script>
-  function simulate() {
-    const channel = document.getElementById("channel").value;
-    const tier = document.getElementById("tier").value;
-    const entry = document.getElementById("entry").value;
-
-    let flow = `<p><b>🧭 유입 채널:</b> ${channel}</p>`;
-    flow += `<p><b>👥 고객 등급:</b> ${tier.toUpperCase()}</p>`;
-    flow += `<p><b>▶ 첫 사용 기능:</b> ${entry}</p>`;
-
-    if (entry === "contract") {
-      flow += `<p>📩 <b>Step 1:</b> 계약서 작성 후 이메일 전송 캠페인</p>`;
-      flow += `<p>📈 <b>Step 2:</b> ROI 예측 연결 ➤ 업그레이드 CTA 표시</p>`;
-    } else if (entry === "forecast") {
-      flow += `<p>📬 <b>Step 1:</b> 예측 리포트 전송 후 계약 유도</p>`;
-      flow += `<p>🔁 <b>Step 2:</b> 반복 ROI 리포트 자동 예약</p>`;
-    } else if (entry === "translate") {
-      flow += `<p>🌐 <b>Step 1:</b> 글로벌 거래 안내 리마인더 전송</p>`;
-      flow += `<p>📩 <b>Step 2:</b> IR 리포트 제출 자동 유도</p>`;
-    } else if (entry === "roi") {
-      flow += `<p>📄 <b>Step 1:</b> PDF 저장 안내</p>`;
-      flow += `<p>💰 <b>Step 2:</b> 투자자용 IR 자동 전환 제안</p>`;
-    }
-
-    flow += `<p>✅ <b>Step 3:</b> 행동 기반 리타겟팅 캠페인 자동 등록</p>`;
-
-    const out = document.getElementById("output");
-    out.innerHTML = flow;
-    out.style.display = "block";
-  }
-</script>
+  <!-- Footer -->
+  <footer class="bg-gray-200 text-center text-sm text-gray-600 py-4">
+    © 2025 AgriNexus World - 자동 진화형 스마트 플랫폼
+  </footer>
 </body>
 </html>
