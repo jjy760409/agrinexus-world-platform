@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📄 계약서 작성 + 전자서명</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>📄 계약서 자동 생성</h1>
+  <input id="name" placeholder="고객명 또는 회사명">
+  <input id="subject" placeholder="계약 항목 (예: 스마트팜 설치)">
+  <textarea id="details" placeholder="계약 상세 내용" rows="6"></textarea>
+  <h2>✍ 전자서명</h2>
+  <input id="signature" placeholder="서명 입력">
+  <button onclick="generatePDF()">📥 계약서 PDF 생성 및 저장</button>
+
+  <script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const name = document.getElementById("name").value;
+      const subject = document.getElementById("subject").value;
+      const details = document.getElementById("details").value;
+      const sign = document.getElementById("signature").value;
+
+      const content = `📄 계약서
+      고객명: ${name}
+      계약 항목: ${subject}
+      상세 내용: ${details}
+      ✍ 서명: ${sign}
+      날짜: ${new Date().toLocaleDateString()}
+      `;
+
+      doc.text(content, 10, 20);
+      doc.save("contract_signed.pdf");
+
+      alert("✅ PDF 저장 완료!");
+    }
+  </script>
+</body>
+</html>
