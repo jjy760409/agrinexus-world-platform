@@ -1,63 +1,80 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World - 스마트팜 SaaS 플랫폼</title>
+  <meta charset="UTF-8" />
+  <title>🔐 로그인 / 회원가입 + 계약 저장</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
+    input, textarea { display: block; margin: 0.5rem 0; padding: 0.6rem; width: 100%; max-width: 400px; }
+    button { margin: 0.5rem 0; padding: 0.6rem 1rem; background: #2563eb; color: white; border: none; border-radius: 6px; }
+    h2 { color: #2563eb; }
+    .hidden { display: none; }
+  </style>
 </head>
 <body>
+  <h1>📋 AgriNexus 계약/회원 시스템</h1>
 
-<header>
-  <h1>🌱 AgriNexus World</h1>
-  <p>AI 기반 스마트팜 플랫폼 | 계약 · 수익 · 배송 · 번역 · 챗봇까지 전자동화</p>
-  <nav>
-    <a href="/login">로그인</a>
-    <a href="/signin">회원가입</a>
-    <a href="/dashboard">기능대시보드</a>
-    <a href="/contact">문의</a>
-  </nav>
-</header>
+  <div>
+    <h2>회원가입</h2>
+    <input id="email" placeholder="이메일">
+    <input id="password" type="password" placeholder="비밀번호">
+    <button onclick="signup()">회원가입</button>
+  </div>
 
-<main>
-  <section class="hero">
-    <h2>스마트팜 운영, 한 곳에서 전부 해결</h2>
-    <p>계약서 생성부터 수익 리포트, 배송 분석, 고객 응답까지 <br/>단 3분 안에 실행되는 통합형 플랫폼</p>
-    <a class="cta" href="/portal">지금 시작하기 →</a>
-  </section>
+  <div>
+    <h2>로그인</h2>
+    <input id="loginEmail" placeholder="이메일">
+    <input id="loginPassword" type="password" placeholder="비밀번호">
+    <button onclick="login()">로그인</button>
+  </div>
 
-  <section class="grid">
-    <div class="card">
-      <h3>📄 계약서 자동화</h3>
-      <p>입력 → 요약 → PDF → 전자서명까지 연결된 계약 흐름</p>
-      <a href="/contract-pdf">계약서 생성</a>
-    </div>
-    <div class="card">
-      <h3>💰 수익 분석</h3>
-      <p>예상 금액 입력 → 수익 예측 리포트 자동 출력</p>
-      <a href="/forecast-report">수익 예측</a>
-    </div>
-    <div class="card">
-      <h3>🌎 글로벌 번역</h3>
-      <p>AI 기반 다국어 번역기로 해외 거래도 문제 없이</p>
-      <a href="/ai-translator">번역기</a>
-    </div>
-    <div class="card">
-      <h3>🤖 질문-응답 연결</h3>
-      <p>사용자 질문 → 기능 추천 → 바로 실행 흐름</p>
-      <a href="/connect">질문 연결</a>
-    </div>
-  </section>
+  <div id="userArea" class="hidden">
+    <h2>✍ 계약서 저장</h2>
+    <input id="contractName" placeholder="고객명/회사명">
+    <textarea id="contractDetail" placeholder="계약 내용 상세입력" rows="5"></textarea>
+    <input id="contractSign" placeholder="서명">
+    <button onclick="saveContract()">저장하기</button>
+    <p id="status"></p>
+  </div>
 
-  <section class="feature">
-    <h2>📦 물류 & 배송 분석 · 전자서명 · PDF 자동화까지</h2>
-    <p>전자계약, 수익 계산, PDF 출력, 이메일 전송, 설치형 앱까지 실사용 흐름으로 완성</p>
-  </section>
-</main>
+<script>
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-<footer>
-  ⓒ 2025 AgriNexus World – 고객의 질문과 데이터가 플랫폼을 성장시킵니다.
-</footer>
+  function signup() {
+    const email = document.getElementById("email").value;
+    const pw = document.getElementById("password").value;
+    auth.createUserWithEmailAndPassword(email, pw).then(() => alert("✅ 가입 완료"));
+  }
 
+  function login() {
+    const email = document.getElementById("loginEmail").value;
+    const pw = document.getElementById("loginPassword").value;
+    auth.signInWithEmailAndPassword(email, pw).then(() => {
+      document.getElementById("userArea").classList.remove("hidden");
+    });
+  }
+
+  function saveContract() {
+    const user = auth.currentUser;
+    const name = document.getElementById("contractName").value;
+    const content = document.getElementById("contractDetail").value;
+    const sign = document.getElementById("contractSign").value;
+    db.collection("contracts").add({
+      uid: user.uid,
+      name: name,
+      content: content,
+      sign: sign,
+      timestamp: new Date().toISOString()
+    }).then(() => {
+      document.getElementById("status").innerText = "✅ 계약 저장 완료!";
+    });
+  }
+</script>
 </body>
 </html>
