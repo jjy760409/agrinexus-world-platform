@@ -2,90 +2,55 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>⚡ 기능 업그레이드 제안 · 자동 실행</title>
+  <title>📢 실시간 관리자 알림 + 기능 사용 리포트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; background: #f0fdf4; padding: 2rem; color: #111827; }
-    h1 { color: #15803d; }
-    input, select {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-    }
-    button {
-      padding: 0.75rem 1.5rem;
-      background: #16a34a;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      margin-top: 1rem;
-      cursor: pointer;
-    }
-    .result {
+    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
+    h1 { color: #1d4ed8; text-align: center; }
+    .log {
       margin-top: 2rem;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .cta {
-      margin-top: 1rem;
       padding: 1rem;
-      background: #ecfccb;
-      border-left: 4px solid #65a30d;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .log-entry {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.75rem 0;
+    }
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    .highlight {
+      color: #16a34a;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>⚡ 기능 업그레이드 제안 · 자동 실행</h1>
-  <input id="email" placeholder="고객 이메일" />
-  <select id="tier">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
-  </select>
-  <select id="action">
-    <option value="contract">계약서만 생성</option>
-    <option value="contract+email">계약서 생성 + 이메일</option>
-    <option value="roi">ROI 분석만 보기</option>
-    <option value="roi+pdf">ROI 분석 + PDF 저장</option>
-  </select>
-  <button onclick="recommend()">제안 실행</button>
-
-  <div class="result" id="output" style="display:none;">
-    <p><b>추천 결과:</b></p>
-    <div id="response"></div>
-    <div class="cta" id="ctaBox"></div>
-  </div>
+  <h1>📢 실시간 기능 사용 로그 & 관리자 알림</h1>
+  <div class="log" id="logBox">로딩 중...</div>
 
 <script>
-  function recommend() {
-    const email = document.getElementById("email").value;
-    const tier = document.getElementById("tier").value;
-    const action = document.getElementById("action").value;
-    let message = "";
-    let nextStep = "";
+  const db = firebase.firestore();
+  const logBox = document.getElementById("logBox");
 
-    if (action === "contract") {
-      message = "📄 계약서 생성 기능을 기본 제공 중입니다.";
-      nextStep = "<a href='/contract-pdf'>계약서 생성 바로가기 →</a>";
-    } else if (action === "contract+email") {
-      message = "📄 계약서 + 📬 이메일 전송 기능 활성화 추천!";
-      nextStep = "<a href='/email-report'>이메일 리포트 전송하기 →</a>";
-    } else if (action === "roi") {
-      message = "📈 ROI 분석 리포트를 확인하세요.";
-      nextStep = "<a href='/roi-simulation'>ROI 분석 이동 →</a>";
-    } else if (action === "roi+pdf") {
-      message = "📈 ROI 분석 결과를 PDF로 저장 추천!";
-      nextStep = "<a href='/roi-report-email'>PDF 저장 + 이메일 전송 →</a>";
-    }
-
-    document.getElementById("response").innerText = `${email} 고객님 (${tier.toUpperCase()} 등급)에 적합한 추천:`;
-    document.getElementById("ctaBox").innerHTML = nextStep;
-    document.getElementById("output").style.display = "block";
-  }
+  db.collection("activity_logs").orderBy("timestamp", "desc").limit(30)
+    .onSnapshot(snapshot => {
+      logBox.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const row = `<div class="log-entry">
+          📧 <span class='highlight'>${d.email}</span> 님이
+          🧩 <b>${d.feature}</b> 기능 사용함
+          <br/>🕒 <small>${new Date(d.timestamp).toLocaleString()}</small>
+        </div>`;
+        logBox.innerHTML += row;
+      });
+    });
 </script>
 </body>
 </html>
