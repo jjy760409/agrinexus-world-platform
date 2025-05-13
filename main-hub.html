@@ -2,77 +2,97 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World - 통합 허브</title>
+  <title>AgriNexus World - 디지털 자동화 허브</title>
   <style>
-    body { font-family: sans-serif; margin: 0; background: #f4f4f4; }
-    header { background: #1b5e20; color: white; padding: 1em; text-align: center; }
-    main { padding: 2em; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1em; }
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
+    header {
+      background: linear-gradient(to right, #2e7d32, #43a047);
+      color: white;
+      padding: 1.5em; text-align: center; font-size: 1.8em; font-weight: bold;
+    }
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5em;
+      padding: 2em;
+    }
     .card {
-      background: white; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 1.5em; transition: transform 0.2s;
+      background: white; border-radius: 16px; box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      padding: 2em; transition: transform 0.3s ease;
     }
-    .card:hover { transform: scale(1.02); }
-    .card h3 { margin-top: 0; }
-    footer {
-      background: #eee; text-align: center; padding: 1em; margin-top: 2em;
-      font-size: 0.9em; color: #333;
-    }
+    .card:hover { transform: translateY(-5px); }
+    .card h3 { margin-top: 0; font-size: 1.4em; }
+    .card p { color: #444; }
     a.button {
-      display: inline-block; margin-top: 1em; padding: 0.5em 1em;
-      background: #4caf50; color: white; text-decoration: none; border-radius: 6px;
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.6em 1.2em;
+      background: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    footer {
+      background: #e0e0e0;
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9em;
+      color: #333;
+      margin-top: 2em;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>AgriNexus World 통합 자동화 허브</h1>
+    🌍 AgriNexus World 전자동화 디지털 플랫폼 허브
   </header>
   <main>
     <div class="card">
-      <h3>📄 계약서 자동 생성</h3>
-      <p>자동 계약서 작성 및 전자서명 포함.</p>
-      <a class="button" href="/contract">바로가기</a>
+      <h3>📄 계약 자동 생성</h3>
+      <p>전자서명 포함, 다국어 계약 지원 시스템</p>
+      <a class="button" href="/contract">계약 모듈</a>
     </div>
     <div class="card">
-      <h3>📊 수익 분석 리포트</h3>
-      <p>ROI 분석과 보고서 자동 출력.</p>
-      <a class="button" href="/report">바로가기</a>
+      <h3>📊 ROI / 리포트 시스템</h3>
+      <p>투자 분석 및 보고서 자동 PDF 생성</p>
+      <a class="button" href="/report">보고서</a>
     </div>
     <div class="card">
-      <h3>🛰 위성 기반 물류 추적</h3>
-      <p>실시간 위치와 배송 경로 추적 기능.</p>
-      <a class="button" href="/satellite">바로가기</a>
+      <h3>🛰 위성 물류 추적</h3>
+      <p>실시간 글로벌 배송 상태 시각화</p>
+      <a class="button" href="/satellite">물류</a>
     </div>
     <div class="card">
-      <h3>🤖 AI 설계 시뮬레이터</h3>
-      <p>공간, 환경 기반 스마트팜 설계 생성.</p>
-      <a class="button" href="/ai">바로가기</a>
+      <h3>🤖 AI 스마트팜 설계</h3>
+      <p>환경·도면 기반 자동화 설계 및 시뮬레이션</p>
+      <a class="button" href="/ai">AI 설계</a>
     </div>
     <div class="card">
-      <h3>📬 이메일 전송 및 PDF 제출</h3>
-      <p>계약서, 보고서 PDF 전송 시스템.</p>
-      <a class="button" href="/email">바로가기</a>
+      <h3>📬 자동 이메일 전송</h3>
+      <p>계약서/리포트 이메일 제출 + 통계</p>
+      <a class="button" href="/email">이메일 발송</a>
     </div>
     <div class="card">
       <h3>📈 업그레이드 추천</h3>
-      <p>사용자 활동 기반 자동 기능 추천.</p>
-      <a class="button" href="/upgrade">바로가기</a>
+      <p>사용자 맞춤 AI 기반 기능 제안</p>
+      <a class="button" href="/upgrade">추천 기능</a>
     </div>
     <div class="card">
-      <h3>🎯 이탈 고객 복귀</h3>
-      <p>자동 메시지, 쿠폰 발송, 복귀 유도.</p>
-      <a class="button" href="/retarget">바로가기</a>
+      <h3>🎯 고객 복귀 자동화</h3>
+      <p>쿠폰/리마인더 기반 이탈 사용자 복귀</p>
+      <a class="button" href="/retarget">CRM 리타겟팅</a>
     </div>
     <div class="card">
-      <h3>🚀 미래 확장 슬롯</h3>
-      <p>GPT, 결제, 모바일 앱 기능 등.</p>
-      <a class="button" href="/future">바로가기</a>
+      <h3>🚀 미래 확장 기능</h3>
+      <p>PWA 설치형 앱, GPT 제안, 자동 결제 연결</p>
+      <a class="button" href="/future">확장 영역</a>
     </div>
   </main>
   <footer>
-    ⓒ 2025 AgriNexus World. All rights reserved.
+    © 2025 AgriNexus World - 자동 진화형 스마트 플랫폼
   </footer>
 </body>
 </html>
