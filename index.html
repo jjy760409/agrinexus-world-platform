@@ -1,88 +1,90 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 고객 등급 + 행동 이력 기반 추천 리포트</title>
+  <meta charset="UTF-8" />
+  <title>⚡ 기능 업그레이드 제안 · 자동 실행</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #111827; }
+    body { font-family: sans-serif; background: #f0fdf4; padding: 2rem; color: #111827; }
     h1 { color: #15803d; }
-    label, select, input {
-      display: block;
-      margin: 1rem 0 0.3rem;
-    }
-    select, input {
-      padding: 0.6rem;
-      max-width: 400px;
+    input, select {
       width: 100%;
+      max-width: 400px;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
     }
     button {
-      margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
       background: #16a34a;
       color: white;
       border: none;
       border-radius: 6px;
+      margin-top: 1rem;
       cursor: pointer;
     }
     .result {
       margin-top: 2rem;
+      padding: 1.5rem;
       background: white;
-      padding: 1.2rem;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .highlight {
-      color: #10b981;
-      font-weight: bold;
+    .cta {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #ecfccb;
+      border-left: 4px solid #65a30d;
     }
   </style>
 </head>
 <body>
-  <h1>📊 고객 등급 + 행동 이력 기반 추천 리포트</h1>
-  <label>고객 이메일</label>
-  <input id="email" placeholder="예: user@agrinexus.com">
-  <label>고객 등급</label>
+  <h1>⚡ 기능 업그레이드 제안 · 자동 실행</h1>
+  <input id="email" placeholder="고객 이메일" />
   <select id="tier">
     <option value="bronze">Bronze</option>
     <option value="silver">Silver</option>
     <option value="gold">Gold</option>
     <option value="vip">VIP</option>
   </select>
-  <label>지난 30일간 계약 수</label>
-  <input id="count" type="number" placeholder="예: 5">
-  <label>가장 자주 사용한 기능</label>
-  <select id="feature">
-    <option value="contract">계약서 생성</option>
-    <option value="forecast">수익 예측</option>
-    <option value="upload">파일 업로드</option>
-    <option value="translate">번역기</option>
+  <select id="action">
+    <option value="contract">계약서만 생성</option>
+    <option value="contract+email">계약서 생성 + 이메일</option>
+    <option value="roi">ROI 분석만 보기</option>
+    <option value="roi+pdf">ROI 분석 + PDF 저장</option>
   </select>
-  <button onclick="recommend()">리포트 생성</button>
+  <button onclick="recommend()">제안 실행</button>
 
-  <div id="result" class="result" style="display:none;"></div>
+  <div class="result" id="output" style="display:none;">
+    <p><b>추천 결과:</b></p>
+    <div id="response"></div>
+    <div class="cta" id="ctaBox"></div>
+  </div>
 
 <script>
   function recommend() {
     const email = document.getElementById("email").value;
     const tier = document.getElementById("tier").value;
-    const count = parseInt(document.getElementById("count").value || 0);
-    const feature = document.getElementById("feature").value;
+    const action = document.getElementById("action").value;
+    let message = "";
+    let nextStep = "";
 
-    let action = "";
-    if (feature === "contract") action = "📄 계약서 자동 이메일 전송 기능";
-    else if (feature === "forecast") action = "📈 수익 예측 기반 리포트 저장 기능";
-    else if (feature === "upload") action = "📤 업로드 파일 기반 보고서 분석 기능";
-    else if (feature === "translate") action = "🌍 번역 기록 기반 고객 맞춤형 번역기 프리셋";
+    if (action === "contract") {
+      message = "📄 계약서 생성 기능을 기본 제공 중입니다.";
+      nextStep = "<a href='/contract-pdf'>계약서 생성 바로가기 →</a>";
+    } else if (action === "contract+email") {
+      message = "📄 계약서 + 📬 이메일 전송 기능 활성화 추천!";
+      nextStep = "<a href='/email-report'>이메일 리포트 전송하기 →</a>";
+    } else if (action === "roi") {
+      message = "📈 ROI 분석 리포트를 확인하세요.";
+      nextStep = "<a href='/roi-simulation'>ROI 분석 이동 →</a>";
+    } else if (action === "roi+pdf") {
+      message = "📈 ROI 분석 결과를 PDF로 저장 추천!";
+      nextStep = "<a href='/roi-report-email'>PDF 저장 + 이메일 전송 →</a>";
+    }
 
-    const html = `
-      <p><b>${email}</b> 고객님은 <span class='highlight'>${tier.toUpperCase()}</span> 등급이며,</p>
-      <p>최근 30일 내 <span class='highlight'>${count}건</span>의 계약 활동을 하셨고,</p>
-      <p>가장 많이 사용한 기능은 <span class='highlight'>${feature}</span>입니다.</p>
-      <p>추천 기능: <b>${action}</b></p>
-    `;
-    document.getElementById("result").innerHTML = html;
-    document.getElementById("result").style.display = "block";
+    document.getElementById("response").innerText = `${email} 고객님 (${tier.toUpperCase()} 등급)에 적합한 추천:`;
+    document.getElementById("ctaBox").innerHTML = nextStep;
+    document.getElementById("output").style.display = "block";
   }
 </script>
 </body>
