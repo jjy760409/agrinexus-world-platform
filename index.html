@@ -2,51 +2,102 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI 스마트팜 설계 시뮬레이터</title>
+  <meta charset="UTF-8">
+  <title>AgriNexus World | 실사용 플랫폼 SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans p-6">
-  <div class="max-w-xl mx-auto">
-    <h1 class="text-2xl font-bold mb-4">🤖 AI 설계 시뮬레이션</h1>
+<body class="bg-white text-gray-800 font-sans">
 
-    <label class="block mb-2">설계 대상 지역</label>
-    <input id="designInput" type="text" placeholder="예: 전북 익산시" class="border p-2 rounded w-full mb-4" />
+<header class="bg-green-700 text-white text-center py-6">
+  <h1 class="text-3xl font-bold">AgriNexus World</h1>
+  <p class="text-sm">실사용 기능 포함 | 자동화 기반 플랫폼 | Netlify 배포 가능</p>
+</header>
 
-    <label class="block mb-2">기후 유형 선택</label>
-    <select id="climateSelect" class="border p-2 rounded w-full mb-4">
-      <option>온난 습윤</option>
-      <option>건조 사막</option>
-      <option>한랭 고산</option>
-      <option>열대 우림</option>
-    </select>
+<main class="max-w-5xl mx-auto p-6 text-sm">
+  <nav class="flex justify-center gap-2 mb-6 flex-wrap">
+    <button onclick="showTab('contract')" class="bg-green-100 px-4 py-2 rounded">📄 계약</button>
+    <button onclick="showTab('design')" class="bg-purple-100 px-4 py-2 rounded">🤖 설계</button>
+    <button onclick="showTab('report')" class="bg-pink-100 px-4 py-2 rounded">📊 리포트</button>
+  </nav>
 
-    <button onclick="generateDesign()" class="bg-purple-600 text-white px-5 py-2 rounded hover:bg-purple-700">설계 생성</button>
-
-    <div id="designOutput" class="mt-6 p-4 bg-white border rounded shadow hidden">
-      <h2 class="text-xl font-semibold mb-2">설계 시뮬레이션 결과</h2>
-      <p id="designMessage" class="text-purple-800 font-medium"></p>
+  <!-- 계약 -->
+  <section id="contract" class="tab active">
+    <h2 class="text-xl font-bold mb-2">📄 계약 생성</h2>
+    <input id="cName" placeholder="계약자 이름" class="border p-2 rounded w-full mb-2"/>
+    <textarea id="cText" placeholder="계약 내용 입력" rows="4" class="border p-2 rounded w-full mb-2"></textarea>
+    <button onclick="downloadContract()" class="bg-green-600 text-white px-4 py-2 rounded">📄 PDF 다운로드</button>
+    <div id="cPreview" class="mt-4 p-4 border bg-white rounded hidden">
+      <h3 class="font-bold">[계약서]</h3>
+      <p><strong>계약자:</strong> <span id="cOutName"></span></p>
+      <p class="mt-2 whitespace-pre-wrap" id="cOutText"></p>
     </div>
-  </div>
+  </section>
 
-  <script>
-    function generateDesign() {
-      const area = document.getElementById("designInput").value.trim();
-      const climate = document.getElementById("climateSelect").value;
-      const result = document.getElementById("designOutput");
-      const message = document.getElementById("designMessage");
+  <!-- 설계 -->
+  <section id="design" class="tab">
+    <h2 class="text-xl font-bold mb-2">🤖 설계 시뮬레이션</h2>
+    <input id="dArea" placeholder="설계 지역" class="border p-2 rounded w-full mb-2"/>
+    <select id="dType" class="border p-2 rounded w-full mb-2">
+      <option>복합형 온실</option>
+      <option>태양광 연계형</option>
+      <option>수경재배 시스템</option>
+    </select>
+    <button onclick="showDesign()" class="bg-purple-600 text-white px-4 py-2 rounded">설계 결과 생성</button>
+    <p id="dResult" class="mt-4 text-purple-700 font-medium"></p>
+  </section>
 
-      if (!area) {
-        alert("지역을 입력해주세요.");
-        return;
-      }
+  <!-- 리포트 -->
+  <section id="report" class="tab">
+    <h2 class="text-xl font-bold mb-2">📊 ROI 계산 리포트</h2>
+    <input id="rAmount" type="number" placeholder="투자금(만원)" class="border p-2 rounded w-full mb-2"/>
+    <button onclick="showROI()" class="bg-pink-600 text-white px-4 py-2 rounded">ROI 계산 + PDF</button>
+    <div id="rBox" class="mt-4 hidden border p-4 bg-white rounded">
+      <p id="rResult" class="text-pink-700 font-medium"></p>
+    </div>
+  </section>
+</main>
 
-      message.innerText = `📍 ${area} 지역은 '${climate}' 기후에 적합하며,
-AI가 추천한 스마트팜 설계는 복합형 온실 + 자동 수경 시스템입니다.
-광량 조절, 물 사용량 최적화, 태양광 전력 패널 포함된 설계 시뮬레이션이 생성되었습니다.`;
-      result.classList.remove("hidden");
-    }
-  </script>
+<footer class="bg-gray-100 text-center text-sm text-gray-600 py-6 mt-6">
+  © 2025 AgriNexus World — 실사용 운영 플랫폼
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function downloadContract() {
+    const name = document.getElementById('cName').value;
+    const text = document.getElementById('cText').value;
+    document.getElementById('cOutName').innerText = name;
+    document.getElementById('cOutText').innerText = text;
+    const view = document.getElementById('cPreview');
+    view.classList.remove('hidden');
+    html2pdf().set({ filename: `계약서_${name}.pdf` }).from(view).save();
+  }
+
+  function showDesign() {
+    const area = document.getElementById('dArea').value;
+    const type = document.getElementById('dType').value;
+    document.getElementById('dResult').innerText = `📍 ${area} 지역에는 ${type} 설비가 최적화됩니다.`;
+  }
+
+  function showROI() {
+    const amt = parseFloat(document.getElementById('rAmount').value);
+    const roi = (amt * 1.45).toLocaleString();
+    document.getElementById('rResult').innerText = `📈 예상 ROI는 약 ${roi}만원입니다.`;
+    document.getElementById('rBox').classList.remove('hidden');
+    html2pdf().set({ filename: "ROI_리포트.pdf" }).from(document.getElementById('rBox')).save();
+  }
+</script>
+
 </body>
 </html>
