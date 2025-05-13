@@ -1,69 +1,83 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>🧭 고객 행동 여정맵 시각화</title>
+  <meta charset="UTF-8" />
+  <title>🚀 조건 기반 자동 캠페인 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #f0f9ff; padding: 2rem; color: #1f2937; }
-    h1 { color: #0284c7; text-align: center; }
-    .flowmap {
-      max-width: 900px;
-      margin: 3rem auto;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      padding: 2rem;
+    body { font-family: sans-serif; padding: 2rem; background: #fef2f2; color: #1f2937; }
+    h1 { color: #dc2626; }
+    input, select {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
     }
-    .step {
-      display: flex;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    .step-circle {
-      min-width: 60px;
-      height: 60px;
-      background: #38bdf8;
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #ef4444;
       color: white;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 60px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-right: 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .step-desc {
-      font-size: 1.05rem;
+    .output {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>🧭 고객 행동 흐름 여정맵 (Flow Map)</h1>
-  <div class="flowmap">
-    <div class="step">
-      <div class="step-circle">1</div>
-      <div class="step-desc">홈페이지 접속 및 가입 (로그인/회원가입)</div>
-    </div>
-    <div class="step">
-      <div class="step-circle">2</div>
-      <div class="step-desc">계약서 생성 기능 클릭 → PDF 출력 or 이메일 전송</div>
-    </div>
-    <div class="step">
-      <div class="step-circle">3</div>
-      <div class="step-desc">추천 기능 노출 → ROI 예측 또는 업그레이드 유도 클릭</div>
-    </div>
-    <div class="step">
-      <div class="step-circle">4</div>
-      <div class="step-desc">고객 등급 분석 → 할인쿠폰 or IR 리포트 자동 제안</div>
-    </div>
-    <div class="step">
-      <div class="step-circle">5</div>
-      <div class="step-desc">기능 사용 기록 저장 → 관리자 리포트 실시간 반영</div>
-    </div>
-    <div class="step">
-      <div class="step-circle">6</div>
-      <div class="step-desc">행동 기반 추천 → 다음 기능 자동 연결 / 캠페인 이메일 발송</div>
-    </div>
-  </div>
+  <h1>🚀 자동 캠페인 생성 시스템</h1>
+  <label>고객 등급</label>
+  <select id="tier">
+    <option value="bronze">Bronze</option>
+    <option value="silver">Silver</option>
+    <option value="gold">Gold</option>
+    <option value="vip">VIP</option>
+  </select>
+
+  <label>최근 기능 사용</label>
+  <select id="action">
+    <option value="contract">계약서 생성</option>
+    <option value="roi">ROI 분석</option>
+    <option value="translate">번역기 사용</option>
+    <option value="upload">자료 업로드</option>
+  </select>
+
+  <label>접속 횟수</label>
+  <input id="visits" type="number" placeholder="예: 10" />
+
+  <button onclick="generate()">캠페인 생성</button>
+
+  <div class="output" id="outputBox" style="display:none;"></div>
+
+<script>
+  function generate() {
+    const tier = document.getElementById("tier").value;
+    const action = document.getElementById("action").value;
+    const visits = parseInt(document.getElementById("visits").value || 0);
+
+    let result = "";
+
+    if (tier === "vip" && visits >= 10) {
+      result = "🔥 VIP 고객 전용 리포트 자동 이메일 발송 캠페인 시작!";
+    } else if (action === "roi" && visits >= 5) {
+      result = "📈 ROI 분석 기반 업그레이드 제안 캠페인 자동 실행!";
+    } else if (tier === "gold" && action === "contract") {
+      result = "📩 계약 완료 후 전자서명 유도 캠페인 자동 생성!";
+    } else {
+      result = "🔁 전체 기능 탐색 유도 캠페인 준비됨 → 다국어 이메일 템플릿 적용 가능.";
+    }
+
+    const box = document.getElementById("outputBox");
+    box.innerHTML = `<b>📣 생성된 캠페인:</b><br/>${result}`;
+    box.style.display = "block";
+  }
+</script>
 </body>
 </html>
