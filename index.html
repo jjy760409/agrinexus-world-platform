@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>🧠 스마트 리마인더 AI 생성기</title>
+  <meta charset="UTF-8" />
+  <title>🧠 AI 기반 리마인더 생성 + 예약 발송 통합</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #eef2ff; color: #1f2937; }
-    h1 { color: #4f46e5; text-align: center; }
-    input, select {
-      padding: 0.6rem;
-      margin-top: 0.5rem;
+    body { font-family: sans-serif; background: #fefce8; padding: 2rem; color: #1f2937; }
+    h1 { color: #ca8a04; text-align: center; }
+    label, select, input {
+      margin-top: 1rem;
+      display: block;
       width: 100%;
       max-width: 500px;
-      display: block;
+    }
+    input, select {
+      padding: 0.6rem;
     }
     button {
-      margin-top: 1rem;
+      margin-top: 1.2rem;
       padding: 0.75rem 1.5rem;
-      background: #6366f1;
+      background: #f59e0b;
       color: white;
       border: none;
       border-radius: 6px;
@@ -26,16 +28,21 @@
     .output {
       margin-top: 2rem;
       background: white;
-      padding: 1.2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>🧠 AgriNexus 스마트 리마인더 생성기</h1>
+  <h1>🧠 AI 리마인더 자동 생성 + 예약 발송 시스템</h1>
+
   <label>고객 이름</label>
-  <input id="name" placeholder="예: 홍길동" />
+  <input id="name" placeholder="예: 김마케팅" />
+
+  <label>고객 이메일</label>
+  <input id="email" placeholder="예: vip@agrinexus.com" />
+
   <label>최근 사용 기능</label>
   <select id="feature">
     <option value="contract">계약서 생성</option>
@@ -43,7 +50,8 @@
     <option value="ir">IR 보고서</option>
     <option value="translate">번역기</option>
   </select>
-  <label>등급</label>
+
+  <label>고객 등급</label>
   <select id="tier">
     <option value="bronze">Bronze</option>
     <option value="silver">Silver</option>
@@ -51,34 +59,43 @@
     <option value="vip">VIP</option>
   </select>
 
-  <button onclick="generate()">AI 리마인더 생성</button>
+  <label>예약 발송 날짜</label>
+  <input id="date" type="date" />
+
+  <button onclick="generateAndSchedule()">리마인더 생성 및 예약</button>
 
   <div id="output" class="output" style="display:none;"></div>
 
 <script>
-  function generate() {
+  function generateAndSchedule() {
     const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
     const feature = document.getElementById("feature").value;
     const tier = document.getElementById("tier").value;
+    const date = document.getElementById("date").value;
 
     let message = "";
 
     if (feature === "contract") {
-      message = `📄 ${name} 고객님, 최근 계약서를 작성하셨죠? 아직 전자서명이 남아있습니다. 지금 완료하시고 계약을 마무리하세요!`;
+      message = `📄 ${name} 고객님, 계약서 전자서명이 아직 완료되지 않았습니다. 지금 완료하시고 계약을 마무리해 주세요.`;
     } else if (feature === "roi") {
-      message = `📈 ${name} 고객님, ROI 분석을 다시 실행해 더 나은 수익 전략을 확인해보세요. 리포트 PDF로도 받으실 수 있습니다.`;
+      message = `📈 ${name} 고객님, ROI 분석을 다시 실행하여 최신 수익 예측을 확인해보세요. PDF 리포트도 받으실 수 있습니다.`;
     } else if (feature === "ir") {
-      message = `📊 ${name} 고객님, IR 보고서 제출이 아직 완료되지 않았습니다. 투자자들과의 신뢰 강화를 위해 제출을 권장드립니다.`;
+      message = `📊 ${name} 고객님, IR 보고서 제출을 아직 마치지 않으셨습니다. 투자자 보고용 문서를 제출해주세요.`;
     } else if (feature === "translate") {
-      message = `🌍 ${name} 고객님, 글로벌 거래를 위해 번역기 프리셋을 설정해보세요. 자동 번역이 더욱 정확해집니다.`;
+      message = `🌍 ${name} 고객님, 번역기 프리셋을 설정해 글로벌 거래를 더 편리하게 하실 수 있습니다.`;
     }
 
     if (tier === "vip") {
-      message += " 🎁 VIP 고객님께는 이번 리마인더에 보너스 혜택이 포함됩니다!";
+      message += " 🎁 VIP 고객님께는 특별 보너스 혜택이 함께 제공됩니다!";
     }
 
     const output = document.getElementById("output");
-    output.innerText = message;
+    output.innerHTML = `
+      <p><b>예약 대상:</b> ${email}</p>
+      <p><b>발송일:</b> ${date}</p>
+      <p><b>메시지 내용:</b><br/>${message}</p>
+    `;
     output.style.display = "block";
   }
 </script>
