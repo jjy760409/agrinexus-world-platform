@@ -4,58 +4,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World | 글로벌 스마트팜 자동화 플랫폼</title>
-  <meta name="description" content="AI 기반 설계, 계약, 물류, 투자 시스템까지 완전 자동화된 스마트팜 통합 플랫폼" />
-  <meta name="robots" content="index, follow" />
-  <link rel="icon" href="/favicon.ico" />
+  <title>AgriNexus World | 스마트팜 자동화 플랫폼</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white text-gray-900 font-sans">
+<body class="bg-white text-gray-900 font-sans scroll-smooth">
 
   <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-20 px-6 text-center shadow">
-    <h1 class="text-4xl font-bold mb-4">AgriNexus World</h1>
-    <p class="text-lg max-w-2xl mx-auto">세계 최고 수준의 스마트팜 자동화 플랫폼 – 설계, 계약, 물류, 투자까지 한 번에</p>
-    <div class="mt-6 space-x-4">
-      <a href="#features" class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">전체 기능 보기</a>
-      <a href="#contact" class="bg-green-900 px-6 py-3 rounded-full font-semibold hover:bg-green-700">상담 문의</a>
+  <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-20 text-center px-6">
+    <h1 class="text-4xl font-bold mb-2">AgriNexus World</h1>
+    <p class="text-lg mb-6">세계 최고 수준의 스마트팜 자동화 플랫폼 – 설계, 계약, 물류, 투자까지 한 번에</p>
+    <div class="flex justify-center flex-wrap gap-4">
+      <a href="#features" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">전체 기능 보기</a>
+      <a href="#contract" class="bg-green-900 px-6 py-2 rounded-full font-semibold hover:bg-green-700 text-white">상담 문의</a>
     </div>
   </section>
 
-  <!-- Feature Grid -->
-  <section id="features" class="py-20 px-6 bg-gray-50">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+  <!-- Feature Overview -->
+  <section id="features" class="py-16 bg-gray-50 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-sm">
       <div>
-        <h3 class="text-green-700 font-semibold text-lg mb-2">📄 계약 자동화</h3>
-        <p class="text-sm text-gray-700">계약서 생성, 전자서명, 다국어, PDF 자동 저장 및 제출</p>
+        <h3 class="text-green-700 font-bold text-lg mb-2">📄 <a href="#contract">계약 자동화</a></h3>
+        <p>계약서 생성, 전자서명, 다국어, PDF 자동 저장 및 제출</p>
       </div>
       <div>
-        <h3 class="text-purple-700 font-semibold text-lg mb-2">🤖 AI 설계</h3>
-        <p class="text-sm text-gray-700">스마트팜 설계 자동화, 자재 추천, 시뮬레이션 영상 생성</p>
+        <h3 class="text-purple-700 font-bold text-lg mb-2">🤖 <a href="#design">AI 설계</a></h3>
+        <p>설계 자동화, 자재 추천, 시뮬레이션 영상 및 음성 생성</p>
       </div>
       <div>
-        <h3 class="text-blue-700 font-semibold text-lg mb-2">🛰 물류 시스템</h3>
-        <p class="text-sm text-gray-700">위성 기반 물류 추적, 수출입 서류, 글로벌 배송 자동화</p>
+        <h3 class="text-blue-700 font-bold text-lg mb-2">🛰 <a href="#logistics">물류 시스템</a></h3>
+        <p>위성 기반 물류 추적, 수출입 서류, 글로벌 배송 자동화</p>
       </div>
       <div>
-        <h3 class="text-pink-600 font-semibold text-lg mb-2">📊 보고서 / 분석</h3>
-        <p class="text-sm text-gray-700">ROI 리포트, 성과 대시보드, 이메일 제출 시스템</p>
+        <h3 class="text-pink-600 font-bold text-lg mb-2">📊 <a href="#report">보고서 / 분석</a></h3>
+        <p>ROI 리포트, 대시보드, 이메일 제출 시스템</p>
       </div>
       <div>
-        <h3 class="text-orange-600 font-semibold text-lg mb-2">💰 투자 시스템</h3>
-        <p class="text-sm text-gray-700">IR 자동 생성, 요금제 분석, 실시간 투자 제안</p>
+        <h3 class="text-orange-600 font-bold text-lg mb-2">💰 <a href="#investment">투자 시스템</a></h3>
+        <p>IR 자동 생성, 요금제 분석, 실시간 투자 제안</p>
       </div>
       <div>
-        <h3 class="text-teal-600 font-semibold text-lg mb-2">🌐 글로벌 확장</h3>
-        <p class="text-sm text-gray-700">다국어, PWA, 인증 자동화, GPT 챗 연동</p>
+        <h3 class="text-teal-600 font-bold text-lg mb-2">🌐 <a href="#global">글로벌 확장</a></h3>
+        <p>다국어, PWA, 인증 자동화, GPT 챗 연동</p>
       </div>
     </div>
+  </section>
+
+  <!-- Detailed Sections -->
+  <section id="contract" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-green-700 mb-4">📄 계약 자동화</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>계약서 자동 생성, 조항별 설명, 다국어 변환</li>
+      <li>전자서명 및 PDF 자동 저장/제출</li>
+      <li>보안 등급 분류 및 유효기간 자동 알림</li>
+    </ul>
+  </section>
+
+  <section id="design" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-purple-700 mb-4">🤖 AI 설계</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>스마트팜 도면 기반 자동 설계</li>
+      <li>자재, 설비 브랜드 자동 추천</li>
+      <li>3D 시뮬레이션 영상 및 음성 생성</li>
+    </ul>
+  </section>
+
+  <section id="logistics" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-blue-700 mb-4">🛰 물류 시스템</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>실시간 위성 기반 물류 경로 추적</li>
+      <li>글로벌 배송비 비교 자동화</li>
+      <li>수출입 문서 자동 생성 및 통합 제출</li>
+    </ul>
+  </section>
+
+  <section id="report" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-pink-600 mb-4">📊 보고서 / 분석</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>ROI 분석 리포트 자동 생성</li>
+      <li>성과 기반 대시보드 및 시각화</li>
+      <li>PDF 리포트 이메일 자동 제출</li>
+    </ul>
+  </section>
+
+  <section id="investment" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-orange-600 mb-4">💰 투자 시스템</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>IR 문서 자동 생성 및 PDF 출력</li>
+      <li>요금제 및 수익 분석 기반 제안</li>
+      <li>실시간 투자 시나리오 추천</li>
+    </ul>
+  </section>
+
+  <section id="global" class="py-16 px-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-teal-700 mb-4">🌐 글로벌 확장</h2>
+    <ul class="list-disc ml-6 space-y-2 text-gray-700">
+      <li>다국어 계약 / 보고서 자동 번역</li>
+      <li>PWA 앱 설치형 구성 자동화</li>
+      <li>GPT 챗봇 / 인증 대응 시스템 통합</li>
+    </ul>
   </section>
 
   <!-- Footer -->
-  <footer id="contact" class="bg-gray-100 text-center text-sm text-gray-600 py-6">
+  <footer class="bg-gray-100 text-center text-sm text-gray-600 py-6">
     © 2025 AgriNexus World — 글로벌 스마트팜 자동화 플랫폼
   </footer>
-
 </body>
 </html>
