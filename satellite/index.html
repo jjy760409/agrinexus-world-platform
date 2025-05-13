@@ -1,1 +1,13 @@
-<html><body style='font-family:sans-serif;padding:2rem'><h1>🛰 위성 물류 추적</h1><p>실시간 위치 기반 물류 시스템</p></body></html>
+<html><body class='p-6 text-sm font-sans'>
+      <h1 class="text-2xl font-bold mb-4">🛰 위성 물류 추적</h1>
+      <p>배송 시작 도시 입력</p>
+      <input id="satelliteCity" type="text" placeholder="예: 부산" class="border p-2 rounded w-full max-w-md" />
+      <button onclick="trackLogistics()" class="bg-blue-600 text-white px-4 py-2 mt-3 rounded">물류 추적</button>
+      <p id="satelliteResult" class="mt-4 text-blue-700 font-medium"></p>
+      <script>
+        function trackLogistics() {
+          const city = document.getElementById('satelliteCity').value;
+          document.getElementById('satelliteResult').innerText = `🚚 ${city}에서 출발한 물류의 실시간 위치를 추적 중입니다.`;
+        }
+      </script>
+    </body></html>

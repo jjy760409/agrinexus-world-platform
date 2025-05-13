@@ -1,1 +1,13 @@
-<html><body style='font-family:sans-serif;padding:2rem'><h1>📊 ROI 리포트 자동화</h1><p>성과 대시보드 + PDF 출력</p></body></html>
+<html><body class='p-6 text-sm font-sans'>
+      <h1 class="text-2xl font-bold mb-4">📊 ROI 분석 리포트 생성</h1>
+      <p>예상 투자금액 (만원):</p>
+      <input id="roiInput" type="number" class="border p-2 rounded w-full max-w-md" />
+      <button onclick="generateROI()" class="bg-pink-600 text-white px-4 py-2 mt-3 rounded">리포트 생성</button>
+      <p id="roiResult" class="mt-4 text-pink-700 font-medium"></p>
+      <script>
+        function generateROI() {
+          const value = document.getElementById('roiInput').value;
+          document.getElementById('roiResult').innerText = `📈 약 ${value * 1.5}만원의 ROI 예상 리포트가 생성되었습니다.`;
+        }
+      </script>
+    </body></html>

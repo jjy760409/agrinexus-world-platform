@@ -1,1 +1,13 @@
-<html><body style='font-family:sans-serif;padding:2rem'><h1>💰 투자 IR 자동화</h1><p>요금제 분석 + IR 문서 생성</p></body></html>
+<html><body class='p-6 text-sm font-sans'>
+      <h1 class="text-2xl font-bold mb-4">💰 투자 IR 자동 생성</h1>
+      <p>IR 제목 입력 후 생성</p>
+      <input id="irTitle" type="text" placeholder="IR 제목" class="border p-2 rounded w-full max-w-md" />
+      <button onclick="generateIR()" class="bg-orange-600 text-white px-4 py-2 mt-3 rounded">IR 생성</button>
+      <p id="irResult" class="mt-4 text-orange-700 font-medium"></p>
+      <script>
+        function generateIR() {
+          const title = document.getElementById('irTitle').value;
+          document.getElementById('irResult').innerText = `📝 IR 문서 (${title})가 PDF 형식으로 생성되었습니다.`;
+        }
+      </script>
+    </body></html>

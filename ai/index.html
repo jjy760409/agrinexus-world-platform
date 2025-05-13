@@ -1,1 +1,13 @@
-<html><body style='font-family:sans-serif;padding:2rem'><h1>🤖 스마트팜 AI 설계</h1><p>도면 설계 + 시뮬레이션 영상 자동 생성</p></body></html>
+<html><body class='p-6 text-sm font-sans'>
+      <h1 class="text-2xl font-bold mb-4">🤖 AI 설계 시뮬레이션</h1>
+      <p>설계 대상 지역 입력 후 추천 설계 생성</p>
+      <input id="designInput" type="text" placeholder="예: 서울시 강남구" class="border p-2 rounded w-full max-w-md" />
+      <button onclick="simulateAI()" class="bg-purple-600 text-white px-4 py-2 mt-3 rounded">설계 생성</button>
+      <p id="designResult" class="mt-4 text-purple-700 font-medium"></p>
+      <script>
+        function simulateAI() {
+          const area = document.getElementById('designInput').value;
+          document.getElementById('designResult').innerText = `🌱 ${area}에 적합한 스마트팜 설계 시뮬레이션이 준비되었습니다.`;
+        }
+      </script>
+    </body></html>

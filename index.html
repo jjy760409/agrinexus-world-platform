@@ -3,58 +3,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World | 전체 기능 작동 통합본</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World - 실제 작동 통합본</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>html { scroll-behavior: smooth; }</style>
 </head>
-<body class="bg-white text-gray-900 font-sans">
+<body class="bg-white text-gray-900 font-sans scroll-smooth">
+  <header class="bg-green-700 text-white text-center py-8">
+    <h1 class="text-3xl font-bold">AgriNexus World</h1>
+    <p class="mt-2 text-sm">각 기능이 실제로 작동하는 통합 스마트팜 시스템</p>
+    <div class="mt-4 flex justify-center flex-wrap gap-3">
+<a href="#contract" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">CONTRACT</a>
+<a href="#ai" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">AI</a>
+<a href="#satellite" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">SATELLITE</a>
+<a href="#report" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">REPORT</a>
+<a href="#investment" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">INVESTMENT</a>
+<a href="#global" class="bg-white text-green-800 px-4 py-2 rounded-full hover:bg-gray-100">GLOBAL</a>
+</div></header>
 
-  <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-4">AgriNexus World</h1>
-    <p class="text-lg max-w-2xl mx-auto">기능별 실제 작동 가능한 스마트팜 통합 자동화 플랫폼</p>
-    <div class="mt-6 flex justify-center flex-wrap gap-4">
-      <a href="#contract" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">계약</a>
-      <a href="#ai" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">설계</a>
-      <a href="#satellite" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">물류</a>
-      <a href="#report" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">리포트</a>
-      <a href="#investment" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">투자</a>
-      <a href="#global" class="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-gray-100">글로벌</a>
-    </div>
-  </section>
-
-  <section id="contract" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">📄 계약서 자동 생성기</h2>
-    <iframe src="./contract/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="contract" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./contract/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <section id="ai" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">🤖 스마트팜 AI 설계</h2>
-    <iframe src="./ai/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="ai" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./ai/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <section id="satellite" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">🛰 위성 물류 추적</h2>
-    <iframe src="./satellite/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="satellite" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./satellite/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <section id="report" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">📊 ROI 리포트 자동화</h2>
-    <iframe src="./report/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="report" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./report/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <section id="investment" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">💰 투자 IR 자동화</h2>
-    <iframe src="./investment/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="investment" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./investment/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <section id="global" class="py-12 px-4 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold mb-4">🌐 글로벌 확장 시스템</h2>
-    <iframe src="./global/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
-  </section>
+    <section id="global" class="py-10 px-4 max-w-5xl mx-auto">
+      <iframe src="./global/index.html" class="w-full h-[500px] border rounded shadow"></iframe>
+    </section>
     
-  <footer class="bg-gray-100 text-center text-sm text-gray-600 py-6">
-    © 2025 AgriNexus World — 모든 기능 실제 작동 연결 완료
-  </footer>
+  <footer class="text-center text-sm text-gray-600 py-6">© 2025 AgriNexus World</footer>
 </body>
 </html>

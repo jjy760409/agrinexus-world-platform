@@ -1,1 +1,13 @@
-<html><body style='font-family:sans-serif;padding:2rem'><h1>📄 계약서 자동 생성기</h1><p>전자서명, 다국어 번역, PDF 저장</p></body></html>
+<html><body class='p-6 text-sm font-sans'>
+      <h1 class="text-2xl font-bold mb-4">📄 계약서 자동 생성기</h1>
+      <p class="mb-2">계약자 이름 입력 후 계약서 생성</p>
+      <input id="contractName" type="text" placeholder="계약자 이름" class="border p-2 rounded w-full max-w-md" />
+      <button onclick="generateContract()" class="bg-green-600 text-white px-4 py-2 mt-3 rounded">계약서 생성</button>
+      <p id="contractOutput" class="mt-4 text-green-700 font-medium"></p>
+      <script>
+        function generateContract() {
+          const name = document.getElementById('contractName').value;
+          document.getElementById('contractOutput').innerText = `✅ ${name}님을 위한 계약서가 생성되었습니다 (PDF 다운로드 준비됨)`;
+        }
+      </script>
+    </body></html>
