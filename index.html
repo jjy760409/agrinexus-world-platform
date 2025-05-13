@@ -3,56 +3,82 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>계약서 생성기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>계약서 PDF + Firebase 저장</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-900 font-sans p-6">
-  <div class="max-w-xl mx-auto">
-    <h1 class="text-2xl font-bold mb-4">📄 계약서 자동 생성기</h1>
-    <label class="block mb-2">계약자 이름</label>
-    <input id="name" type="text" placeholder="예: 홍길동" class="border p-2 w-full rounded mb-4"/>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
-    <label class="block mb-2">계약 내용</label>
-    <textarea id="content" rows="5" placeholder="계약 내용을 입력하세요" class="border p-2 w-full rounded mb-4"></textarea>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSTGz4dADf0yVuQgyo7srtJng66jjXbEA",
+      authDomain: "agrinexus-world.firebaseapp.com",
+      projectId: "agrinexus-world",
+      storageBucket: "agrinexus-world.appspot.com",
+      messagingSenderId: "77729457741",
+      appId: "1:77729457741:web:a65d86e12998b63095e04",
+      measurementId: "G-3921M5SL2H"
+    };
 
-    <button onclick="generatePDF()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">📄 PDF 생성</button>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    <div id="preview" class="mt-10 p-6 bg-white border rounded shadow hidden">
-      <h2 class="text-xl font-bold mb-2">[ 계약서 ]</h2>
-      <p><strong>계약자명:</strong> <span id="previewName"></span></p>
-      <p class="mt-4 whitespace-pre-wrap" id="previewContent"></p>
-      <p class="mt-6 text-sm text-gray-500">* 본 계약서는 AgriNexus World에서 자동 생성되었습니다.</p>
-    </div>
-  </div>
-
-  <script>
-    function generatePDF() {
+    window.submitContract = async () => {
       const name = document.getElementById("name").value.trim();
       const content = document.getElementById("content").value.trim();
+      const preview = document.getElementById("preview");
+      const pname = document.getElementById("previewName");
+      const pcontent = document.getElementById("previewContent");
+      const status = document.getElementById("status");
 
       if (!name || !content) {
-        alert("계약자 이름과 내용을 모두 입력해 주세요.");
+        alert("이름과 계약 내용을 모두 입력해 주세요.");
         return;
       }
 
-      document.getElementById("previewName").innerText = name;
-      document.getElementById("previewContent").innerText = content;
-      const preview = document.getElementById("preview");
+      pname.innerText = name;
+      pcontent.innerText = content;
       preview.classList.remove("hidden");
 
-      html2pdf()
-        .set({
-          margin: 0.5,
-          filename: `계약서_${name}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        })
-        .from(preview)
-        .save();
-    }
+      try {
+        await addDoc(collection(db, "contracts"), {
+          name,
+          content,
+          timestamp: serverTimestamp()
+        });
+        status.innerText = "✅ Firebase 저장 성공!";
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        status.innerText = "❌ 저장 실패: " + e.message;
+      }
+    };
+
+    window.generatePDF = () => {
+      html2pdf().set({ filename: "계약서.pdf" }).from(document.getElementById("preview")).save();
+    };
   </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans p-6">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">📄 계약서 생성 및 저장 시스템</h1>
+    <label class="block mb-1">계약자 이름</label>
+    <input id="name" type="text" placeholder="예: 홍길동" class="border p-2 rounded w-full mb-4" />
+    
+    <label class="block mb-1">계약 내용</label>
+    <textarea id="content" rows="5" placeholder="계약 내용을 입력하세요" class="border p-2 rounded w-full mb-4"></textarea>
+
+    <button onclick="submitContract()" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">📥 저장 & 미리보기</button>
+    
+    <div id="status" class="mt-4 font-medium text-green-700"></div>
+
+    <div id="preview" class="mt-6 p-4 bg-white border rounded shadow hidden">
+      <h2 class="text-xl font-bold mb-2">[ 계약서 ]</h2>
+      <p><strong>계약자명:</strong> <span id="previewName"></span></p>
+      <p class="mt-3 whitespace-pre-wrap" id="previewContent"></p>
+      <p class="mt-6 text-sm text-gray-400">본 계약서는 AgriNexus World 시스템에 의해 생성되었습니다.</p>
+      <button onclick="generatePDF()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">📄 PDF 다운로드</button>
+    </div>
+  </div>
 </body>
 </html>
