@@ -1,56 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📬 리마인더 발송 상태 추적 시스템</title>
+  <meta charset="UTF-8" />
+  <title>📊 리마인더 유형별 성과 리포트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #fef2f2; padding: 2rem; color: #1f2937; }
-    h1 { color: #dc2626; text-align: center; }
-    .table {
-      max-width: 900px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
+    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #1f2937; }
+    h1 { color: #10b981; text-align: center; }
     table {
+      margin: 2rem auto;
       width: 100%;
+      max-width: 900px;
       border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     th, td {
       padding: 0.75rem;
       text-align: center;
-      border: 1px solid #fca5a5;
+      border: 1px solid #d1fae5;
     }
     th {
-      background: #fee2e2;
+      background: #ccfbf1;
     }
     tr:nth-child(even) {
-      background: #fff1f2;
+      background: #ecfdf5;
     }
   </style>
 </head>
 <body>
-  <h1>📬 리마인더 이메일 반응 추적 리포트</h1>
-  <div class="table">
-    <table>
-      <thead>
-        <tr>
-          <th>고객 이메일</th>
-          <th>기능</th>
-          <th>발송일</th>
-          <th>열람 여부</th>
-          <th>기능 클릭 여부</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>vip@agrinexus.com</td><td>ROI 분석</td><td>2024-05-15</td><td>✅ 열람</td><td>✅ 클릭함</td></tr>
-        <tr><td>gold@agrinexus.com</td><td>계약서 서명</td><td>2024-05-14</td><td>✅ 열람</td><td>❌ 미반응</td></tr>
-        <tr><td>silver@agrinexus.com</td><td>IR 리포트 제출</td><td>2024-05-10</td><td>❌ 미열람</td><td>❌ 미반응</td></tr>
-        <tr><td>test@agrinexus.com</td><td>기능 업그레이드</td><td>2024-05-12</td><td>✅ 열람</td><td>✅ 클릭함</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <h1>📊 리마인더 유형별 성과 비교 리포트</h1>
+  <table>
+    <thead>
+      <tr><th>리마인더 항목</th><th>발송 수</th><th>열람 수</th><th>클릭 수</th><th>클릭률</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>계약서 재작성</td><td>320</td><td>248</td><td>138</td><td>43.1%</td></tr>
+      <tr><td>ROI 분석 다시보기</td><td>210</td><td>159</td><td>84</td><td>40.0%</td></tr>
+      <tr><td>IR 보고서 제출 유도</td><td>186</td><td>132</td><td>54</td><td>29.0%</td></tr>
+      <tr><td>기능 업그레이드 안내</td><td>234</td><td>174</td><td>62</td><td>26.5%</td></tr>
+    </tbody>
+  </table>
 </body>
 </html>
