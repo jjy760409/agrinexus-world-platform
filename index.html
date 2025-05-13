@@ -2,71 +2,57 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📬 A/B 테스트 기반 마케팅 퍼널 분석 시스템</title>
+  <title>📊 AgriNexus 마케팅 종합 분석 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #fef9c3; padding: 2rem; color: #1f2937; }
-    h1 { color: #ca8a04; }
-    input, select {
-      padding: 0.6rem;
+    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; color: #1f2937; }
+    h1 { color: #1d4ed8; text-align: center; }
+    table {
       width: 100%;
-      max-width: 400px;
-      margin: 0.5rem 0;
+      max-width: 900px;
+      margin: 2rem auto;
+      border-collapse: collapse;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    button {
-      padding: 0.75rem 1.5rem;
-      background: #f59e0b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 0.75rem;
+      text-align: center;
     }
-    .result {
-      margin-top: 2rem;
-      background: white;
+    th {
+      background: #eff6ff;
+    }
+    tr:nth-child(even) {
+      background: #f1f5f9;
+    }
+    .summary {
+      max-width: 900px;
+      margin: 0 auto;
       padding: 1rem;
+      background: white;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>📬 고객 대상 A/B 마케팅 시나리오 시뮬레이션</h1>
-  <label>고객 이메일</label>
-  <input id="email" placeholder="예: user@agrinexus.com">
-  <label>추천 항목</label>
-  <select id="campaign">
-    <option value="contract-sign">전자서명 제안</option>
-    <option value="roi-report-email">ROI 리포트 전송</option>
-    <option value="upgrade-cta-system">기능 업그레이드 유도</option>
-  </select>
-  <label>테스트 그룹</label>
-  <select id="group">
-    <option value="A">A: 일반 텍스트 이메일</option>
-    <option value="B">B: 이미지 포함 강조형 이메일</option>
-  </select>
-  <button onclick="simulate()">결과 확인</button>
+  <h1>📊 AgriNexus 마케팅 종합 리포트</h1>
+  <div class="summary">
+    <p><strong>총 이메일 발송 수:</strong> 426통</p>
+    <p><strong>총 추천 기능 클릭 수:</strong> 218회</p>
+    <p><strong>총 기능 전환율 평균:</strong> 11.3%</p>
+  </div>
 
-  <div class="result" id="resultBox" style="display:none;"></div>
-
-<script>
-  function simulate() {
-    const email = document.getElementById("email").value;
-    const campaign = document.getElementById("campaign").value;
-    const group = document.getElementById("group").value;
-    let result = "";
-
-    if (group === "A") {
-      result = `📤 ${email} 고객에게 간단한 텍스트 형태로 '${campaign}' 항목을 안내했습니다.
-효과: 클릭률 12.3%, 전환률 3.1%`;
-    } else {
-      result = `📸 ${email} 고객에게 이미지 강조형 이메일로 '${campaign}' 항목을 안내했습니다.
-효과: 클릭률 27.8%, 전환률 9.6%`;
-    }
-
-    document.getElementById("resultBox").innerHTML = result;
-    document.getElementById("resultBox").style.display = "block";
-  }
-</script>
+  <table>
+    <thead>
+      <tr><th>추천 기능</th><th>노출 수</th><th>클릭 수</th><th>전환율</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>전자서명 기능</td><td>145</td><td>53</td><td>36.6%</td></tr>
+      <tr><td>ROI 분석 리포트</td><td>98</td><td>24</td><td>24.5%</td></tr>
+      <tr><td>IR 투자 제안</td><td>76</td><td>9</td><td>11.8%</td></tr>
+      <tr><td>기능 업그레이드 안내</td><td>107</td><td>13</td><td>12.1%</td></tr>
+    </tbody>
+  </table>
 </body>
 </html>
