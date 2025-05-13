@@ -1,47 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 관리자 리포트 대시보드</title>
+  <meta charset="UTF-8" />
+  <title>📈 관리자 통계 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
-    h1 { color: #1d4ed8; }
-    table { width: 100%; margin-top: 2rem; border-collapse: collapse; }
-    th, td { padding: 0.5rem; border: 1px solid #e5e7eb; text-align: left; }
-    th { background: #eff6ff; }
+    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #111827; }
+    h1 { color: #2563eb; text-align: center; }
+    canvas { max-width: 800px; margin: 2rem auto; display: block; }
   </style>
 </head>
 <body>
-  <h1>📊 계약 저장 내역 (실시간)</h1>
-  <table>
-    <thead>
-      <tr><th>고객명</th><th>계약 내용</th><th>서명</th><th>날짜</th></tr>
-    </thead>
-    <tbody id="tableBody">
-      <tr><td colspan="4">로딩 중...</td></tr>
-    </tbody>
-  </table>
+  <h1>📈 계약 건수 분석 대시보드</h1>
+  <canvas id="monthlyChart"></canvas>
+  <canvas id="dailyChart"></canvas>
 
 <script>
   const db = firebase.firestore();
 
-  db.collection("contracts").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
+  const countBy = (arr, key) => {
+    return arr.reduce((acc, curr) => {
+      const val = curr[key];
+      acc[val] = (acc[val] || 0) + 1;
+      return acc;
+    }, {});
+  };
+
+  db.collection("contracts").get().then(snapshot => {
+    const data = [];
     snapshot.forEach(doc => {
       const d = doc.data();
-      const row = `<tr>
-        <td>${d.name}</td>
-        <td>${d.content}</td>
-        <td>${d.sign}</td>
-        <td>${new Date(d.timestamp).toLocaleString()}</td>
-      </tr>`;
-      tbody.innerHTML += row;
+      const date = new Date(d.timestamp);
+      const month = date.toISOString().slice(0,7);  // YYYY-MM
+      const day = date.toISOString().slice(0,10);   // YYYY-MM-DD
+      data.push({ month, day });
     });
+
+    const monthCount = countBy(data, 'month');
+    const dayCount = countBy(data, 'day');
+
+    const renderChart = (id, label, labels, values, color) => {
+      new Chart(document.getElementById(id).getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label,
+            data: values,
+            backgroundColor: color
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    };
+
+    renderChart("monthlyChart", "월별 계약 건수", Object.keys(monthCount), Object.values(monthCount), "#3b82f6");
+    renderChart("dailyChart", "일별 계약 건수", Object.keys(dayCount), Object.values(dayCount), "#16a34a");
   });
 </script>
 </body>
