@@ -1,61 +1,72 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>📄 AgriNexus 투자자용 IR 리포트 자동 생성기</title>
+  <meta charset="UTF-8">
+  <title>🎁 할인쿠폰 추천 · 자동 전송</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
-    h1 { color: #1d4ed8; }
-    label { display: block; margin-top: 1rem; font-weight: bold; }
-    input, textarea {
+    body { font-family: sans-serif; padding: 2rem; background: #fefce8; color: #111827; }
+    h1 { color: #ca8a04; }
+    input, select {
       width: 100%;
-      max-width: 600px;
+      max-width: 400px;
       padding: 0.6rem;
-      margin-top: 0.3rem;
+      margin: 0.5rem 0;
     }
     button {
-      margin-top: 2rem;
+      margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      background: #2563eb;
+      background: #d97706;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
+    .result {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
   </style>
 </head>
 <body>
-  <h1>📄 AgriNexus 투자자용 IR 리포트 자동 생성</h1>
-  <label>회사 핵심 성과 요약</label>
-  <textarea id="summary" rows="4" placeholder="예: 3개월간 누적 계약 129건, 평균 계약 금액 68만원..."></textarea>
-  <label>시장 성장 전략</label>
-  <textarea id="strategy" rows="4" placeholder="예: 동남아 수출 확대, 전자서명 기반 계약 자동화 확대..."></textarea>
-  <label>추가 설명 / 주주 메시지</label>
-  <textarea id="note" rows="3" placeholder="예: 2025년 IPO 예정, ESG 기반 농업 기술 기업으로 확장 중..."></textarea>
-  <button onclick="generate()">📥 IR PDF 생성</button>
+  <h1>🎁 고객 등급 기반 할인쿠폰 자동 추천</h1>
+  <input id="email" placeholder="고객 이메일" />
+  <select id="tier">
+    <option value="bronze">Bronze 등급</option>
+    <option value="silver">Silver 등급</option>
+    <option value="gold">Gold 등급</option>
+    <option value="vip">VIP 등급</option>
+  </select>
+  <button onclick="send()">쿠폰 전송</button>
 
-  <script>
-    function generate() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const s = document.getElementById("summary").value;
-      const st = document.getElementById("strategy").value;
-      const note = document.getElementById("note").value;
+  <div id="result" class="result">쿠폰 추천 결과가 여기에 표시됩니다.</div>
 
-      doc.setFontSize(14);
-      doc.text("AgriNexus IR 투자자 보고서", 10, 20);
-      doc.setFontSize(11);
-      doc.text("📌 주요 성과 요약:", 10, 35);
-      doc.text(s, 10, 42);
-      doc.text("📈 시장 전략:", 10, 65);
-      doc.text(st, 10, 72);
-      doc.text("📝 주주 메시지 / 비전:", 10, 95);
-      doc.text(note, 10, 102);
+<script>
+  emailjs.init("_YOUR_EMAILJS_PUBLIC_KEY_"); // EmailJS 실제 키로 교체
 
-      doc.save("agrinexus_ir_report.pdf");
-    }
-  </script>
+  function send() {
+    const email = document.getElementById("email").value;
+    const tier = document.getElementById("tier").value;
+    const coupons = {
+      bronze: "WELCOME5K",
+      silver: "SAVE10K",
+      gold: "AGRI20",
+      vip: "VIP50"
+    };
+    const message = `🎉 ${tier.toUpperCase()} 등급 전용 쿠폰 코드: ${coupons[tier]}\n감사합니다!`;
+
+    // 이메일 전송
+    emailjs.send("default_service", "template_xxxx", {
+      message,
+      email
+    }).then(() => {
+      document.getElementById("result").innerHTML = `✅ ${tier.toUpperCase()} 쿠폰 <b>${coupons[tier]}</b>이 ${email}로 전송되었습니다.`;
+    });
+  }
+</script>
 </body>
 </html>
