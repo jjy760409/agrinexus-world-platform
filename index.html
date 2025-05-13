@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>🧠 조건 기반 추천 노출 시스템</title>
+  <meta charset="UTF-8" />
+  <title>📬 A/B 테스트 기반 마케팅 퍼널 분석 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #eef2ff; color: #1f2937; }
-    h1 { color: #4f46e5; }
-    label, select, input {
-      display: block;
-      margin: 1rem 0 0.3rem;
-    }
+    body { font-family: sans-serif; background: #fef9c3; padding: 2rem; color: #1f2937; }
+    h1 { color: #ca8a04; }
     input, select {
       padding: 0.6rem;
       width: 100%;
       max-width: 400px;
+      margin: 0.5rem 0;
     }
     button {
-      margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
-      background: #6366f1;
+      background: #f59e0b;
       color: white;
       border: none;
       border-radius: 6px;
@@ -27,54 +23,49 @@
     }
     .result {
       margin-top: 2rem;
-      padding: 1.5rem;
       background: white;
-      border-left: 5px solid #818cf8;
+      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>🧠 조건 기반 추천 노출</h1>
-  <label>고객 등급</label>
-  <select id="tier">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
+  <h1>📬 고객 대상 A/B 마케팅 시나리오 시뮬레이션</h1>
+  <label>고객 이메일</label>
+  <input id="email" placeholder="예: user@agrinexus.com">
+  <label>추천 항목</label>
+  <select id="campaign">
+    <option value="contract-sign">전자서명 제안</option>
+    <option value="roi-report-email">ROI 리포트 전송</option>
+    <option value="upgrade-cta-system">기능 업그레이드 유도</option>
   </select>
+  <label>테스트 그룹</label>
+  <select id="group">
+    <option value="A">A: 일반 텍스트 이메일</option>
+    <option value="B">B: 이미지 포함 강조형 이메일</option>
+  </select>
+  <button onclick="simulate()">결과 확인</button>
 
-  <label>최근 계약 수</label>
-  <input id="contracts" type="number" placeholder="예: 3" />
-
-  <label>최근 접속 일수</label>
-  <input id="visits" type="number" placeholder="예: 10" />
-
-  <button onclick="filterRecommend()">추천 보기</button>
-
-  <div id="output" class="result" style="display:none;"></div>
+  <div class="result" id="resultBox" style="display:none;"></div>
 
 <script>
-  function filterRecommend() {
-    const tier = document.getElementById("tier").value;
-    const contracts = parseInt(document.getElementById("contracts").value || 0);
-    const visits = parseInt(document.getElementById("visits").value || 0);
+  function simulate() {
+    const email = document.getElementById("email").value;
+    const campaign = document.getElementById("campaign").value;
+    const group = document.getElementById("group").value;
+    let result = "";
 
-    let message = "📌 추천: ";
-
-    if (tier === "vip" && contracts >= 5 && visits >= 10) {
-      message += "전자서명 + PDF 자동 이메일 전송 ➤ /contract-sign";
-    } else if (tier === "gold" && contracts >= 3) {
-      message += "ROI 분석 + IR 보고서 추천 ➤ /ir-auto-generator";
-    } else if (tier === "silver" && visits >= 5) {
-      message += "기능 업그레이드 추천 ➤ /upgrade-cta-system";
+    if (group === "A") {
+      result = `📤 ${email} 고객에게 간단한 텍스트 형태로 '${campaign}' 항목을 안내했습니다.
+효과: 클릭률 12.3%, 전환률 3.1%`;
     } else {
-      message += "전체 대시보드에서 더 많은 기능 탐색 ➤ /dashboard";
+      result = `📸 ${email} 고객에게 이미지 강조형 이메일로 '${campaign}' 항목을 안내했습니다.
+효과: 클릭률 27.8%, 전환률 9.6%`;
     }
 
-    document.getElementById("output").innerHTML = message;
-    document.getElementById("output").style.display = "block";
+    document.getElementById("resultBox").innerHTML = result;
+    document.getElementById("resultBox").style.display = "block";
   }
 </script>
 </body>
