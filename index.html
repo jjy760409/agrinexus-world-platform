@@ -4,81 +4,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>계약서 PDF + Firebase 저장</title>
+  <title>AgriNexus World - 스마트팜 자동화 플랫폼</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBSTGz4dADf0yVuQgyo7srtJng66jjXbEA",
-      authDomain: "agrinexus-world.firebaseapp.com",
-      projectId: "agrinexus-world",
-      storageBucket: "agrinexus-world.appspot.com",
-      messagingSenderId: "77729457741",
-      appId: "1:77729457741:web:a65d86e12998b63095e04",
-      measurementId: "G-3921M5SL2H"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    window.submitContract = async () => {
-      const name = document.getElementById("name").value.trim();
-      const content = document.getElementById("content").value.trim();
-      const preview = document.getElementById("preview");
-      const pname = document.getElementById("previewName");
-      const pcontent = document.getElementById("previewContent");
-      const status = document.getElementById("status");
-
-      if (!name || !content) {
-        alert("이름과 계약 내용을 모두 입력해 주세요.");
-        return;
-      }
-
-      pname.innerText = name;
-      pcontent.innerText = content;
-      preview.classList.remove("hidden");
-
-      try {
-        await addDoc(collection(db, "contracts"), {
-          name,
-          content,
-          timestamp: serverTimestamp()
-        });
-        status.innerText = "✅ Firebase 저장 성공!";
-      } catch (e) {
-        console.error("Error adding document: ", e);
-        status.innerText = "❌ 저장 실패: " + e.message;
-      }
-    };
-
-    window.generatePDF = () => {
-      html2pdf().set({ filename: "계약서.pdf" }).from(document.getElementById("preview")).save();
-    };
-  </script>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans p-6">
-  <div class="max-w-xl mx-auto">
-    <h1 class="text-2xl font-bold mb-4">📄 계약서 생성 및 저장 시스템</h1>
-    <label class="block mb-1">계약자 이름</label>
-    <input id="name" type="text" placeholder="예: 홍길동" class="border p-2 rounded w-full mb-4" />
-    
-    <label class="block mb-1">계약 내용</label>
-    <textarea id="content" rows="5" placeholder="계약 내용을 입력하세요" class="border p-2 rounded w-full mb-4"></textarea>
-
-    <button onclick="submitContract()" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">📥 저장 & 미리보기</button>
-    
-    <div id="status" class="mt-4 font-medium text-green-700"></div>
-
-    <div id="preview" class="mt-6 p-4 bg-white border rounded shadow hidden">
-      <h2 class="text-xl font-bold mb-2">[ 계약서 ]</h2>
-      <p><strong>계약자명:</strong> <span id="previewName"></span></p>
-      <p class="mt-3 whitespace-pre-wrap" id="previewContent"></p>
-      <p class="mt-6 text-sm text-gray-400">본 계약서는 AgriNexus World 시스템에 의해 생성되었습니다.</p>
-      <button onclick="generatePDF()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">📄 PDF 다운로드</button>
+<body class="bg-white text-gray-900">
+  <!-- Header Section -->
+  <section class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-20 text-center px-6">
+    <h1 class="text-5xl font-bold mb-4">AgriNexus World</h1>
+    <p class="text-lg max-w-3xl mx-auto">
+      세계 최고 수준의 스마트팜 자동화 플랫폼 – 계약, 설계, 물류, 투자까지 한 번에 연결되는 실서비스
+    </p>
+    <div class="mt-8 flex justify-center gap-4">
+      <a href="#features" class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">전체 기능 보기</a>
+      <a href="#contact" class="bg-green-900 px-6 py-3 rounded-full font-semibold hover:bg-green-700">상담 문의</a>
     </div>
-  </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-gray-50 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center text-sm">
+      <div>
+        <h3 class="text-green-700 font-semibold text-lg mb-2">📄 계약 자동화</h3>
+        <p>계약서 생성, 전자서명, 다국어, PDF 저장 + Firebase 저장</p>
+      </div>
+      <div>
+        <h3 class="text-purple-700 font-semibold text-lg mb-2">🤖 AI 설계</h3>
+        <p>스마트팜 설계 자동화, 자재 추천, 시뮬레이션 생성 및 저장</p>
+      </div>
+      <div>
+        <h3 class="text-blue-700 font-semibold text-lg mb-2">🛰 물류 시스템</h3>
+        <p>위성 기반 물류 추적, 글로벌 배송비 비교, API 연동</p>
+      </div>
+      <div>
+        <h3 class="text-pink-600 font-semibold text-lg mb-2">📊 리포트 / 분석</h3>
+        <p>ROI 계산, 성과 대시보드, PDF + 이메일 제출 시스템</p>
+      </div>
+      <div>
+        <h3 class="text-orange-600 font-semibold text-lg mb-2">💰 투자 자동화</h3>
+        <p>IR 보고서 자동 생성, 저장, 투자자 이메일 연동</p>
+      </div>
+      <div>
+        <h3 class="text-teal-600 font-semibold text-lg mb-2">🌐 글로벌 확장</h3>
+        <p>GPT 연동, 다국어 시스템, 앱 설치형(PWA) 자동화</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section id="contact" class="py-20 text-center bg-white">
+    <h2 class="text-2xl font-bold mb-4 text-green-700">지금 AgriNexus 서비스를 시작해보세요</h2>
+    <p class="mb-6 text-gray-700">설계부터 계약, 운영까지 완전 자동화된 스마트팜 플랫폼을 지금 경험해보세요.</p>
+    <a href="mailto:info@agrinexus.world" class="bg-green-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-600">상담 문의하기</a>
+  </section>
+
+  <footer class="bg-gray-100 text-center text-sm text-gray-500 py-6">
+    © 2025 AgriNexus World — 글로벌 스마트팜 자동화 플랫폼
+  </footer>
 </body>
 </html>
