@@ -2,69 +2,59 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📡 캠페인 생성 모니터링 대시보드</title>
+  <title>📧 A/B 이메일 캠페인 성과 비교 리포트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; background: #f0f9ff; padding: 2rem; color: #1f2937; }
-    h1 { color: #0284c7; text-align: center; }
+    body { font-family: sans-serif; background: #f3f4f6; padding: 2rem; color: #1f2937; }
+    h1 { color: #0f172a; text-align: center; }
+    .summary {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
     table {
       margin-top: 2rem;
       width: 100%;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
       border-collapse: collapse;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     th, td {
+      border: 1px solid #e5e7eb;
       padding: 0.75rem;
-      border: 1px solid #e2e8f0;
       text-align: center;
     }
     th {
-      background: #e0f2fe;
+      background: #fef9c3;
+    }
+    tr:nth-child(even) {
+      background: #fefce8;
     }
   </style>
 </head>
 <body>
-  <h1>📡 자동 캠페인 생성 내역 모니터링</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>고객 등급</th>
-        <th>최근 사용 기능</th>
-        <th>접속 횟수</th>
-        <th>생성된 캠페인</th>
-        <th>생성 시간</th>
-      </tr>
-    </thead>
-    <tbody id="logTable">
-      <tr><td colspan="5">로딩 중...</td></tr>
-    </tbody>
-  </table>
+  <h1>📧 이메일 템플릿 A/B 성과 리포트</h1>
+  <div class="summary">
+    <p><strong>캠페인 주제:</strong> 전자서명 기능 유도</p>
+    <p><strong>대상 고객 수:</strong> 1,000명</p>
+    <p><strong>총 전환률:</strong> 12.4%</p>
 
-<script>
-  const db = firebase.firestore();
-  const table = document.getElementById("logTable");
-
-  db.collection("campaign_logs").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-    table.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      table.innerHTML += `
+    <table>
+      <thead>
         <tr>
-          <td>${d.tier}</td>
-          <td>${d.feature}</td>
-          <td>${d.visits}</td>
-          <td>${d.campaign}</td>
-          <td>${new Date(d.timestamp).toLocaleString()}</td>
-        </tr>`;
-    });
-  });
-</script>
+          <th>그룹</th><th>템플릿 유형</th><th>발송 수</th><th>클릭 수</th><th>전환 수</th><th>전환률</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A</td><td>텍스트 중심 이메일</td><td>500</td><td>95</td><td>34</td><td>6.8%</td>
+        </tr>
+        <tr>
+          <td>B</td><td>이미지 포함 강조형</td><td>500</td><td>162</td><td>90</td><td>18.0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
