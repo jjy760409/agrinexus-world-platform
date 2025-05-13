@@ -2,68 +2,68 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📋 사용자별 계약 요약 리포트</title>
+  <title>📈 ROI 수익 분석 시뮬레이션</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #111827; }
-    h1 { color: #1e40af; }
-    select, button {
-      margin-top: 1rem;
+    body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #111827; }
+    h1 { color: #15803d; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input {
+      width: 100%;
+      max-width: 400px;
       padding: 0.6rem;
-      font-size: 1rem;
+      margin-top: 0.3rem;
     }
-    .report {
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .output {
       margin-top: 2rem;
       background: white;
       padding: 1.5rem;
-      border-radius: 8px;
+      border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>📋 사용자별 계약 요약 리포트</h1>
-  <label>사용자 UID 선택</label><br/>
-  <select id="userSelect"></select>
-  <button onclick="generateSummary()">리포트 보기</button>
+  <h1>📈 ROI 수익 분석 시뮬레이션</h1>
+  <label>계약 총 개수</label>
+  <input id="contracts" type="number" placeholder="예: 25">
+  <label>계약당 평균 매출 (₩)</label>
+  <input id="revenue" type="number" placeholder="예: 500000">
+  <label>총 운영 비용 (₩)</label>
+  <input id="cost" type="number" placeholder="예: 3000000">
+  <button onclick="calculate()">ROI 계산하기</button>
 
-  <div id="report" class="report" style="display:none;"></div>
+  <div id="result" class="output" style="display:none;"></div>
 
-<script>
-  const db = firebase.firestore();
-  const select = document.getElementById("userSelect");
-  const report = document.getElementById("report");
+  <script>
+    function calculate() {
+      const count = parseInt(document.getElementById("contracts").value || 0);
+      const revenue = parseInt(document.getElementById("revenue").value || 0);
+      const cost = parseInt(document.getElementById("cost").value || 0);
 
-  // 사용자 목록 불러오기
-  db.collection("contracts").get().then(snapshot => {
-    const users = new Set();
-    snapshot.forEach(doc => {
-      users.add(doc.data().uid);
-    });
-    users.forEach(uid => {
-      const opt = document.createElement("option");
-      opt.value = uid;
-      opt.text = uid;
-      select.appendChild(opt);
-    });
-  });
+      const totalRevenue = count * revenue;
+      const roi = ((totalRevenue - cost) / cost * 100).toFixed(2);
 
-  function generateSummary() {
-    const uid = select.value;
-    db.collection("contracts").where("uid", "==", uid).get().then(snapshot => {
-      let html = `<h3>사용자: ${uid}</h3><ul>`;
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        html += `<li><b>${new Date(d.timestamp).toLocaleString()}</b>: ${d.name} (${d.sign})</li>`;
-      });
-      html += `</ul><p>총 계약 건수: ${snapshot.size}건</p>`;
-      report.innerHTML = html;
-      report.style.display = "block";
-    });
-  }
-</script>
+      const result = `
+        🔢 계약 수: ${count}건<br/>
+        💰 총 매출: ₩${totalRevenue.toLocaleString()}<br/>
+        💸 운영비: ₩${cost.toLocaleString()}<br/>
+        📈 ROI 수익률: <strong>${roi}%</strong>
+      `;
+
+      const div = document.getElementById("result");
+      div.innerHTML = result;
+      div.style.display = "block";
+    }
+  </script>
 </body>
 </html>
