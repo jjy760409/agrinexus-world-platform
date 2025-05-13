@@ -1,83 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>🚀 조건 기반 자동 캠페인 생성기</title>
+  <meta charset="UTF-8">
+  <title>📡 캠페인 생성 모니터링 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fef2f2; color: #1f2937; }
-    h1 { color: #dc2626; }
-    input, select {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background: #ef4444;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .output {
+    body { font-family: sans-serif; background: #f0f9ff; padding: 2rem; color: #1f2937; }
+    h1 { color: #0284c7; text-align: center; }
+    table {
       margin-top: 2rem;
+      width: 100%;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
       background: white;
-      padding: 1.2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    th {
+      background: #e0f2fe;
     }
   </style>
 </head>
 <body>
-  <h1>🚀 자동 캠페인 생성 시스템</h1>
-  <label>고객 등급</label>
-  <select id="tier">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
-  </select>
-
-  <label>최근 기능 사용</label>
-  <select id="action">
-    <option value="contract">계약서 생성</option>
-    <option value="roi">ROI 분석</option>
-    <option value="translate">번역기 사용</option>
-    <option value="upload">자료 업로드</option>
-  </select>
-
-  <label>접속 횟수</label>
-  <input id="visits" type="number" placeholder="예: 10" />
-
-  <button onclick="generate()">캠페인 생성</button>
-
-  <div class="output" id="outputBox" style="display:none;"></div>
+  <h1>📡 자동 캠페인 생성 내역 모니터링</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>고객 등급</th>
+        <th>최근 사용 기능</th>
+        <th>접속 횟수</th>
+        <th>생성된 캠페인</th>
+        <th>생성 시간</th>
+      </tr>
+    </thead>
+    <tbody id="logTable">
+      <tr><td colspan="5">로딩 중...</td></tr>
+    </tbody>
+  </table>
 
 <script>
-  function generate() {
-    const tier = document.getElementById("tier").value;
-    const action = document.getElementById("action").value;
-    const visits = parseInt(document.getElementById("visits").value || 0);
+  const db = firebase.firestore();
+  const table = document.getElementById("logTable");
 
-    let result = "";
-
-    if (tier === "vip" && visits >= 10) {
-      result = "🔥 VIP 고객 전용 리포트 자동 이메일 발송 캠페인 시작!";
-    } else if (action === "roi" && visits >= 5) {
-      result = "📈 ROI 분석 기반 업그레이드 제안 캠페인 자동 실행!";
-    } else if (tier === "gold" && action === "contract") {
-      result = "📩 계약 완료 후 전자서명 유도 캠페인 자동 생성!";
-    } else {
-      result = "🔁 전체 기능 탐색 유도 캠페인 준비됨 → 다국어 이메일 템플릿 적용 가능.";
-    }
-
-    const box = document.getElementById("outputBox");
-    box.innerHTML = `<b>📣 생성된 캠페인:</b><br/>${result}`;
-    box.style.display = "block";
-  }
+  db.collection("campaign_logs").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    table.innerHTML = "";
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      table.innerHTML += `
+        <tr>
+          <td>${d.tier}</td>
+          <td>${d.feature}</td>
+          <td>${d.visits}</td>
+          <td>${d.campaign}</td>
+          <td>${new Date(d.timestamp).toLocaleString()}</td>
+        </tr>`;
+    });
+  });
 </script>
 </body>
 </html>
