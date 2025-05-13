@@ -2,53 +2,67 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>📥 계약 내역 PDF 리포트 출력</title>
+  <title>📋 사용자별 계약 요약 리포트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="firebase-config.js"></script>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #111827; }
-    h1 { color: #1d4ed8; }
-    button {
-      padding: 0.75rem 1.5rem;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    h1 { color: #1e40af; }
+    select, button {
       margin-top: 1rem;
+      padding: 0.6rem;
+      font-size: 1rem;
+    }
+    .report {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>📥 계약 내역 PDF 리포트 출력</h1>
-  <button onclick="exportPDF()">PDF 저장하기</button>
+  <h1>📋 사용자별 계약 요약 리포트</h1>
+  <label>사용자 UID 선택</label><br/>
+  <select id="userSelect"></select>
+  <button onclick="generateSummary()">리포트 보기</button>
+
+  <div id="report" class="report" style="display:none;"></div>
 
 <script>
-  async function exportPDF() {
-    const db = firebase.firestore();
-    const snapshot = await db.collection("contracts").orderBy("timestamp", "desc").get();
+  const db = firebase.firestore();
+  const select = document.getElementById("userSelect");
+  const report = document.getElementById("report");
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 20;
-    doc.text("AgriNexus 계약서 리포트", 10, y);
-    y += 10;
-
-    snapshot.forEach(docSnap => {
-      const d = docSnap.data();
-      const row = `- 고객: ${d.name}, 서명: ${d.sign}, 날짜: ${new Date(d.timestamp).toLocaleDateString()}`;
-      doc.text(row, 10, y);
-      y += 10;
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
+  // 사용자 목록 불러오기
+  db.collection("contracts").get().then(snapshot => {
+    const users = new Set();
+    snapshot.forEach(doc => {
+      users.add(doc.data().uid);
     });
+    users.forEach(uid => {
+      const opt = document.createElement("option");
+      opt.value = uid;
+      opt.text = uid;
+      select.appendChild(opt);
+    });
+  });
 
-    doc.save("agrinexus_report.pdf");
+  function generateSummary() {
+    const uid = select.value;
+    db.collection("contracts").where("uid", "==", uid).get().then(snapshot => {
+      let html = `<h3>사용자: ${uid}</h3><ul>`;
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        html += `<li><b>${new Date(d.timestamp).toLocaleString()}</b>: ${d.name} (${d.sign})</li>`;
+      });
+      html += `</ul><p>총 계약 건수: ${snapshot.size}건</p>`;
+      report.innerHTML = html;
+      report.style.display = "block";
+    });
   }
 </script>
 </body>
