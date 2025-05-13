@@ -4,64 +4,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World - 스마트팜 자동화 플랫폼</title>
+  <title>AI 스마트팜 설계 시뮬레이터</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Noto Sans KR', sans-serif; }
-  </style>
 </head>
-<body class="bg-white text-gray-900">
-  <!-- Header Section -->
-  <section class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-20 text-center px-6">
-    <h1 class="text-5xl font-bold mb-4">AgriNexus World</h1>
-    <p class="text-lg max-w-3xl mx-auto">
-      세계 최고 수준의 스마트팜 자동화 플랫폼 – 계약, 설계, 물류, 투자까지 한 번에 연결되는 실서비스
-    </p>
-    <div class="mt-8 flex justify-center gap-4">
-      <a href="#features" class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">전체 기능 보기</a>
-      <a href="#contact" class="bg-green-900 px-6 py-3 rounded-full font-semibold hover:bg-green-700">상담 문의</a>
+<body class="bg-gray-50 text-gray-900 font-sans p-6">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">🤖 AI 설계 시뮬레이션</h1>
+
+    <label class="block mb-2">설계 대상 지역</label>
+    <input id="designInput" type="text" placeholder="예: 전북 익산시" class="border p-2 rounded w-full mb-4" />
+
+    <label class="block mb-2">기후 유형 선택</label>
+    <select id="climateSelect" class="border p-2 rounded w-full mb-4">
+      <option>온난 습윤</option>
+      <option>건조 사막</option>
+      <option>한랭 고산</option>
+      <option>열대 우림</option>
+    </select>
+
+    <button onclick="generateDesign()" class="bg-purple-600 text-white px-5 py-2 rounded hover:bg-purple-700">설계 생성</button>
+
+    <div id="designOutput" class="mt-6 p-4 bg-white border rounded shadow hidden">
+      <h2 class="text-xl font-semibold mb-2">설계 시뮬레이션 결과</h2>
+      <p id="designMessage" class="text-purple-800 font-medium"></p>
     </div>
-  </section>
+  </div>
 
-  <!-- Features Section -->
-  <section id="features" class="py-20 bg-gray-50 px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center text-sm">
-      <div>
-        <h3 class="text-green-700 font-semibold text-lg mb-2">📄 계약 자동화</h3>
-        <p>계약서 생성, 전자서명, 다국어, PDF 저장 + Firebase 저장</p>
-      </div>
-      <div>
-        <h3 class="text-purple-700 font-semibold text-lg mb-2">🤖 AI 설계</h3>
-        <p>스마트팜 설계 자동화, 자재 추천, 시뮬레이션 생성 및 저장</p>
-      </div>
-      <div>
-        <h3 class="text-blue-700 font-semibold text-lg mb-2">🛰 물류 시스템</h3>
-        <p>위성 기반 물류 추적, 글로벌 배송비 비교, API 연동</p>
-      </div>
-      <div>
-        <h3 class="text-pink-600 font-semibold text-lg mb-2">📊 리포트 / 분석</h3>
-        <p>ROI 계산, 성과 대시보드, PDF + 이메일 제출 시스템</p>
-      </div>
-      <div>
-        <h3 class="text-orange-600 font-semibold text-lg mb-2">💰 투자 자동화</h3>
-        <p>IR 보고서 자동 생성, 저장, 투자자 이메일 연동</p>
-      </div>
-      <div>
-        <h3 class="text-teal-600 font-semibold text-lg mb-2">🌐 글로벌 확장</h3>
-        <p>GPT 연동, 다국어 시스템, 앱 설치형(PWA) 자동화</p>
-      </div>
-    </div>
-  </section>
+  <script>
+    function generateDesign() {
+      const area = document.getElementById("designInput").value.trim();
+      const climate = document.getElementById("climateSelect").value;
+      const result = document.getElementById("designOutput");
+      const message = document.getElementById("designMessage");
 
-  <!-- Call to Action -->
-  <section id="contact" class="py-20 text-center bg-white">
-    <h2 class="text-2xl font-bold mb-4 text-green-700">지금 AgriNexus 서비스를 시작해보세요</h2>
-    <p class="mb-6 text-gray-700">설계부터 계약, 운영까지 완전 자동화된 스마트팜 플랫폼을 지금 경험해보세요.</p>
-    <a href="mailto:info@agrinexus.world" class="bg-green-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-600">상담 문의하기</a>
-  </section>
+      if (!area) {
+        alert("지역을 입력해주세요.");
+        return;
+      }
 
-  <footer class="bg-gray-100 text-center text-sm text-gray-500 py-6">
-    © 2025 AgriNexus World — 글로벌 스마트팜 자동화 플랫폼
-  </footer>
+      message.innerText = `📍 ${area} 지역은 '${climate}' 기후에 적합하며,
+AI가 추천한 스마트팜 설계는 복합형 온실 + 자동 수경 시스템입니다.
+광량 조절, 물 사용량 최적화, 태양광 전력 패널 포함된 설계 시뮬레이션이 생성되었습니다.`;
+      result.classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>
