@@ -1,80 +1,48 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>🔐 로그인 / 회원가입 + 계약 저장</title>
+  <meta charset="UTF-8">
+  <title>📊 관리자 리포트 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f9fafb; color: #1f2937; }
-    input, textarea { display: block; margin: 0.5rem 0; padding: 0.6rem; width: 100%; max-width: 400px; }
-    button { margin: 0.5rem 0; padding: 0.6rem 1rem; background: #2563eb; color: white; border: none; border-radius: 6px; }
-    h2 { color: #2563eb; }
-    .hidden { display: none; }
+    h1 { color: #1d4ed8; }
+    table { width: 100%; margin-top: 2rem; border-collapse: collapse; }
+    th, td { padding: 0.5rem; border: 1px solid #e5e7eb; text-align: left; }
+    th { background: #eff6ff; }
   </style>
 </head>
 <body>
-  <h1>📋 AgriNexus 계약/회원 시스템</h1>
-
-  <div>
-    <h2>회원가입</h2>
-    <input id="email" placeholder="이메일">
-    <input id="password" type="password" placeholder="비밀번호">
-    <button onclick="signup()">회원가입</button>
-  </div>
-
-  <div>
-    <h2>로그인</h2>
-    <input id="loginEmail" placeholder="이메일">
-    <input id="loginPassword" type="password" placeholder="비밀번호">
-    <button onclick="login()">로그인</button>
-  </div>
-
-  <div id="userArea" class="hidden">
-    <h2>✍ 계약서 저장</h2>
-    <input id="contractName" placeholder="고객명/회사명">
-    <textarea id="contractDetail" placeholder="계약 내용 상세입력" rows="5"></textarea>
-    <input id="contractSign" placeholder="서명">
-    <button onclick="saveContract()">저장하기</button>
-    <p id="status"></p>
-  </div>
+  <h1>📊 계약 저장 내역 (실시간)</h1>
+  <table>
+    <thead>
+      <tr><th>고객명</th><th>계약 내용</th><th>서명</th><th>날짜</th></tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr><td colspan="4">로딩 중...</td></tr>
+    </tbody>
+  </table>
 
 <script>
-  const auth = firebase.auth();
   const db = firebase.firestore();
 
-  function signup() {
-    const email = document.getElementById("email").value;
-    const pw = document.getElementById("password").value;
-    auth.createUserWithEmailAndPassword(email, pw).then(() => alert("✅ 가입 완료"));
-  }
-
-  function login() {
-    const email = document.getElementById("loginEmail").value;
-    const pw = document.getElementById("loginPassword").value;
-    auth.signInWithEmailAndPassword(email, pw).then(() => {
-      document.getElementById("userArea").classList.remove("hidden");
+  db.collection("contracts").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      const row = `<tr>
+        <td>${d.name}</td>
+        <td>${d.content}</td>
+        <td>${d.sign}</td>
+        <td>${new Date(d.timestamp).toLocaleString()}</td>
+      </tr>`;
+      tbody.innerHTML += row;
     });
-  }
-
-  function saveContract() {
-    const user = auth.currentUser;
-    const name = document.getElementById("contractName").value;
-    const content = document.getElementById("contractDetail").value;
-    const sign = document.getElementById("contractSign").value;
-    db.collection("contracts").add({
-      uid: user.uid,
-      name: name,
-      content: content,
-      sign: sign,
-      timestamp: new Date().toISOString()
-    }).then(() => {
-      document.getElementById("status").innerText = "✅ 계약 저장 완료!";
-    });
-  }
+  });
 </script>
 </body>
 </html>
