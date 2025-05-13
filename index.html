@@ -1,102 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>🧠 AI 기반 리마인더 생성 + 예약 발송 통합</title>
+  <meta charset="UTF-8">
+  <title>🔁 반복 캠페인 자동 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #fefce8; padding: 2rem; color: #1f2937; }
-    h1 { color: #ca8a04; text-align: center; }
-    label, select, input {
-      margin-top: 1rem;
-      display: block;
+    body { font-family: sans-serif; padding: 2rem; background: #f3f4f6; color: #1f2937; }
+    h1 { color: #0f172a; text-align: center; }
+    input, select {
       width: 100%;
       max-width: 500px;
-    }
-    input, select {
       padding: 0.6rem;
+      margin: 1rem 0;
     }
     button {
-      margin-top: 1.2rem;
       padding: 0.75rem 1.5rem;
-      background: #f59e0b;
+      background: #0ea5e9;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    .output {
+    .result {
       margin-top: 2rem;
       background: white;
       padding: 1.5rem;
-      border-radius: 10px;
+      border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <h1>🧠 AI 리마인더 자동 생성 + 예약 발송 시스템</h1>
-
-  <label>고객 이름</label>
-  <input id="name" placeholder="예: 김마케팅" />
-
-  <label>고객 이메일</label>
-  <input id="email" placeholder="예: vip@agrinexus.com" />
-
-  <label>최근 사용 기능</label>
+  <h1>🔁 반복 캠페인 자동 시나리오 생성</h1>
+  <label>캠페인 대상 기능</label>
   <select id="feature">
-    <option value="contract">계약서 생성</option>
-    <option value="roi">ROI 분석</option>
-    <option value="ir">IR 보고서</option>
-    <option value="translate">번역기</option>
+    <option value="contract">계약 리마인더</option>
+    <option value="roi">ROI 리포트 전송</option>
+    <option value="ir">IR 제출 유도</option>
+    <option value="translate">다국어 번역 안내</option>
   </select>
 
-  <label>고객 등급</label>
-  <select id="tier">
-    <option value="bronze">Bronze</option>
-    <option value="silver">Silver</option>
-    <option value="gold">Gold</option>
-    <option value="vip">VIP</option>
+  <label>반복 주기</label>
+  <select id="interval">
+    <option value="7">7일 마다</option>
+    <option value="14">2주 간격</option>
+    <option value="30">월 1회</option>
   </select>
 
-  <label>예약 발송 날짜</label>
-  <input id="date" type="date" />
+  <label>최대 반복 횟수</label>
+  <input id="limit" type="number" placeholder="예: 3" />
 
-  <button onclick="generateAndSchedule()">리마인더 생성 및 예약</button>
+  <button onclick="build()">시나리오 생성</button>
 
-  <div id="output" class="output" style="display:none;"></div>
+  <div class="result" id="output" style="display:none;"></div>
 
 <script>
-  function generateAndSchedule() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
+  function build() {
     const feature = document.getElementById("feature").value;
-    const tier = document.getElementById("tier").value;
-    const date = document.getElementById("date").value;
+    const interval = document.getElementById("interval").value;
+    const limit = document.getElementById("limit").value;
 
-    let message = "";
-
+    let desc = "";
     if (feature === "contract") {
-      message = `📄 ${name} 고객님, 계약서 전자서명이 아직 완료되지 않았습니다. 지금 완료하시고 계약을 마무리해 주세요.`;
+      desc = "계약 진행 상태에 따라 주기적으로 전자서명 안내 메일을 전송합니다.";
     } else if (feature === "roi") {
-      message = `📈 ${name} 고객님, ROI 분석을 다시 실행하여 최신 수익 예측을 확인해보세요. PDF 리포트도 받으실 수 있습니다.`;
+      desc = "ROI 수익 분석 보고서를 정기적으로 전송합니다.";
     } else if (feature === "ir") {
-      message = `📊 ${name} 고객님, IR 보고서 제출을 아직 마치지 않으셨습니다. 투자자 보고용 문서를 제출해주세요.`;
+      desc = "IR 리포트 제출 독려 메일을 반복 전송합니다.";
     } else if (feature === "translate") {
-      message = `🌍 ${name} 고객님, 번역기 프리셋을 설정해 글로벌 거래를 더 편리하게 하실 수 있습니다.`;
+      desc = "다국어 번역기 사용 안내를 반복적으로 전송합니다.";
     }
 
-    if (tier === "vip") {
-      message += " 🎁 VIP 고객님께는 특별 보너스 혜택이 함께 제공됩니다!";
-    }
-
-    const output = document.getElementById("output");
-    output.innerHTML = `
-      <p><b>예약 대상:</b> ${email}</p>
-      <p><b>발송일:</b> ${date}</p>
-      <p><b>메시지 내용:</b><br/>${message}</p>
+    const summary = `
+      <p><b>캠페인 구성:</b> ${desc}</p>
+      <p><b>반복 주기:</b> ${interval}일 마다</p>
+      <p><b>최대 반복 횟수:</b> ${limit}회</p>
     `;
-    output.style.display = "block";
+
+    document.getElementById("output").innerHTML = summary;
+    document.getElementById("output").style.display = "block";
   }
 </script>
 </body>
