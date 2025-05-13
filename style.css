@@ -7,37 +7,35 @@ body {
 header {
   background: #1d4ed8;
   color: white;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
 }
 main {
   padding: 2rem;
 }
 section {
-  background: white;
-  margin: 1rem auto;
-  max-width: 700px;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
 }
-input {
-  padding: 0.6rem;
-  margin: 0.5rem 0;
-  width: 100%;
+h2 {
+  color: #2563eb;
 }
-button {
-  padding: 0.6rem 1.2rem;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin-top: 1rem;
 }
-ul { padding-left: 1.2rem; text-align: left; }
+.menu a {
+  background: #2563eb;
+  color: white;
+  padding: 0.75rem 1.2rem;
+  text-decoration: none;
+  border-radius: 8px;
+  min-width: 180px;
+}
 footer {
   text-align: center;
   padding: 1.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #6b7280;
 }
