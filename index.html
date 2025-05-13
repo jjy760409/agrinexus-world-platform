@@ -2,62 +2,69 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>📉 전체 기능 전환 퍼널 분석 맵</title>
+  <title>🔁 이탈 사용자 복귀 유도 시스템</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: sans-serif; background: #f1f5f9; padding: 2rem; color: #1f2937; }
-    h1 { color: #1d4ed8; text-align: center; }
-    .funnel {
-      max-width: 700px;
-      margin: 3rem auto;
+    body { font-family: sans-serif; background: #fef2f2; padding: 2rem; color: #1f2937; }
+    h1 { color: #dc2626; }
+    label, input {
+      display: block;
+      margin: 1rem 0 0.3rem;
+    }
+    input {
+      padding: 0.6rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1.5rem;
       background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .step {
-      margin: 2rem 0;
-      padding: 1rem;
-      background: #e0f2fe;
-      border-left: 6px solid #60a5fa;
-    }
-    .step h3 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-    .step p {
-      margin-top: 0.5rem;
-      color: #475569;
+      border-left: 6px solid #f87171;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
   </style>
 </head>
 <body>
-  <h1>📉 전체 기능 전환 퍼널 분석 맵</h1>
-  <div class="funnel">
-    <div class="step">
-      <h3>1️⃣ 홈페이지 진입</h3>
-      <p>방문 수: 3,500 | 이탈률: 38%</p>
-    </div>
-    <div class="step">
-      <h3>2️⃣ 로그인 또는 회원가입</h3>
-      <p>전환 수: 2,170 | 전환율: 62%</p>
-    </div>
-    <div class="step">
-      <h3>3️⃣ 계약서 생성 기능 이용</h3>
-      <p>클릭 수: 1,430 | 전환율: 65.9%</p>
-    </div>
-    <div class="step">
-      <h3>4️⃣ 수익 분석 / ROI 예측</h3>
-      <p>사용 수: 840 | 전환율: 58.7%</p>
-    </div>
-    <div class="step">
-      <h3>5️⃣ 이메일 전송 or 업그레이드 클릭</h3>
-      <p>이메일 전송 수: 473 | 업그레이드 클릭 수: 267</p>
-    </div>
-    <div class="step">
-      <h3>✅ 최종 전환 (계약 완료 or 캠페인 참여)</h3>
-      <p>완료 수: 221 | 전체 전환률: 6.3%</p>
-    </div>
-  </div>
+  <h1>🔁 이탈 고객 복귀 자동 유도 시스템</h1>
+  <label>고객 이메일</label>
+  <input id="email" placeholder="예: user@agrinexus.com" />
+  <label>마지막 접속일 (YYYY-MM-DD)</label>
+  <input id="lastVisit" type="date" />
+  <button onclick="trigger()">유도 실행</button>
+
+  <div class="result" id="resultBox" style="display:none;"></div>
+
+<script>
+  function trigger() {
+    const email = document.getElementById("email").value;
+    const lastVisit = new Date(document.getElementById("lastVisit").value);
+    const now = new Date();
+    const diff = Math.floor((now - lastVisit) / (1000 * 60 * 60 * 24));
+
+    let message = "";
+    if (diff >= 30) {
+      message = `📬 ${email} 고객님은 ${diff}일간 미접속 상태입니다. 리마인더 캠페인 + 할인 쿠폰 전송 예정!`;
+    } else if (diff >= 14) {
+      message = `📩 ${email} 고객님에게 최근 추천 기능 안내 메일 자동 발송됨.`;
+    } else {
+      message = `👍 ${email} 고객님은 최근 접속 사용자로 유지 관리 중입니다.`;
+    }
+
+    const box = document.getElementById("resultBox");
+    box.innerHTML = message;
+    box.style.display = "block";
+  }
+</script>
 </body>
 </html>
