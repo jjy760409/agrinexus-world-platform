@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World | 통합 SPA + Firebase 저장</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSTGz4dADf0yVuQgyo7srtJng66jjXbEA",
+      authDomain: "agrinexus-world.firebaseapp.com",
+      projectId: "agrinexus-world",
+      storageBucket: "agrinexus-world.appspot.com",
+      messagingSenderId: "77729457741",
+      appId: "1:77729457741:web:a65d86e12998b63095e04",
+      measurementId: "G-3921M5SL2H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.submitContract = async () => {
+      const name = document.getElementById("contractName").value.trim();
+      const content = document.getElementById("contractContent").value.trim();
+      const preview = document.getElementById("contractPreview");
+      const pname = document.getElementById("previewName");
+      const pcontent = document.getElementById("previewContent");
+      const status = document.getElementById("status");
+
+      if (!name || !content) {
+        alert("이름과 계약 내용을 모두 입력해 주세요.");
+        return;
+      }
+
+      pname.innerText = name;
+      pcontent.innerText = content;
+      preview.classList.remove("hidden");
+
+      try {
+        await addDoc(collection(db, "contracts"), {
+          name,
+          content,
+          timestamp: serverTimestamp()
+        });
+        status.innerText = "✅ Firebase 저장 완료";
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        status.innerText = "❌ 저장 실패: " + e.message;
+      }
+    };
+
+    window.generatePDF = () => {
+      html2pdf().set({ filename: "계약서.pdf" }).from(document.getElementById("contractPreview")).save();
+    };
+
+    window.showSection = (id) => {
+      document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+    };
+  </script>
+</head>
+<body class="bg-white text-gray-900 font-sans scroll-smooth">
+  <header class="bg-green-700 text-white text-center py-6">
+    <h1 class="text-3xl font-bold">AgriNexus World</h1>
+    <p class="text-sm mt-1">통합 자동화 SPA 플랫폼 | Firebase 저장 연동</p>
+    <div class="mt-4 flex justify-center flex-wrap gap-2">
+      <button onclick="showSection('contract')" class="bg-white text-green-800 px-4 py-2 rounded">📄 계약</button>
+      <button onclick="showSection('design')" class="bg-white text-green-800 px-4 py-2 rounded">🤖 설계</button>
+      <button onclick="showSection('logistics')" class="bg-white text-green-800 px-4 py-2 rounded">🛰 물류</button>
+      <button onclick="showSection('report')" class="bg-white text-green-800 px-4 py-2 rounded">📊 리포트</button>
+      <button onclick="showSection('investment')" class="bg-white text-green-800 px-4 py-2 rounded">💰 투자</button>
+      <button onclick="showSection('global')" class="bg-white text-green-800 px-4 py-2 rounded">🌐 글로벌</button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <!-- 계약 -->
+    <section id="contract" class="section">
+      <h2 class="text-xl font-bold mb-2">📄 계약서 생성 및 Firebase 저장</h2>
+      <input id="contractName" placeholder="계약자 이름" class="border p-2 rounded w-full mb-2" />
+      <textarea id="contractContent" placeholder="계약 내용" class="border p-2 rounded w-full mb-2" rows="4"></textarea>
+      <button onclick="submitContract()" class="bg-green-600 text-white px-4 py-2 rounded">📥 저장 & 미리보기</button>
+      <div id="status" class="mt-2 text-green-700 font-medium"></div>
+      <div id="contractPreview" class="mt-6 p-4 bg-white border rounded hidden">
+        <h3 class="text-lg font-bold">[ 계약서 ]</h3>
+        <p><strong>계약자:</strong> <span id="previewName"></span></p>
+        <p class="mt-2 whitespace-pre-wrap" id="previewContent"></p>
+        <button onclick="generatePDF()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">📄 PDF 다운로드</button>
+      </div>
+    </section>
+
+    <!-- 다른 섹션들 (디자인 등은 UI만 유지) -->
+    <section id="design" class="section hidden">
+      <h2 class="text-xl font-bold mb-2">🤖 설계 시뮬레이션 (추후 연동)</h2>
+      <p>설계 기능은 다음 단계에서 Firebase와 연결 예정입니다.</p>
+    </section>
+
+    <section id="logistics" class="section hidden">
+      <h2 class="text-xl font-bold mb-2">🛰 물류 추적 시스템 (추후 연동)</h2>
+      <p>위성 물류 시스템은 추후 지도 API와 연동 예정입니다.</p>
+    </section>
+
+    <section id="report" class="section hidden">
+      <h2 class="text-xl font-bold mb-2">📊 리포트 시스템 (추후 연동)</h2>
+      <p>ROI 리포트 저장 기능도 다음 단계에서 연동됩니다.</p>
+    </section>
+
+    <section id="investment" class="section hidden">
+      <h2 class="text-xl font-bold mb-2">💰 투자 자동화 (추후 연동)</h2>
+      <p>IR 생성 및 이메일 제출은 다음 기능으로 구성됩니다.</p>
+    </section>
+
+    <section id="global" class="section hidden">
+      <h2 class="text-xl font-bold mb-2">🌐 글로벌 기능</h2>
+      <p>GPT 챗, 다국어 변환, PWA 앱 설치는 확장 예정입니다.</p>
+    </section>
+  </main>
+
+  <footer class="bg-gray-100 text-center text-sm text-gray-600 py-6">
+    © 2025 AgriNexus World — 통합 SPA + Firebase 저장
+  </footer>
+</body>
+</html>
