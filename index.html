@@ -1,17 +1,69 @@
 
-    <!DOCTYPE html>
-    <html lang="ko">
-    <head><meta charset="UTF-8"><title>AgriNexus World - 메인</title></head>
-    <body>
-        <h1>🌍 AgriNexus World - GPT 120기능 자동화 플랫폼</h1>
-        <ul>
-            <li><a href="contract.html">📄 계약 생성기</a></li>
-            <li><a href="proposal.html">📑 제안서 생성기</a></li>
-            <li><a href="report.html">📈 보고서 생성기</a></li>
-            <li><a href="delivery.html">🚚 물류 최적화</a></li>
-            <li><a href="satellite.html">🛰️ 위성 기반 설계</a></li>
-            <li><a href="admin.html">📊 관리자 요약</a></li>
-        </ul>
-    </body>
-    </html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AgriNexus World - GPT Key 자동저장</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #f9f9f9; }
+        textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
+        button { background-color: #2e8b57; color: white; border: none; cursor: pointer; }
+        #gpt-output { margin-top: 20px; padding: 15px; border: 1px solid #ccc; background-color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>🌍 AgriNexus World - GPT 자동 저장 플랫폼</h1>
+    <p>🔐 OpenAI API Key (처음 한 번만 입력):</p>
+    <input type="password" id="api-key" placeholder="API 키를 입력하세요">
     
+    <p>💬 GPT에게 명령 또는 질문을 입력하세요:</p>
+    <textarea id="gpt-input" placeholder="예: 이 조건으로 스마트팜 계약서를 작성해줘."></textarea>
+    <button onclick="askGPT()">GPT 실행</button>
+
+    <div id="gpt-output">여기에 GPT 응답이 표시됩니다...</div>
+
+    <script>
+    window.onload = function() {
+        const savedKey = localStorage.getItem("openai_api_key");
+        if (savedKey) {
+            document.getElementById("api-key").value = savedKey;
+        }
+    };
+
+    async function askGPT() {
+        const input = document.getElementById("gpt-input").value;
+        const apiKey = document.getElementById("api-key").value;
+        const output = document.getElementById("gpt-output");
+
+        if (!apiKey) {
+            output.innerHTML = "❗ API Key를 입력해야 합니다.";
+            return;
+        }
+
+        localStorage.setItem("openai_api_key", apiKey);
+
+        output.innerHTML = "GPT 응답 생성 중...";
+
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + apiKey
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o",
+                    messages: [{ role: "user", content: input }],
+                    temperature: 0.7
+                })
+            });
+
+            const data = await response.json();
+            output.innerHTML = data.choices?.[0]?.message?.content || "❌ 응답 오류 발생";
+        } catch (error) {
+            output.innerHTML = "❌ 네트워크 오류 또는 API 호출 실패";
+        }
+    }
+    </script>
+</body>
+</html>
