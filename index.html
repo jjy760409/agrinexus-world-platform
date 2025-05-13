@@ -2,72 +2,87 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>💬 고객 요청 응답 + 업셀링 제안 시스템</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📊 고객 등급 + 행동 이력 기반 추천 리포트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f0fdf4; color: #111827; }
     h1 { color: #15803d; }
-    textarea, input {
-      width: 100%;
-      max-width: 600px;
+    label, select, input {
+      display: block;
+      margin: 1rem 0 0.3rem;
+    }
+    select, input {
       padding: 0.6rem;
-      margin-top: 0.5rem;
+      max-width: 400px;
+      width: 100%;
     }
     button {
-      padding: 0.6rem 1.2rem;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
       background: #16a34a;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    .response {
+    .result {
       margin-top: 2rem;
       background: white;
       padding: 1.2rem;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    .upsell {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #ecfccb;
-      border-left: 4px solid #84cc16;
+    .highlight {
+      color: #10b981;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>💬 고객 요청 자동 응답 + 업셀링 제안</h1>
-  <label>고객 요청 내용 입력</label>
-  <textarea id="request" rows="4" placeholder="예: 계약서 기능 외에 수익 분석도 원합니다."></textarea>
-  <button onclick="respond()">응답 생성</button>
+  <h1>📊 고객 등급 + 행동 이력 기반 추천 리포트</h1>
+  <label>고객 이메일</label>
+  <input id="email" placeholder="예: user@agrinexus.com">
+  <label>고객 등급</label>
+  <select id="tier">
+    <option value="bronze">Bronze</option>
+    <option value="silver">Silver</option>
+    <option value="gold">Gold</option>
+    <option value="vip">VIP</option>
+  </select>
+  <label>지난 30일간 계약 수</label>
+  <input id="count" type="number" placeholder="예: 5">
+  <label>가장 자주 사용한 기능</label>
+  <select id="feature">
+    <option value="contract">계약서 생성</option>
+    <option value="forecast">수익 예측</option>
+    <option value="upload">파일 업로드</option>
+    <option value="translate">번역기</option>
+  </select>
+  <button onclick="recommend()">리포트 생성</button>
 
-  <div class="response" id="response" style="display:none;">
-    <div id="autoReply"></div>
-    <div class="upsell" id="upsellBox"></div>
-  </div>
+  <div id="result" class="result" style="display:none;"></div>
 
 <script>
-  function respond() {
-    const text = document.getElementById("request").value.toLowerCase();
-    let reply = "🤖 고객님의 요청을 반영했습니다.";
-    let upsell = "";
+  function recommend() {
+    const email = document.getElementById("email").value;
+    const tier = document.getElementById("tier").value;
+    const count = parseInt(document.getElementById("count").value || 0);
+    const feature = document.getElementById("feature").value;
 
-    if (text.includes("수익") || text.includes("분석")) {
-      reply += "\n📈 수익 분석 기능은 아래에서 바로 이용하실 수 있습니다.";
-      upsell = "💡 더 많은 계약 데이터 기반 예측이 필요하신가요? ➤ <a href='/forecast-report'>예측 리포트 보러가기</a>";
-    } else if (text.includes("계약") && text.includes("메일")) {
-      reply += "\n📬 이메일로 계약 내용을 자동 전송해드릴 수 있어요.";
-      upsell = "💼 계약 리포트를 PDF로 받아보시려면 ➤ <a href='/email-report'>이메일 리포트 보내기</a>";
-    } else {
-      reply += "\n🧠 문의하신 내용을 기반으로 유사 기능을 분석 중입니다.";
-      upsell = "🔍 다양한 기능을 검색하고 싶으시면 ➤ <a href='/connect'>기능 연결 페이지로 이동</a>";
-    }
+    let action = "";
+    if (feature === "contract") action = "📄 계약서 자동 이메일 전송 기능";
+    else if (feature === "forecast") action = "📈 수익 예측 기반 리포트 저장 기능";
+    else if (feature === "upload") action = "📤 업로드 파일 기반 보고서 분석 기능";
+    else if (feature === "translate") action = "🌍 번역 기록 기반 고객 맞춤형 번역기 프리셋";
 
-    document.getElementById("autoReply").innerText = reply;
-    document.getElementById("upsellBox").innerHTML = upsell;
-    document.getElementById("response").style.display = "block";
+    const html = `
+      <p><b>${email}</b> 고객님은 <span class='highlight'>${tier.toUpperCase()}</span> 등급이며,</p>
+      <p>최근 30일 내 <span class='highlight'>${count}건</span>의 계약 활동을 하셨고,</p>
+      <p>가장 많이 사용한 기능은 <span class='highlight'>${feature}</span>입니다.</p>
+      <p>추천 기능: <b>${action}</b></p>
+    `;
+    document.getElementById("result").innerHTML = html;
+    document.getElementById("result").style.display = "block";
   }
 </script>
 </body>
