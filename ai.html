@@ -1,8 +1,29 @@
 
 <!DOCTYPE html><html><body>
 <h1>🤖 OpenAI 자동 생성기</h1>
-<form>
-  프롬프트 입력: <input type="text" name="prompt"><br>
-  <button type="submit">AI 응답 생성</button>
+<form onsubmit="event.preventDefault(); callOpenAI();">
+  프롬프트 입력: <input type="text" id="prompt"><br>
+  <button type="submit">응답 생성</button>
 </form>
+<pre id="output" style="margin-top:1em; background:#f3f3f3; padding:1em;"></pre>
+<script>
+async function callOpenAI() {
+  const prompt = document.getElementById("prompt").value;
+  document.getElementById("output").textContent = "요청 중...";
+  const response = await fetch("https://api.openai.com/v1/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+    },
+    body: JSON.stringify({
+      model: "text-davinci-003",
+      prompt: prompt,
+      max_tokens: 50
+    })
+  });
+  const data = await response.json();
+  document.getElementById("output").textContent = data.choices[0].text;
+}
+</script>
 </body></html>

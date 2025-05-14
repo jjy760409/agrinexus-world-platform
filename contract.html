@@ -1,9 +1,19 @@
 
 <!DOCTYPE html><html><body>
 <h1>📄 계약 생성기</h1>
-<form>
-  계약자 이름: <input type="text" name="name"><br>
-  계약 내용: <textarea name="content"></textarea><br>
+<form onsubmit="event.preventDefault(); generateContract();">
+  계약자 이름: <input type="text" id="name"><br>
+  계약 내용: <textarea id="content"></textarea><br>
   <button type="submit">계약서 PDF 생성</button>
 </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  async function generateContract() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text(`계약자: ${document.getElementById("name").value}`, 10, 10);
+    doc.text(`내용: ${document.getElementById("content").value}`, 10, 20);
+    doc.save("contract.pdf");
+  }
+</script>
 </body></html>

@@ -1,9 +1,19 @@
 
 <!DOCTYPE html><html><body>
 <h1>📑 보고서 생성기</h1>
-<form>
-  제목: <input type="text" name="title"><br>
-  요약: <textarea name="summary"></textarea><br>
-  <button type="submit">보고서 PDF 생성</button>
+<form onsubmit="event.preventDefault(); generateReport();">
+  제목: <input type="text" id="title"><br>
+  요약: <textarea id="summary"></textarea><br>
+  <button type="submit">PDF 생성</button>
 </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  async function generateReport() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text(`제목: ${document.getElementById("title").value}`, 10, 10);
+    doc.text(document.getElementById("summary").value, 10, 20);
+    doc.save("report.pdf");
+  }
+</script>
 </body></html>
