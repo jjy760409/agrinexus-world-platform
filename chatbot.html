@@ -3,17 +3,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus AI 상담봇</title>
+  <title>AgriNexus AI 상담봇 (보안 구조)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial; padding: 2rem; }
+    body { font-family: Arial; padding: 2rem; background: #fefefe; }
     #chat { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 1rem; background: #f9f9f9; }
     .user { font-weight: bold; color: #007bff; }
     .bot { margin-left: 1rem; color: #222; }
   </style>
 </head>
 <body>
-  <h2>🤖 AgriNexus AI 상담봇</h2>
+  <h2>🤖 AgriNexus AI 상담봇 (GPT-4 실시간 응답)</h2>
   <div id="chat"></div>
   <input type="text" id="input" placeholder="질문을 입력하세요..." style="width: 80%;">
   <button onclick="sendMessage()">전송</button>
@@ -27,21 +27,20 @@ async function sendMessage() {
 
   chat.innerHTML += `<div class='user'>🙋‍♂️ 나: ${message}</div>`;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer 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",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-4",
-      messages: [{ role: "user", content: message }]
-    })
-  });
+  try {
+    const response = await fetch("https://gpt-api-proxy.vercel.app/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: message })
+    });
 
-  const data = await response.json();
-  const reply = data.choices?.[0]?.message?.content || "답변 오류 발생";
-  chat.innerHTML += `<div class='bot'>🤖 AI: ${reply}</div>`;
+    const data = await response.json();
+    const reply = data.reply || "❌ 오류: AI 응답 실패";
+    chat.innerHTML += `<div class='bot'>🤖 AI: ${reply}</div>`;
+  } catch (error) {
+    chat.innerHTML += `<div class='bot'>❌ 네트워크 오류 또는 응답 실패</div>`;
+  }
+
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
 }
