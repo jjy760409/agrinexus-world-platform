@@ -1,33 +1,51 @@
-
 <!DOCTYPE html><html><body>
-<h1>📦 Firebase 데이터 저장</h1>
+
+<nav class="bg-white shadow px-4 py-3 text-sm font-medium space-x-4">
+  <a href="index.html">홈</a>
+  <a href="contract.html">계약</a>
+  <a href="report.html">보고서</a>
+  <a href="ai.html">GPT 생성기</a>
+  <a href="smartfarm.html">스마트팜</a>
+  <a href="seeds.html">종자</a>
+  <a href="chart.html">시세</a>
+  <a href="firebase.html">저장</a>
+  <a href="logistics.html">물류</a>
+  <a href="tracking.html">추적</a>
+  <a href="notify.html">알림</a>
+</nav>
+
+<h1>📦 Firebase 저장</h1>
+
+<!-- 🔒 Firebase API 키 입력 팁:
+1. firebase.html 파일에서 YOUR_API_KEY, YOUR_PROJECT 등 부분을
+   실제 Firebase 프로젝트의 정보로 바꾸세요.
+2. GitHub 등 공개 저장소에 올릴 땐 절대 키 노출하지 마세요.
+3. 안전하게 배포할 땐 서버 또는 환경변수(.env) 방식으로 처리하세요.
+-->
+
 <form onsubmit="event.preventDefault(); saveData();">
-  이름: <input type="text" id="name"><br>
-  내용: <input type="text" id="data"><br>
-  <button type="submit">데이터 저장</button>
+  이름: <input id="name"><br>
+  데이터: <input id="data"><br>
+  <button type="submit">저장</button>
 </form>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "SENDER_ID",
-    appId: "APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  window.saveData = () => {
-    const name = document.getElementById("name").value;
-    const data = document.getElementById("data").value;
-    set(ref(db, 'users/' + name), { content: data });
-    alert("Firebase에 저장되었습니다.");
-  };
-</script>
-</body></html>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window.saveData = () => {
+  const name = document.getElementById("name").value;
+  const data = document.getElementById("data").value;
+  set(ref(db, 'users/' + name), { content: data });
+  alert("저장 완료");
+};
+</script></body></html>
