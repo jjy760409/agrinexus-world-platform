@@ -11,11 +11,15 @@
   <a href="admin.html">🛠 관리자</a>
 </nav><hr>
 
-<h2>🛠 관리자 - 사용자 로그 확인</h2>
-<ul id="logList"></ul>
+<h2>📥 사용자 로그 입력</h2>
+<form onsubmit="event.preventDefault(); saveLog();">
+  <label>이름: <input type="text" id="user"></label><br>
+  <label>내용: <input type="text" id="message"></label><br>
+  <button type="submit">로그 저장</button>
+</form>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
@@ -29,14 +33,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const logRef = ref(db, "logs/");
 
-onValue(logRef, (snapshot) => {
-  const data = snapshot.val();
-  const out = Object.entries(data || {}).map(([k, v]) =>
-    `<li><strong>${v.user}</strong>: ${v.message}<br><small>${v.time}</small></li>`
-  ).join("");
-  document.getElementById("logList").innerHTML = out;
-});
+window.saveLog = () => {
+  const user = document.getElementById("user").value;
+  const message = document.getElementById("message").value;
+  push(ref(db, "logs/"), { user, message, time: new Date().toISOString() });
+  alert("로그가 저장되었습니다.");
+};
 </script>
 </body></html>
