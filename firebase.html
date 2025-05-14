@@ -1,0 +1,33 @@
+
+<!DOCTYPE html><html><body>
+<h1>📦 Firebase 데이터 저장</h1>
+<form onsubmit="event.preventDefault(); saveData();">
+  이름: <input type="text" id="name"><br>
+  내용: <input type="text" id="data"><br>
+  <button type="submit">데이터 저장</button>
+</form>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  window.saveData = () => {
+    const name = document.getElementById("name").value;
+    const data = document.getElementById("data").value;
+    set(ref(db, 'users/' + name), { content: data });
+    alert("Firebase에 저장되었습니다.");
+  };
+</script>
+</body></html>

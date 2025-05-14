@@ -1,0 +1,29 @@
+
+<!DOCTYPE html><html><head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head><body>
+<h1>📊 실시간 시세 그래프</h1>
+<canvas id="priceChart" width="600" height="300"></canvas>
+<script>
+const ctx = document.getElementById("priceChart").getContext("2d");
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: ["1월", "2월", "3월", "4월", "5월"],
+    datasets: [{
+      label: "쌀 가격 (₩)",
+      data: [1200, 1400, 1350, 1500, 1600],
+      borderColor: "green",
+      backgroundColor: "rgba(0,128,0,0.1)",
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: false }
+    }
+  }
+});
+</script>
+</body></html>

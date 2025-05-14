@@ -1,0 +1,22 @@
+
+<!DOCTYPE html><html><body>
+<h1>🌾 종자 추천 시스템</h1>
+<form onsubmit="event.preventDefault(); recommendSeeds();">
+  국가: <input type="text" id="country"><br>
+  계절: <input type="text" id="season"><br>
+  <button type="submit">종자 추천</button>
+</form>
+<ul id="result"></ul>
+<script>
+function recommendSeeds() {
+  const country = document.getElementById("country").value.toLowerCase();
+  const season = document.getElementById("season").value.toLowerCase();
+  const seeds = {
+    korea: { spring: ["상추", "시금치"], summer: ["오이", "토마토"] },
+    japan: { spring: ["배추", "당근"], summer: ["고추", "가지"] }
+  };
+  const result = seeds[country]?.[season] || ["추천 종자 없음"];
+  document.getElementById("result").innerHTML = result.map(seed => `<li>${seed}</li>`).join("");
+}
+</script>
+</body></html>
