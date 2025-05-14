@@ -1,35 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>계약서 자동 생성</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>계약서 자동 생성기</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body>
-  <h2>📄 계약서 자동 생성</h2>
-  <textarea id="prompt" rows="6" cols="60" placeholder="계약 조건을 입력하세요"></textarea><br>
-  <button onclick="generateContract()">계약서 생성</button>
-  <pre id="result" style="white-space: pre-wrap; background-color: #f0f0f0; padding: 1em;"></pre>
-
-<script>
-async function generateContract() {
-  const prompt = document.getElementById("prompt").value;
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer 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",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }]
-    })
-  });
-
-  const data = await response.json();
-  document.getElementById("result").innerText = data.choices?.[0]?.message?.content || "오류 발생";
-}
-</script>
+<body class="bg-gray-50 text-gray-800 p-6">
+  <div class="max-w-xl mx-auto bg-white shadow p-6 rounded">
+    <h1 class="text-xl font-bold mb-4">📝 계약서 자동 생성기</h1>
+    <label class="block mb-2 text-sm">계약자명</label>
+    <input type="text" id="name" class="w-full border p-2 mb-4" placeholder="홍길동">
+    <label class="block mb-2 text-sm">계약 내용 요약</label>
+    <textarea id="content" class="w-full border p-2 mb-4" rows="4" placeholder="스마트팜 설치 및 운영 계약..."></textarea>
+    <button onclick="generatePDF()" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">📄 계약서 PDF 생성</button>
+  </div>
+  <script>
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const name = document.getElementById("name").value;
+      const content = document.getElementById("content").value;
+      doc.setFontSize(12);
+      doc.text(`[계약서]`, 10, 10);
+      doc.text(`계약자: ${name}`, 10, 20);
+      doc.text("계약 내용:", 10, 30);
+      doc.text(content, 10, 40);
+      doc.text("전자서명: ____________________", 10, 70);
+      doc.save(`AgriNexus_Contract_${name}.pdf`);
+    }
+  </script>
 </body>
 </html>
