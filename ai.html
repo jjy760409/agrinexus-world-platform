@@ -1,19 +1,44 @@
 <!DOCTYPE html><html><body>
-
-<nav class="bg-white shadow px-4 py-3 text-sm font-medium space-x-4">
-  <a href="index.html">홈</a>
-  <a href="contract.html">계약</a>
-  <a href="report.html">보고서</a>
-  <a href="ai.html">GPT 생성기</a>
-  <a href="smartfarm.html">스마트팜</a>
-  <a href="seeds.html">종자</a>
-  <a href="chart.html">시세</a>
-  <a href="firebase.html">저장</a>
-  <a href="logistics.html">물류</a>
-  <a href="tracking.html">추적</a>
+<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
+  <a href="index.html">홈</a> |
+  <a href="contract.html">계약</a> |
+  <a href="report.html">보고서</a> |
+  <a href="ai.html">GPT</a> |
+  <a href="smartfarm.html">스마트팜</a> |
+  <a href="seeds.html">종자</a> |
+  <a href="chart.html">시세</a> |
+  <a href="firebase.html">저장</a> |
+  <a href="logistics.html">물류</a> |
+  <a href="tracking.html">추적</a> |
   <a href="notify.html">알림</a>
-</nav>
+</nav><hr>
 
-<h1>🤖 GPT 생성기</h1>
-<p>🤖 GPT 생성기 입력폼 및 기능 영역입니다.</p>
+<h2>🤖 GPT 자동 생성기</h2>
+<form onsubmit="event.preventDefault(); callAI();">
+  <label>API Key: <input type="password" id="key"></label><br>
+  <label>프롬프트: <input type="text" id="prompt" placeholder="예: 농업 최신 트렌드 알려줘"></label><br>
+  <button type="submit">응답 요청</button>
+</form>
+<pre id="output" style="margin-top:1em; background:#f0f0f0; padding:1em;"></pre>
+<script>
+async function callAI() {
+  const key = document.getElementById("key").value;
+  const prompt = document.getElementById("prompt").value;
+  document.getElementById("output").textContent = "요청 중...";
+  const res = await fetch("https://api.openai.com/v1/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + key
+    },
+    body: JSON.stringify({
+      model: "text-davinci-003",
+      prompt: prompt,
+      max_tokens: 100
+    })
+  });
+  const data = await res.json();
+  document.getElementById("output").textContent = data.choices?.[0]?.text || "응답 없음";
+}
+</script>
 </body></html>

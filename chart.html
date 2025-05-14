@@ -1,19 +1,45 @@
-<!DOCTYPE html><html><body>
-
-<nav class="bg-white shadow px-4 py-3 text-sm font-medium space-x-4">
-  <a href="index.html">홈</a>
-  <a href="contract.html">계약</a>
-  <a href="report.html">보고서</a>
-  <a href="ai.html">GPT 생성기</a>
-  <a href="smartfarm.html">스마트팜</a>
-  <a href="seeds.html">종자</a>
-  <a href="chart.html">시세</a>
-  <a href="firebase.html">저장</a>
-  <a href="logistics.html">물류</a>
-  <a href="tracking.html">추적</a>
+<!DOCTYPE html><html><head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head><body>
+<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
+  <a href="index.html">홈</a> |
+  <a href="contract.html">계약</a> |
+  <a href="report.html">보고서</a> |
+  <a href="ai.html">GPT</a> |
+  <a href="smartfarm.html">스마트팜</a> |
+  <a href="seeds.html">종자</a> |
+  <a href="chart.html">시세</a> |
+  <a href="firebase.html">저장</a> |
+  <a href="logistics.html">물류</a> |
+  <a href="tracking.html">추적</a> |
   <a href="notify.html">알림</a>
-</nav>
+</nav><hr>
 
-<h1>📊 시세 그래프</h1>
-<p>📊 시세 그래프 입력폼 및 기능 영역입니다.</p>
+<h2>📊 농산물 시세 그래프</h2>
+<canvas id="chart" width="600" height="300"></canvas>
+<script>
+const ctx = document.getElementById("chart").getContext("2d");
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: ["1월", "2월", "3월", "4월", "5월"],
+    datasets: [{
+      label: "쌀 가격(₩)",
+      data: [1200, 1400, 1350, 1600, 1550],
+      borderColor: "green",
+      backgroundColor: "rgba(0,255,0,0.1)",
+      tension: 0.3,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: false
+      }
+    }
+  }
+});
+</script>
 </body></html>

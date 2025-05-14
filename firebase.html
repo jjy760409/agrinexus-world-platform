@@ -1,33 +1,25 @@
 <!DOCTYPE html><html><body>
-
-<nav class="bg-white shadow px-4 py-3 text-sm font-medium space-x-4">
-  <a href="index.html">홈</a>
-  <a href="contract.html">계약</a>
-  <a href="report.html">보고서</a>
-  <a href="ai.html">GPT 생성기</a>
-  <a href="smartfarm.html">스마트팜</a>
-  <a href="seeds.html">종자</a>
-  <a href="chart.html">시세</a>
-  <a href="firebase.html">저장</a>
-  <a href="logistics.html">물류</a>
-  <a href="tracking.html">추적</a>
+<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
+  <a href="index.html">홈</a> |
+  <a href="contract.html">계약</a> |
+  <a href="report.html">보고서</a> |
+  <a href="ai.html">GPT</a> |
+  <a href="smartfarm.html">스마트팜</a> |
+  <a href="seeds.html">종자</a> |
+  <a href="chart.html">시세</a> |
+  <a href="firebase.html">저장</a> |
+  <a href="logistics.html">물류</a> |
+  <a href="tracking.html">추적</a> |
   <a href="notify.html">알림</a>
-</nav>
+</nav><hr>
 
-<h1>📦 Firebase 저장</h1>
-
-<!-- 🔒 Firebase API 키 입력 팁:
-1. firebase.html 파일에서 YOUR_API_KEY, YOUR_PROJECT 등 부분을
-   실제 Firebase 프로젝트의 정보로 바꾸세요.
-2. GitHub 등 공개 저장소에 올릴 땐 절대 키 노출하지 마세요.
-3. 안전하게 배포할 땐 서버 또는 환경변수(.env) 방식으로 처리하세요.
--->
-
+<h2>📦 Firebase 데이터 저장</h2>
 <form onsubmit="event.preventDefault(); saveData();">
-  이름: <input id="name"><br>
-  데이터: <input id="data"><br>
+  <label>사용자 ID: <input type="text" id="user"></label><br>
+  <label>메시지 내용: <input type="text" id="data"></label><br>
   <button type="submit">저장</button>
 </form>
+<small>※ Firebase 설정 필요: API 키, 프로젝트 ID 등은 보안상 직접 입력해야 합니다.</small>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -43,9 +35,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 window.saveData = () => {
-  const name = document.getElementById("name").value;
+  const user = document.getElementById("user").value;
   const data = document.getElementById("data").value;
-  set(ref(db, 'users/' + name), { content: data });
-  alert("저장 완료");
+  set(ref(db, 'users/' + user), { message: data });
+  alert("Firebase에 저장 완료");
 };
-</script></body></html>
+</script>
+</body></html>
