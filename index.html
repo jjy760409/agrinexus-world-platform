@@ -4,48 +4,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World - 스마트팜 통합 플랫폼</title>
+  <title>AgriNexus World</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-    }
+    body { font-family: 'Noto Sans KR', sans-serif; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-white text-gray-900">
 
-  <header class="bg-green-700 text-white p-5 shadow-md">
-    <div class="text-2xl font-bold">🌿 AgriNexus World</div>
-    <p class="text-sm text-green-200">AI 기반 스마트팜·물류·계약·국가정보 자동화 플랫폼</p>
+  <header class="sticky top-0 z-50 bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <div class="text-xl font-bold text-green-700">🌿 AgriNexus World</div>
+      <nav class="space-x-6 text-sm font-medium">
+        <a href="index.html" class="text-gray-700 hover:text-green-700">홈</a>
+        <a href="contract.html" class="text-gray-700 hover:text-green-700">계약 생성</a>
+        <a href="report.html" class="text-gray-700 hover:text-green-700">보고서</a>
+        <a href="login.html" class="text-gray-700 hover:text-green-700">관리자</a>
+        <a href="#" class="text-gray-700 hover:text-green-700">챗봇</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
 
-    <section class="bg-white rounded-xl shadow-md border p-6">
-      <h2 class="text-2xl font-bold text-green-700 mb-4">🚀 통합 기능 안내</h2>
-      <ul class="list-disc pl-6 text-base leading-relaxed text-gray-800 space-y-1">
-        <li>📄 <strong>계약서 자동 생성기</strong> – 계약 내용 입력 → 전자서명 포함 PDF 출력</li>
-        <li>📑 <strong>보고서 자동 생성기</strong> – 입력 요약 → PDF 보고서 변환</li>
-        <li>🔐 <strong>관리자 로그인 시스템</strong> – 로그인 후 수익 및 추천 분석 가능</li>
-        <li>🧠 <strong>스마트팜 AI 통합 설계 생성기</strong> – 환경에 맞는 농장 구조 자동 설계</li>
-        <li>🚚 <strong>AI 물류 통합 생성기</strong> – 생산지~도착지 자동 매핑 물류 경로 생성</li>
-        <li>📊 <strong>국가별 정보 생성기</strong> – 정책, 환경, 기후, 수출입 등 실시간 요약</li>
-        <li>🌱 <strong>국가별 종자 정보 서비스 생성기</strong> – 나라별 재배 가능 작물 및 기간 제공</li>
-        <li>💬 <strong>AI 챗봇 생성기</strong> – GPT 응답 기반 스마트 고객 응대</li>
-        <li>🔗 <strong>OpenAI API 연동 생성기</strong> – 입력값 기반 실시간 텍스트 자동화</li>
-      </ul>
+    <section class="mb-12 text-center">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">농업의 미래, AgriNexus에서 시작됩니다.</h1>
+      <p class="text-lg text-gray-600">스마트팜, 계약, 물류, 국가 정보, AI까지 모든 것을 자동화한 올인원 플랫폼</p>
     </section>
 
-    <section class="bg-white rounded-xl shadow-md border p-6">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2">📦 전체 기능은 클릭 한 번으로 연결됩니다.</h2>
-      <p class="text-gray-600 text-sm">각 기능은 HTML 내 포함되어 있으며, GitHub 또는 Netlify에 배포하여 실시간 서비스 가능</p>
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <a href="contract.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
+        <h3 class="text-lg font-bold text-green-700 mb-2">📄 계약서 자동 생성</h3>
+        <p class="text-sm text-gray-700">전자서명 포함 계약서를 클릭 한 번으로 출력</p>
+      </a>
+      <a href="report.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
+        <h3 class="text-lg font-bold text-green-700 mb-2">📑 보고서 PDF 출력</h3>
+        <p class="text-sm text-gray-700">데이터를 입력하면 PDF로 변환됩니다</p>
+      </a>
+      <a href="login.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
+        <h3 class="text-lg font-bold text-green-700 mb-2">🔐 관리자 접속</h3>
+        <p class="text-sm text-gray-700">수익 분석, 추천 관리 기능 제공</p>
+      </a>
+    </section>
+
+    <section class="bg-gray-100 p-6 rounded-xl shadow-inner text-center">
+      <h2 class="text-xl font-semibold mb-2 text-gray-800">AgriNexus World는 신뢰를 설계합니다.</h2>
+      <p class="text-sm text-gray-600">복잡한 기술은 감추고, 결과 중심의 자동화 흐름을 제공합니다.<br/>전 세계 누구나 클릭 한 번으로 농업 비즈니스를 시작할 수 있습니다.</p>
     </section>
 
   </main>
 
   <footer class="text-center text-xs py-6 text-gray-500 border-t mt-10">
-    © 2025 AgriNexus World | 전세계 스마트 농업 자동화 시스템
+    © 2025 AgriNexus World | 스마트 농업 자동화 플랫폼
   </footer>
 
 </body>
