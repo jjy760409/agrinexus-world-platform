@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,51 +8,68 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900">
+  <header class="bg-green-700 text-white p-5 shadow-md">
+    <div class="text-2xl font-bold">🌿 AgriNexus World</div>
+  </header>
 
-  <!-- ✅ 네비게이션 메뉴바 -->
-  <nav class="bg-green-800 text-white px-6 py-3 shadow flex flex-wrap items-center justify-between">
-    <div class="text-lg font-bold">🌿 AgriNexus World</div>
-    <ul class="flex flex-wrap gap-4 text-sm">
-      <li><a href="index.html" class="hover:underline">🏁 메인</a></li>
-      <li><a href="contract.html" class="hover:underline">📄 계약 생성</a></li>
-      <li><a href="report.html" class="hover:underline">📑 보고서</a></li>
-      <li><a href="login.html" class="hover:underline">🔐 관리자</a></li>
-      <li><a href="#" onclick="toggleChat()" class="hover:underline">💬 AI 상담</a></li>
-      <li><a href="#" class="hover:underline">💰 추천 리워드</a></li>
-      <li><a href="index.html#about" class="hover:underline">🏢 회사 소개</a></li>
-    </ul>
-  </nav>
-
-  <!-- 메인 콘텐츠 -->
-  <main class="p-6 max-w-4xl mx-auto space-y-10">
-    <section id="about">
-      <h2 class="text-xl font-semibold mb-2">회사 소개</h2>
-      <p class="text-gray-700 leading-relaxed">
-        AgriNexus World는 전 세계 누구나 사용할 수 있는 스마트팜 자동화 플랫폼입니다.
-        우리는 사무실이 없지만, 플랫폼과 시스템으로 모든 걸 운영합니다.  
-        계약서, 보고서, 상담, 설계, 운영, 수익까지 모든 과정이 자동화됩니다.  
-        단 1인 운영으로도 글로벌 수준의 농업 비즈니스를 가능합니다.
+  <section class="max-w-4xl mx-auto p-6 space-y-10">
+    <div>
+      <h2 class="text-2xl font-bold mb-3">🌱 AgriNexus World는 왜 특별한가요?</h2>
+      <p class="text-gray-800 leading-relaxed text-lg">
+        AgriNexus World는 전 세계 어디서든 누구나 클릭 한 번으로  
+        <strong>스마트팜을 설계하고 계약하고 수익을 창출할 수 있는 자동화 플랫폼</strong>입니다.  
+        복잡한 기술은 보이지 않도록 숨기고,  
+        사용자에겐 <strong>가장 직관적인 경험</strong>만을 남깁니다.  
+        계약서, 보고서, 설계, 물류, 운영까지  
+        모든 것이 하나의 흐름으로 연결되고 자동화됩니다.
       </p>
-    </section>
+    </div>
 
-    <section>
-      <h2 class="text-xl font-semibold mb-2">플랫폼 철학</h2>
-      <p class="text-gray-700 mb-2">💬 Esse, non videri – 보이기보다 존재하라</p>
-      <ul class="list-disc pl-5 text-sm text-gray-800 space-y-1">
+    <div>
+      <h2 class="text-xl font-semibold mt-8 mb-2">💬 플랫폼 철학</h2>
+      <p class="text-md font-medium text-gray-700 mb-2">💭 Esse, non videri – 보이기보다 존재하라</p>
+      <ul class="list-disc pl-5 space-y-1 text-gray-800 text-base">
         <li>겉치레 없이, 진짜로 작동하는 시스템을 만듭니다.</li>
+        <li>복잡함은 숨기고, 결과만 보여줍니다.</li>
         <li>기술은 조용하게, 그러나 누구보다 강력하게 작동합니다.</li>
-        <li>누구나, 어디서든 클릭 한 번으로 농업 비즈니스를 시작할 수 있게 합니다.</li>
-        <li>1인 기업도 세계 최고가 될 수 있다는 믿음을 실현합니다.</li>
+        <li>누구든 직관적으로 농업을 시작하고 수익을 창출할 수 있어야 합니다.</li>
       </ul>
-    </section>
-  </main>
+    </div>
 
-  <!-- GPT 챗봇 (간이 연결용 예시) -->
-  <script>
-    function toggleChat() {
-      alert('💬 GPT 챗봇 기능은 Netlify 연결 시 iframe 또는 위젯으로 연동됩니다.');
-    }
-  </script>
+    <div>
+      <h2 class="text-xl font-semibold mt-8 mb-2">🌟 핵심 가치 키워드</h2>
+      <table class="w-full table-auto text-sm text-left border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-4 py-2">가치</th>
+            <th class="border px-4 py-2">설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-4 py-2 font-semibold">신뢰</td>
+            <td class="border px-4 py-2">사용자/투자자/파트너 모두에게 약속된 기능과 결과를 제공합니다.</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2 font-semibold">자동화</td>
+            <td class="border px-4 py-2">누구나 전문가처럼 운영할 수 있도록 모든 시스템을 자동화합니다.</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2 font-semibold">확장성</td>
+            <td class="border px-4 py-2">한국 → 아시아 → 글로벌 확장까지 모든 시스템이 준비되어 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2 font-semibold">투명성</td>
+            <td class="border px-4 py-2">수익, 계약, 운영 흐름 전부 실시간으로 공개됩니다.</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2 font-semibold">지속가능성</td>
+            <td class="border px-4 py-2">농업과 기술의 융합을 통해 기후위기, 식량위기에 대응합니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <footer class="bg-gray-100 text-center text-xs py-4 mt-10 text-gray-500">
     © 2025 AgriNexus World | 모든 권리 보유
