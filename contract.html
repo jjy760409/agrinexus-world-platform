@@ -1,1 +1,35 @@
-<h2>📄 실제 운영되는 계약서 자동 생성 시스템 준비됨</h2>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>계약서 자동 생성</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <h2>📄 계약서 자동 생성</h2>
+  <textarea id="prompt" rows="6" cols="60" placeholder="계약 조건을 입력하세요"></textarea><br>
+  <button onclick="generateContract()">계약서 생성</button>
+  <pre id="result" style="white-space: pre-wrap; background-color: #f0f0f0; padding: 1em;"></pre>
+
+<script>
+async function generateContract() {
+  const prompt = document.getElementById("prompt").value;
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer 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",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  const data = await response.json();
+  document.getElementById("result").innerText = data.choices?.[0]?.message?.content || "오류 발생";
+}
+</script>
+</body>
+</html>
