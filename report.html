@@ -1,33 +1,9 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>보고서 자동 생성기</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 p-6">
-  <div class="max-w-xl mx-auto bg-white shadow p-6 rounded">
-    <h1 class="text-xl font-bold mb-4">📑 보고서 자동 생성기</h1>
-    <label class="block mb-2 text-sm">보고서 제목</label>
-    <input type="text" id="title" class="w-full border p-2 mb-4" placeholder="스마트팜 분석 리포트">
-    <label class="block mb-2 text-sm">내용 요약</label>
-    <textarea id="summary" class="w-full border p-2 mb-4" rows="4" placeholder="이 보고서는 스마트팜 운영에 대한 분석 결과를 포함합니다..."></textarea>
-    <button onclick="generateReport()" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">📄 PDF 생성</button>
-  </div>
-  <script>
-    async function generateReport() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const title = document.getElementById("title").value;
-      const summary = document.getElementById("summary").value;
-      doc.setFontSize(14);
-      doc.text(`[보고서] ${title}`, 10, 10);
-      doc.setFontSize(11);
-      doc.text(summary, 10, 20);
-      doc.save(`AgriNexus_Report_${title}.pdf`);
-    }
-  </script>
-</body>
-</html>
+
+<!DOCTYPE html><html><body>
+<h1>📑 보고서 생성기</h1>
+<form>
+  제목: <input type="text" name="title"><br>
+  요약: <textarea name="summary"></textarea><br>
+  <button type="submit">보고서 PDF 생성</button>
+</form>
+</body></html>

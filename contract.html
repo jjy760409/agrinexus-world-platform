@@ -1,35 +1,9 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>계약서 자동 생성기</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 p-6">
-  <div class="max-w-xl mx-auto bg-white shadow p-6 rounded">
-    <h1 class="text-xl font-bold mb-4">📝 계약서 자동 생성기</h1>
-    <label class="block mb-2 text-sm">계약자명</label>
-    <input type="text" id="name" class="w-full border p-2 mb-4" placeholder="홍길동">
-    <label class="block mb-2 text-sm">계약 내용 요약</label>
-    <textarea id="content" class="w-full border p-2 mb-4" rows="4" placeholder="스마트팜 설치 및 운영 계약..."></textarea>
-    <button onclick="generatePDF()" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">📄 계약서 PDF 생성</button>
-  </div>
-  <script>
-    async function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const name = document.getElementById("name").value;
-      const content = document.getElementById("content").value;
-      doc.setFontSize(12);
-      doc.text(`[계약서]`, 10, 10);
-      doc.text(`계약자: ${name}`, 10, 20);
-      doc.text("계약 내용:", 10, 30);
-      doc.text(content, 10, 40);
-      doc.text("전자서명: ____________________", 10, 70);
-      doc.save(`AgriNexus_Contract_${name}.pdf`);
-    }
-  </script>
-</body>
-</html>
+
+<!DOCTYPE html><html><body>
+<h1>📄 계약 생성기</h1>
+<form>
+  계약자 이름: <input type="text" name="name"><br>
+  계약 내용: <textarea name="content"></textarea><br>
+  <button type="submit">계약서 PDF 생성</button>
+</form>
+</body></html>
