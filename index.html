@@ -3,61 +3,44 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriNexus World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World - 통합 플랫폼</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Noto Sans KR', sans-serif; }
-  </style>
+  <style> body { font-family: 'Noto Sans KR', sans-serif; } </style>
 </head>
 <body class="bg-white text-gray-900">
 
-  <header class="sticky top-0 z-50 bg-white shadow-sm border-b">
-    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+  <header class="sticky top-0 bg-white shadow border-b z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="text-xl font-bold text-green-700">🌿 AgriNexus World</div>
-      <nav class="space-x-6 text-sm font-medium">
-        <a href="index.html" class="text-gray-700 hover:text-green-700">홈</a>
-        <a href="contract.html" class="text-gray-700 hover:text-green-700">계약 생성</a>
-        <a href="report.html" class="text-gray-700 hover:text-green-700">보고서</a>
-        <a href="login.html" class="text-gray-700 hover:text-green-700">관리자</a>
-        <a href="#" class="text-gray-700 hover:text-green-700">챗봇</a>
+      <nav class="space-x-4 text-sm font-medium">
+        <a href="index.html" class="hover:text-green-600">홈</a>
+        <a href="contract.html" class="hover:text-green-600">계약</a>
+        <a href="report.html" class="hover:text-green-600">보고서</a>
+        <a href="logistics.html" class="hover:text-green-600">물류</a>
+        <a href="price.html" class="hover:text-green-600">가격 수집</a>
+        <a href="tracking.html" class="hover:text-green-600">실시간 추적</a>
+        <a href="ai.html" class="hover:text-green-600">OpenAI</a>
+        <a href="notify.html" class="hover:text-green-600">알림 시스템</a>
       </nav>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-
-    <section class="mb-12 text-center">
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">농업의 미래, AgriNexus에서 시작됩니다.</h1>
-      <p class="text-lg text-gray-600">스마트팜, 계약, 물류, 국가 정보, AI까지 모든 것을 자동화한 올인원 플랫폼</p>
-    </section>
-
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-      <a href="contract.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
-        <h3 class="text-lg font-bold text-green-700 mb-2">📄 계약서 자동 생성</h3>
-        <p class="text-sm text-gray-700">전자서명 포함 계약서를 클릭 한 번으로 출력</p>
-      </a>
-      <a href="report.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
-        <h3 class="text-lg font-bold text-green-700 mb-2">📑 보고서 PDF 출력</h3>
-        <p class="text-sm text-gray-700">데이터를 입력하면 PDF로 변환됩니다</p>
-      </a>
-      <a href="login.html" class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-md hover:scale-[1.02] transition">
-        <h3 class="text-lg font-bold text-green-700 mb-2">🔐 관리자 접속</h3>
-        <p class="text-sm text-gray-700">수익 분석, 추천 관리 기능 제공</p>
-      </a>
-    </section>
-
-    <section class="bg-gray-100 p-6 rounded-xl shadow-inner text-center">
-      <h2 class="text-xl font-semibold mb-2 text-gray-800">AgriNexus World는 신뢰를 설계합니다.</h2>
-      <p class="text-sm text-gray-600">복잡한 기술은 감추고, 결과 중심의 자동화 흐름을 제공합니다.<br/>전 세계 누구나 클릭 한 번으로 농업 비즈니스를 시작할 수 있습니다.</p>
-    </section>
-
+    <h1 class="text-2xl font-bold mb-6">AgriNexus World - 통합 자동화 플랫폼</h1>
+    <ul class="list-disc pl-6 space-y-2 text-gray-800">
+      <li>✅ 계약 생성 / 보고서 생성 / 관리자 로그인</li>
+      <li>✅ 스마트 물류 시스템 (CJ벤치마크 기반)</li>
+      <li>✅ 전세계 농산물 실시간 가격 수집 시스템</li>
+      <li>✅ 지도 기반 실시간 물류 추적 시스템</li>
+      <li>✅ OpenAI GPT 연동 자동 생성기</li>
+      <li>✅ 사용자 이벤트 기반 알림 시스템 (Notiplay형)</li>
+    </ul>
   </main>
 
-  <footer class="text-center text-xs py-6 text-gray-500 border-t mt-10">
-    © 2025 AgriNexus World | 스마트 농업 자동화 플랫폼
+  <footer class="text-center text-xs py-6 text-gray-500 border-t mt-12">
+    © 2025 AgriNexus World | All Rights Reserved
   </footer>
-
 </body>
 </html>
