@@ -1,34 +1,9 @@
-<!DOCTYPE html><html><body>
-<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
-  <a href="index.html">홈</a> |
-  <a href="contract.html">계약</a> |
-  <a href="report.html">보고서</a> |
-  <a href="ai.html">GPT</a> |
-  <a href="smartfarm.html">스마트팜</a> |
-  <a href="seeds.html">종자</a> |
-  <a href="chart.html">시세</a> |
-  <a href="firebase.html">저장</a> |
-  <a href="logistics.html">물류</a> |
-  <a href="tracking.html">추적</a> |
-  <a href="notify.html">알림</a>
-</nav><hr>
 
-<h2>📑 보고서 생성기</h2>
-<form onsubmit="event.preventDefault(); makeReport();">
-  <label>보고서 제목: <input type="text" id="title"></label><br>
-  <label>작성자: <input type="text" id="author"></label><br>
-  <label>내용 요약:<br> <textarea id="summary" rows="4" cols="50"></textarea></label><br>
-  <button type="submit">PDF 저장</button>
+<!DOCTYPE html><html><body>
+<h1>📑 보고서 생성기</h1>
+<form>
+  제목: <input type="text" name="title"><br>
+  요약: <textarea name="summary"></textarea><br>
+  <button type="submit">보고서 PDF 생성</button>
 </form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-async function makeReport() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.text(`제목: ` + document.getElementById("title").value, 10, 10);
-  doc.text(`작성자: ` + document.getElementById("author").value, 10, 20);
-  doc.text("요약: " + document.getElementById("summary").value, 10, 30);
-  doc.save("report.pdf");
-}
-</script>
 </body></html>
