@@ -1,32 +1,36 @@
 <!DOCTYPE html><html><body>
-
-<nav class="bg-white shadow px-4 py-3 text-sm font-medium space-x-4">
-  <a href="index.html">홈</a>
-  <a href="contract.html">계약</a>
-  <a href="report.html">보고서</a>
-  <a href="ai.html">GPT 생성기</a>
-  <a href="smartfarm.html">스마트팜</a>
-  <a href="seeds.html">종자</a>
-  <a href="chart.html">시세</a>
-  <a href="firebase.html">저장</a>
-  <a href="logistics.html">물류</a>
-  <a href="tracking.html">추적</a>
+<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
+  <a href="index.html">홈</a> |
+  <a href="contract.html">계약</a> |
+  <a href="report.html">보고서</a> |
+  <a href="ai.html">GPT</a> |
+  <a href="smartfarm.html">스마트팜</a> |
+  <a href="seeds.html">종자</a> |
+  <a href="chart.html">시세</a> |
+  <a href="firebase.html">저장</a> |
+  <a href="logistics.html">물류</a> |
+  <a href="tracking.html">추적</a> |
   <a href="notify.html">알림</a>
-</nav>
+</nav><hr>
 
-<h1>📄 계약 생성기</h1>
-<form onsubmit="event.preventDefault(); generateContract();">
-  이름: <input id="name"><br>
-  내용: <textarea id="content"></textarea><br>
-  <button type="submit">PDF 생성</button>
+<h2>📄 계약서 생성기</h2>
+<form onsubmit="event.preventDefault(); generate();">
+  <label>계약자 이름: <input type="text" id="name"></label><br>
+  <label>계약 시작일: <input type="date" id="start"></label><br>
+  <label>계약 기간: <input type="number" id="days" placeholder="예: 30 (일)"></label><br>
+  <label>계약 내용: <textarea id="details" rows="4" cols="50"></textarea></label><br>
+  <button type="submit">계약서 PDF 생성</button>
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-async function generateContract() {
+async function generate() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  doc.text("계약자: " + document.getElementById("name").value, 10, 10);
-  doc.text("내용: " + document.getElementById("content").value, 10, 20);
+  doc.text(`계약자: ` + document.getElementById("name").value, 10, 10);
+  doc.text(`시작일: ` + document.getElementById("start").value, 10, 20);
+  doc.text(`기간: ` + document.getElementById("days").value + "일", 10, 30);
+  doc.text("내용: " + document.getElementById("details").value, 10, 40);
   doc.save("contract.pdf");
 }
-</script></body></html>
+</script>
+</body></html>
