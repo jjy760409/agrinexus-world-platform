@@ -1,8 +1,8 @@
 
 <!DOCTYPE html><html><body>
 <h1>🗺️ 실시간 추적</h1>
-<form>
-  트래킹 번호: <input type="text" name="tracking"><br>
-  <button type="submit">위치 추적</button>
+<form onsubmit="event.preventDefault(); alert('위치 확인 완료');">
+  트래킹 번호: <input type="text" id="track"><br>
+  <button type="submit">추적</button>
 </form>
 </body></html>

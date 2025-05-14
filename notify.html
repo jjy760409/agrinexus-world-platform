@@ -1,9 +1,9 @@
 
 <!DOCTYPE html><html><body>
 <h1>🔔 알림 시스템</h1>
-<form>
-  알림 대상: <input type="text" name="target"><br>
-  메시지 내용: <textarea name="message"></textarea><br>
-  <button type="submit">알림 보내기</button>
+<form onsubmit="event.preventDefault(); alert('알림 전송 완료');">
+  사용자: <input type="text" id="user"><br>
+  메시지: <input type="text" id="msg"><br>
+  <button type="submit">알림 전송</button>
 </form>
 </body></html>

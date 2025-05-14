@@ -8,12 +8,11 @@
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-  async function generateReport() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text(`제목: ${document.getElementById("title").value}`, 10, 10);
-    doc.text(document.getElementById("summary").value, 10, 20);
-    doc.save("report.pdf");
-  }
-</script>
-</body></html>
+async function generateReport() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(`제목: ${document.getElementById("title").value}`, 10, 10);
+  doc.text(document.getElementById("summary").value, 10, 20);
+  doc.save("report.pdf");
+}
+</script></body></html>
