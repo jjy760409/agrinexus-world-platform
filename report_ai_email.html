@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus Report AI + Email</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>📊 AI 요약 + Email 전송</h1>
+  <textarea id="reportText" rows="8" cols="80" placeholder="분석할 원본 텍스트 입력"></textarea><br>
+  <button onclick="generateSummary()">🧠 AI 요약 (OpenAI)</button>
+  <p><b>요약 결과:</b></p>
+  <div id="summaryBox" style="border:1px solid #ccc; padding:10px;"></div>
+  <input type="email" id="emailTarget" placeholder="받는 사람 이메일 입력" /><br>
+  <button onclick="sendEmail()">📧 이메일 전송</button>
+
+  <script>
+    emailjs.init("YOUR_PUBLIC_KEY");
+
+    async function generateSummary() {
+      const input = document.getElementById("reportText").value;
+      document.getElementById("summaryBox").innerText = "요약 중...";
+      const res = await fetch("https://api.openai.com/v1/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_OPENAI_KEY"
+        },
+        body: JSON.stringify({
+          model: "text-davinci-003",
+          prompt: "아래 내용을 한국어로 3줄 요약:
+" + input,
+          max_tokens: 150
+        })
+      });
+      const data = await res.json();
+      const summary = data.choices?.[0]?.text || "요약 실패";
+      document.getElementById("summaryBox").innerText = summary;
+    }
+
+    function sendEmail() {
+      const toEmail = document.getElementById("emailTarget").value;
+      const summary = document.getElementById("summaryBox").innerText;
+      emailjs.send("your_service_id", "your_template_id", {
+        to_email: toEmail,
+        subject: "📄 AI 요약 보고서",
+        message: summary
+      }).then(() => {
+        alert("✅ 이메일 전송 완료");
+      }, (err) => {
+        alert("❌ 이메일 실패: " + JSON.stringify(err));
+      });
+    }
+  </script>
+</body>
+</html>
