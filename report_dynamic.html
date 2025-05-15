@@ -79,23 +79,7 @@
         summary: report.summary[lang],
         timestamp: new Date().toISOString()
       };
-      
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
-    const { getDatabase, ref, push } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js');
-    const firebaseConfig = {
-      apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
-      authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
-      projectId: "agrinexus-world-aa9b2",
-      storageBucket: "agrinexus-world-aa9b2.appspot.com",
-      messagingSenderId: "440786913965",
-      appId: "1:440786913965:web:d0d57105ee32999b5ad424",
-      databaseURL: "https://agrinexus-world-aa9b2-default-rtdb.firebaseio.com"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    push(ref(db, "reports/"), payload);
-    alert("✅ Report saved to Firebase.");
-    
+      alert("Simulated save: " + JSON.stringify(payload));
     }
 
     loadReport(selected);
