@@ -1,44 +1,38 @@
-<!DOCTYPE html><html><body>
-<nav style="background:#f1f5f9; padding:10px; font-size:14px;">
-  <a href="index.html">홈</a> |
-  <a href="contract.html">계약</a> |
-  <a href="report.html">보고서</a> |
-  <a href="ai.html">GPT</a> |
-  <a href="smartfarm.html">스마트팜</a> |
-  <a href="seeds.html">종자</a> |
-  <a href="chart.html">시세</a> |
-  <a href="firebase.html">저장</a> |
-  <a href="logistics.html">물류</a> |
-  <a href="tracking.html">추적</a> |
-  <a href="notify.html">알림</a>
-</nav><hr>
 
-<h2>📦 Firebase 데이터 저장</h2>
-<form onsubmit="event.preventDefault(); saveData();">
-  <label>사용자 ID: <input type="text" id="user"></label><br>
-  <label>메시지 내용: <input type="text" id="data"></label><br>
-  <button type="submit">저장</button>
-</form>
-<small>※ Firebase 설정 필요: API 키, 프로젝트 ID 등은 보안상 직접 입력해야 합니다.</small>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase 저장</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
+  authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
+  projectId: "agrinexus-world-aa9b2",
+  storageBucket: "agrinexus-world-aa9b2.appspot.com",
+  messagingSenderId: "440786913965",
+  appId: "1:440786913965:web:d0d57105ee32999b5ad424"
 };
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-window.saveData = () => {
-  const user = document.getElementById("user").value;
-  const data = document.getElementById("data").value;
-  set(ref(db, 'users/' + user), { message: data });
-  alert("Firebase에 저장 완료");
-};
-</script>
-</body></html>
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    function saveData() {
+      const input = document.getElementById("inputText").value;
+      set(ref(db, 'data/last'), {
+        text: input,
+        time: new Date().toISOString()
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Firebase 저장 기능</h1>
+  <input type="text" id="inputText" placeholder="입력값" />
+  <button onclick="saveData()">저장</button>
+</body>
+</html>
