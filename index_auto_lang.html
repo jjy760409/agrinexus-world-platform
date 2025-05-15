@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title id="title">AgriNexus World</title>
+  <script>
+    async function loadLang() {
+      const langJson = await fetch('lang.json').then(res => res.json());
+      const lang = navigator.language.includes('ko') ? 'ko' : 'en';
+
+      document.getElementById('title').innerText = langJson.title[lang];
+      document.getElementById('subtitle').innerText = langJson.subtitle[lang];
+      document.getElementById('menuHome').innerText = langJson.menu.home[lang];
+      document.getElementById('menuReport').innerText = langJson.menu.report[lang];
+      document.getElementById('menuGlobal').innerText = langJson.menu.global[lang];
+    }
+    window.onload = loadLang;
+  </script>
+</head>
+<body>
+  <nav>
+    <a id="menuHome" href="index.html"></a> |
+    <a id="menuReport" href="report.html"></a> |
+    <a id="menuGlobal" href="global_portal.html"></a>
+  </nav>
+  <h1 id="title">Loading...</h1>
+  <p id="subtitle">Please wait...</p>
+</body>
+</html>

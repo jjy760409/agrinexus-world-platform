@@ -1,0 +1,18 @@
+{
+  "report": {
+    "title": "2025 Global Smart Agriculture Outlook",
+    "summary": "This report provides an overview of trends in smart farming across regions.",
+    "sections": [
+      {
+        "region": "Asia",
+        "trend": "AI-driven irrigation systems are expanding rapidly.",
+        "recommendation": "Focus on low-cost IoT monitoring devices."
+      },
+      {
+        "region": "Europe",
+        "trend": "Sustainability certification is becoming mandatory.",
+        "recommendation": "Integrate traceability + carbon tracking."
+      }
+    ]
+  }
+}
