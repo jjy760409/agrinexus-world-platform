@@ -3,61 +3,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus Report AI + Email</title>
+  <title>AgriNexus AI Report with Email + Save</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    button { margin-top: 10px; }
-  </style>
 </head>
 <body>
-  <h1>📊 AI 요약 + Email 전송</h1>
-  <textarea id="reportText" rows="8" cols="80" placeholder="분석할 원본 텍스트 입력"></textarea><br>
-  <button onclick="generateSummary()">🧠 AI 요약 (OpenAI)</button>
+  <nav>
+    <a href="index.html">🏠 Home</a> |
+    <a href="report_ai_email.html">📨 AI Email</a> |
+    <a href="report_admin_dashboard.html">📋 Admin</a>
+  </nav>
+  <h1>🧠 AI 요약 + 이메일 전송 + Firebase 저장</h1>
+  <textarea id="reportText" rows="8" cols="80" placeholder="분석할 원본 내용을 입력하세요..."></textarea><br>
+  <button onclick="generateSummary()">🧠 AI 요약</button>
   <p><b>요약 결과:</b></p>
   <div id="summaryBox" style="border:1px solid #ccc; padding:10px;"></div>
-  <input type="email" id="emailTarget" placeholder="받는 사람 이메일 입력" /><br>
-  <button onclick="sendEmail()">📧 이메일 전송</button>
+  <input type="email" id="emailTarget" placeholder="받는 이메일 주소" /><br>
+  <button onclick="sendEmail()">📧 PDF 첨부 이메일 전송</button>
 
-  <script>
-    emailjs.init("YOUR_PUBLIC_KEY");
+  <script type="module">
+    import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import {{ getDatabase, ref, push }} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-    async function generateSummary() {
+    const firebaseConfig = {{
+      apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
+      authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
+      projectId: "agrinexus-world-aa9b2",
+      storageBucket: "agrinexus-world-aa9b2.appspot.com",
+      messagingSenderId: "440786913965",
+      appId: "1:440786913965:web:d0d57105ee32999b5ad424",
+      databaseURL: "https://agrinexus-world-aa9b2-default-rtdb.firebaseio.com"
+    }};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    let summaryText = "";
+
+    async function generateSummary() {{
       const input = document.getElementById("reportText").value;
       document.getElementById("summaryBox").innerText = "요약 중...";
-      const res = await fetch("https://api.openai.com/v1/completions", {
+      const res = await fetch("https://api.openai.com/v1/completions", {{
         method: "POST",
-        headers: {
+        headers: {{
           "Content-Type": "application/json",
           "Authorization": "Bearer YOUR_OPENAI_KEY"
-        },
-        body: JSON.stringify({
+        }},
+        body: JSON.stringify({{
           model: "text-davinci-003",
-          prompt: "아래 내용을 한국어로 3줄 요약:
-" + input,
+          prompt: "아래 내용을 3줄로 요약하세요:\n" + input,
           max_tokens: 150
-        })
-      });
+        }})
+      }});
       const data = await res.json();
-      const summary = data.choices?.[0]?.text || "요약 실패";
-      document.getElementById("summaryBox").innerText = summary;
-    }
+      summaryText = data.choices?.[0]?.text || "요약 실패";
+      document.getElementById("summaryBox").innerText = summaryText;
 
-    function sendEmail() {
-      const toEmail = document.getElementById("emailTarget").value;
-      const summary = document.getElementById("summaryBox").innerText;
-      emailjs.send("your_service_id", "your_template_id", {
-        to_email: toEmail,
-        subject: "📄 AI 요약 보고서",
-        message: summary
-      }).then(() => {
-        alert("✅ 이메일 전송 완료");
-      }, (err) => {
-        alert("❌ 이메일 실패: " + JSON.stringify(err));
-      });
-    }
+      // 저장
+      push(ref(db, "ai_summary_logs/"), {{
+        original: input,
+        summary: summaryText,
+        time: new Date().toISOString()
+      }});
+    }}
+
+    function sendEmail() {{
+      const emailTo = document.getElementById("emailTarget").value;
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("📄 AgriNexus AI Summary", 10, 10);
+      doc.text(summaryText, 10, 20);
+      const blob = doc.output("blob");
+
+      emailjs.send("your_service_id", "your_template_id", {{
+        to_email: emailTo,
+        subject: "AgriNexus AI Summary Report",
+        message: summaryText
+      }}, "your_public_key").then(() => {{
+        alert("📧 이메일 전송 완료!");
+      }}, (err) => {{
+        alert("❌ 이메일 전송 실패: " + JSON.stringify(err));
+      }});
+    }}
+
+    emailjs.init("your_public_key");
   </script>
 </body>
 </html>
