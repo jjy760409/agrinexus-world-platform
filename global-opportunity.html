@@ -1,1 +1,56 @@
-<h2>국가별 전략 제안 시스템 (준비 중...)</h2>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>국가별 전략 제안</title>
+    <script src="config.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        select, button { padding: 10px; width: 100%; margin-top: 10px; }
+        #output { margin-top: 20px; background: #f1f1f1; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>🌍 국가별 전략 제안 시스템</h2>
+    <select id="country">
+        <option value="한국">한국</option>
+        <option value="미국">미국</option>
+        <option value="일본">일본</option>
+        <option value="인도">인도</option>
+        <option value="브라질">브라질</option>
+        <option value="케냐">케냐</option>
+    </select>
+    <button onclick="generateStrategy()">전략 제안 생성</button>
+    <div id="output"></div>
+
+    <script>
+        async function generateStrategy() {
+            const country = document.getElementById("country").value;
+            const output = document.getElementById("output");
+            output.innerHTML = "⏳ 전략 생성 중...";
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + CONFIG.OPENAI_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            { role: "system", content: "당신은 국제 농업 전략가입니다. 선택한 국가에 맞는 스마트팜 전략을 제안하세요." },
+                            { role: "user", content: `국가: ${country}의 기후, 농업환경, 시장상황에 맞춘 스마트팜 전략을 제안해줘.` }
+                        ]
+                    })
+                });
+                const data = await response.json();
+                output.innerHTML = data.choices[0].message.content;
+            } catch (e) {
+                output.innerHTML = "⚠️ 오류 발생: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>

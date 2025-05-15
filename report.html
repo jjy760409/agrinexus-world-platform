@@ -1,1 +1,49 @@
-<h2>보고서 자동 요약 생성기 (준비 중...)</h2>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>보고서 요약 생성기</title>
+    <script src="config.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        textarea, button { width: 100%; padding: 10px; margin-top: 10px; }
+        #summary { margin-top: 20px; background: #f9f9f9; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>📊 보고서 요약 생성기</h2>
+    <textarea id="reportInput" rows="6" placeholder="요약할 내용을 입력하세요..."></textarea>
+    <button onclick="summarize()">요약 생성</button>
+    <div id="summary"></div>
+
+    <script>
+        async function summarize() {
+            const input = document.getElementById("reportInput").value;
+            const summaryBox = document.getElementById("summary");
+            summaryBox.innerHTML = "⏳ 요약 생성 중...";
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + CONFIG.OPENAI_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            { role: "system", content: "당신은 전문 보고서 요약가입니다. 핵심만 간결하게 정리해 주세요." },
+                            { role: "user", content: input }
+                        ]
+                    })
+                });
+                const data = await response.json();
+                summaryBox.innerHTML = data.choices[0].message.content;
+            } catch (e) {
+                summaryBox.innerHTML = "⚠️ 오류 발생: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>

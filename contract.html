@@ -1,1 +1,49 @@
-<h2>GPT 계약서 생성 시스템 (준비 중...)</h2>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>GPT 계약서 생성기</title>
+    <script src="config.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        textarea, button { width: 100%; padding: 10px; margin-top: 10px; }
+        #output { margin-top: 20px; background: #eef; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>📄 GPT 계약서 생성기</h2>
+    <textarea id="contractInput" rows="6" placeholder="계약 조건을 입력하세요 (예: A사와 B사 간 농산물 공급 계약)..."></textarea>
+    <button onclick="generateContract()">계약서 생성</button>
+    <div id="output"></div>
+
+    <script>
+        async function generateContract() {
+            const input = document.getElementById("contractInput").value;
+            const out = document.getElementById("output");
+            out.innerHTML = "⏳ 계약서 생성 중...";
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + CONFIG.OPENAI_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            { role: "system", content: "당신은 법률 계약서 전문가입니다. 사용자의 조건을 바탕으로 신뢰할 수 있는 계약서를 작성하세요." },
+                            { role: "user", content: input }
+                        ]
+                    })
+                });
+                const data = await response.json();
+                out.innerHTML = data.choices[0].message.content;
+            } catch (e) {
+                out.innerHTML = "⚠️ 오류 발생: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
