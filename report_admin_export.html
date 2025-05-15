@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Report Manager - Export and Email</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>📋 관리자 보고서 메일 + CSV 내보내기</h1>
+  <button onclick="exportCSV()">📤 CSV Export</button>
+  <button onclick="sendReport()">📧 Send PDF Report Email</button>
+  <ul id="list"></ul>
+
+  <script type="module">
+    import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import {{ getDatabase, ref, onValue }} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {{
+      apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
+      authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
+      projectId: "agrinexus-world-aa9b2",
+      storageBucket: "agrinexus-world-aa9b2.appspot.com",
+      messagingSenderId: "440786913965",
+      appId: "1:440786913965:web:d0d57105ee32999b5ad424",
+      databaseURL: "https://agrinexus-world-aa9b2-default-rtdb.firebaseio.com"
+    }};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let approved = [];
+
+    window.onload = () => {
+      const reportRef = ref(db, 'reports/');
+      onValue(reportRef, (snapshot) => {
+        const data = snapshot.val() || {{}};
+        approved = Object.entries(data).filter(([_, v]) => v.approved);
+        document.getElementById("list").innerHTML = approved.map(([_, v]) =>
+          `<li><b>${{v.title}}</b> - ${{v.summary}} (${v.timestamp})</li>`
+        ).join("");
+      });
+    };
+
+    window.exportCSV = () => {
+      const rows = [["Title", "Summary", "Time"]];
+      approved.forEach(([_, v]) => {{
+        rows.push([v.title, v.summary, v.timestamp]);
+      }});
+      const csv = rows.map(row => row.join(",")).join("\n");
+      const blob = new Blob([csv], {{ type: "text/csv" }});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "approved_reports.csv";
+      a.click();
+    };
+
+    window.sendReport = async () => {{
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Approved AgriNexus Reports", 10, 10);
+      let y = 20;
+      approved.forEach(([_, v]) => {{
+        doc.text(`- ${{v.title}} | ${{v.summary}}`, 10, y);
+        y += 7;
+      }});
+      doc.save("approved_reports.pdf");
+      alert("📧 PDF 생성 완료 - 첨부는 EmailJS/SMTP API로 연동 필요");
+    }};
+  </script>
+</body>
+</html>
