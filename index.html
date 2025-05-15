@@ -16,5 +16,13 @@
         <li><a href="/ai-export">📦 수출입 문서 자동화</a></li>
         <li><a href="/admin">🛠 관리자 대시보드</a></li>
     </ul>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/serviceWorker.js')
+      .then(function() { console.log("✅ Service Worker 등록 완료"); });
+  }
+</script>
 </body>
+
 </html>

@@ -4,8 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <title>보고서 요약 + PDF 생성</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function uploadPDF(filename, email) {
+    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
+    const file = new File([blob], filename, { type: "application/pdf" });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("email", email);
+
+    fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("✅ 서버에 PDF 제출 완료: " + data.message);
+    })
+    .catch(err => {
+        alert("⚠️ 제출 오류: " + err.message);
+    });
+}
+
+</script>
+    <script src="config.js">
+function uploadPDF(filename, email) {
+    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
+    const file = new File([blob], filename, { type: "application/pdf" });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("email", email);
+
+    fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("✅ 서버에 PDF 제출 완료: " + data.message);
+    })
+    .catch(err => {
+        alert("⚠️ 제출 오류: " + err.message);
+    });
+}
+
+</script>
     <style>
         body { font-family: sans-serif; margin: 20px; }
         textarea, input, button { width: 100%; padding: 10px; margin-top: 10px; }
@@ -19,6 +61,7 @@
     <input type="email" id="email" placeholder="📩 이메일 주소 입력 (선택)">
     <button onclick="summarize()">GPT 요약 생성</button>
     <button onclick="generatePDF()">📄 PDF 저장</button>
+<button onclick="uploadPDF('document_submit.pdf', document.getElementById('email').value)">☁️ 서버 제출</button>
     <div class="tip">💡 GPT 요약 결과는 아래에 표시됩니다. 생성된 결과는 PDF로 저장할 수 있습니다.</div>
     <div id="summary"></div>
 
@@ -71,6 +114,27 @@
             doc.text(content, 10, 20);
             doc.save("report_summary.pdf");
         }
-    </script>
+    
+function uploadPDF(filename, email) {
+    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
+    const file = new File([blob], filename, { type: "application/pdf" });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("email", email);
+
+    fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("✅ 서버에 PDF 제출 완료: " + data.message);
+    })
+    .catch(err => {
+        alert("⚠️ 제출 오류: " + err.message);
+    });
+}
+
+</script>
 </body>
 </html>
