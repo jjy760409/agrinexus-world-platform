@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriNexus 국가별 뉴스 기반 보고서</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; padding: 20px; }
+    select, button { padding: 8px; margin-top: 10px; }
+    .report { margin-top: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>📰 국가별 정책 뉴스 기반 스마트 농업 보고서</h1>
+  <label>국가 선택:
+    <select id="country" onchange="loadNews(this.value)">
+      <option value="">-- 선택 --</option>
+      <option value="kr">대한민국</option>
+      <option value="us">미국</option>
+      <option value="jp">일본</option>
+      <option value="cn">중국</option>
+      <option value="de">독일</option>
+      <option value="fr">프랑스</option>
+    </select>
+  </label>
+  <div id="newsResult" class="report">국가를 선택하면 뉴스 분석 리포트가 자동 생성됩니다.</div>
+  <button onclick="generatePDF()">📄 PDF 저장</button>
+
+  <script>
+    async function loadNews(code) {
+      const resultBox = document.getElementById("newsResult");
+      resultBox.innerHTML = "🔍 뉴스 조회 중...";
+
+      const res = await fetch(`https://gnews.io/api/v4/search?q=agriculture+${code}&lang=ko&token=YOUR_GNEWS_API_KEY`);
+      const data = await res.json();
+
+      const article = data.articles[0];
+      if (!article) {
+        resultBox.innerHTML = "❌ 관련 뉴스가 없습니다.";
+        return;
+      }
+
+      const summary = "요약 예시: " + article.title + " → " + article.description;
+      resultBox.innerHTML = `
+        <h3>${article.title}</h3>
+        <p>${article.description}</p>
+        <p><b>출처:</b> ${article.source.name} | <b>날짜:</b> ${article.publishedAt}</p>
+        <p><b>요약:</b> ${summary}</p>
+      `;
+    }
+
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const text = document.getElementById("newsResult").innerText;
+      doc.text(text, 10, 10);
+      doc.save("agri_news_report.pdf");
+    }
+  </script>
+</body>
+</html>
