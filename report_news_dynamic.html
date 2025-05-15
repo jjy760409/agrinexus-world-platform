@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 국가별 뉴스 기반 보고서</title>
+  <title>AgriNexus 뉴스 기반 스마트 농업 리포트</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body { font-family: 'Segoe UI', sans-serif; padding: 20px; }
@@ -12,41 +12,58 @@
   </style>
 </head>
 <body>
-  <h1>📰 국가별 정책 뉴스 기반 스마트 농업 보고서</h1>
+  <nav>
+    <a href="index.html">🏠 Home</a> |
+    <a href="report_news_dynamic.html">📰 뉴스 리포트</a>
+  </nav>
+  <h1>📰 뉴스 기반 리포트 생성기 + AI 요약</h1>
   <label>국가 선택:
     <select id="country" onchange="loadNews(this.value)">
       <option value="">-- 선택 --</option>
-      <option value="kr">대한민국</option>
-      <option value="us">미국</option>
-      <option value="jp">일본</option>
-      <option value="cn">중국</option>
-      <option value="de">독일</option>
-      <option value="fr">프랑스</option>
+      <option value="korea">대한민국</option>
+      <option value="usa">미국</option>
+      <option value="japan">일본</option>
+      <option value="china">중국</option>
     </select>
   </label>
-  <div id="newsResult" class="report">국가를 선택하면 뉴스 분석 리포트가 자동 생성됩니다.</div>
+  <div id="newsResult" class="report">국가를 선택하면 최신 농업 기사를 불러옵니다.</div>
   <button onclick="generatePDF()">📄 PDF 저장</button>
 
   <script>
-    async function loadNews(code) {
-      const resultBox = document.getElementById("newsResult");
-      resultBox.innerHTML = "🔍 뉴스 조회 중...";
-
-      const res = await fetch(`https://gnews.io/api/v4/search?q=agriculture+${code}&lang=ko&token=YOUR_GNEWS_API_KEY`);
-      const data = await res.json();
-
-      const article = data.articles[0];
+    async function loadNews(country) {
+      const output = document.getElementById("newsResult");
+      output.innerHTML = "🔍 뉴스 검색 중...";
+      const gRes = await fetch(`https://gnews.io/api/v4/search?q=agriculture+${country}&lang=ko&token=YOUR_GNEWS_API_KEY`);
+      const data = await gRes.json();
+      const article = data.articles?.[0];
       if (!article) {
-        resultBox.innerHTML = "❌ 관련 뉴스가 없습니다.";
+        output.innerHTML = "❌ 뉴스 없음.";
         return;
       }
 
-      const summary = "요약 예시: " + article.title + " → " + article.description;
-      resultBox.innerHTML = `
+      // AI 요약 처리 (OpenAI)
+      output.innerHTML = "<b>기사:</b> " + article.title + "<br><i>요약 중...</i>";
+      const response = await fetch("https://api.openai.com/v1/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_OPENAI_KEY"
+        },
+        body: JSON.stringify({
+          model: "text-davinci-003",
+          prompt: "아래 기사 내용을 요약하세요:\n" + article.description,
+          max_tokens: 100
+        })
+      });
+      const result = await response.json();
+      const summary = result.choices?.[0]?.text || "요약 실패";
+
+      output.innerHTML = `
         <h3>${article.title}</h3>
-        <p>${article.description}</p>
-        <p><b>출처:</b> ${article.source.name} | <b>날짜:</b> ${article.publishedAt}</p>
         <p><b>요약:</b> ${summary}</p>
+        <p><b>출처:</b> ${article.source.name}</p>
+        <p><b>일자:</b> ${article.publishedAt}</p>
+        <p><b>내용:</b> ${article.description}</p>
       `;
     }
 
@@ -55,7 +72,7 @@
       const doc = new jsPDF();
       const text = document.getElementById("newsResult").innerText;
       doc.text(text, 10, 10);
-      doc.save("agri_news_report.pdf");
+      doc.save("agri_news_ai_report.pdf");
     }
   </script>
 </body>

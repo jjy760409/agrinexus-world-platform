@@ -1,119 +1,16 @@
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World - Fully Responsive Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    :root {
-      --bg: #fff;
-      --text: #111;
-      --card-bg: #f5f5f5;
-    }
-    [data-theme="dark"] {
-      --bg: #121212;
-      --text: #eee;
-      --card-bg: #1e1e1e;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      background: #007c4d;
-      color: white;
-      padding: 1em;
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .toggle {
-      padding: 5px 12px;
-      background: white;
-      color: #007c4d;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 2em;
-    }
-    .card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      padding: 1em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .card h3 { margin-top: 0; }
-    .card a {
-      display: inline-block;
-      margin-top: 10px;
-      text-decoration: none;
-      color: #007c4d;
-      font-weight: bold;
-    }
-  </style>
-</head>
+<html>
+<head><meta charset="UTF-8"><title>AgriNexus All Portal</title></head>
 <body>
-  <header>
-    <div><b>🌿 AgriNexus World</b></div>
-    <div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="report_dynamic.html">Report</a>
-        <a href="report_ai_email.html">AI Email</a>
-        <a href="report_admin_dashboard.html">Admin</a>
-        <a href="global_portal.html">Global</a>
-      </nav>
-    </div>
-    <button class="toggle" onclick="toggleTheme()">🌓</button>
-  </header>
-
-  <section class="cards">
-    <div class="card">
-      <h3>📄 Report Generator</h3>
-      <p>Generate PDF-based agriculture trend reports by region.</p>
-      <a href="report_dynamic.html">Generate Report →</a>
-    </div>
-    <div class="card">
-      <h3>🧠 AI Email Summary</h3>
-      <p>Use GPT to summarize input and email PDF output.</p>
-      <a href="report_ai_email.html">Use AI Email →</a>
-    </div>
-    <div class="card">
-      <h3>📊 Admin Dashboard</h3>
-      <p>View approved logs with category chart breakdown.</p>
-      <a href="report_admin_dashboard.html">Go to Admin →</a>
-    </div>
-    <div class="card">
-      <h3>🌐 Global Opportunity</h3>
-      <p>Explore policy support and grants across countries.</p>
-      <a href="global_portal.html">Explore Portal →</a>
-    </div>
-  </section>
-
-  <script>
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.getAttribute("data-theme") === "dark";
-      html.setAttribute("data-theme", isDark ? "light" : "dark");
-    }
-  </script>
+<h1>🌿 AgriNexus All Features</h1>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="report_dynamic.html">📄 Regional Report</a></li>
+  <li><a href="report_ai_email.html">🧠 AI Email Summary</a></li>
+  <li><a href="report_admin_dashboard.html">📊 Admin Dashboard</a></li>
+  <li><a href="global_portal.html">🌍 Global Portal</a></li>
+  <li><a href="report_news_dynamic.html">📰 News Report + AI Summary</a></li>
+</ul>
 </body>
 </html>
