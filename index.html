@@ -1,28 +1,56 @@
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus World - 전체 메뉴 통합</title>
+  <title>AgriNexus - Smart Agriculture Report</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    .section { background: #fff; padding: 1em; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 5px #ccc; }
+  </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html">홈</a> |
-    <a href="contract.html">계약</a> |
-    <a href="report.html">보고서</a> |
-    <a href="ai.html">GPT</a> |
-    <a href="smartfarm.html">스마트팜</a> |
-    <a href="seeds.html">종자</a> |
-    <a href="chart.html">시세</a> |
-    <a href="firebase.html">저장</a> |
-    <a href="admin.html">관리자</a> |
-    <a href="global_portal.html">🌍 글로벌 포털</a>
-  </nav>
-<select onchange="window.location.href=this.value" style="float:right; margin-top:10px;">
-  <option value='index.html'>🇰🇷 Korean</option>
-  <option value='index_en.html'>🌍 English</option>
-</select>
+  <h1>📄 Global Smart Agriculture Report</h1>
+  <div id="reportContent"></div>
+  <button onclick="downloadPDF()">📥 Download PDF</button>
 
-  <h1>🌿 AgriNexus World 메인 포털</h1>
+  <script>
+    let reportData;
+    async function loadReport() {
+      const res = await fetch('report_template.json');
+      reportData = await res.json();
+      const div = document.getElementById('reportContent');
+      div.innerHTML = `<h2>${reportData.report.title}</h2><p>${reportData.report.summary}</p>`;
+      reportData.report.sections.forEach(section => {
+        div.innerHTML += `
+          <div class="section">
+            <h3>📍 ${section.region}</h3>
+            <p><strong>Trend:</strong> ${section.trend}</p>
+            <p><strong>Recommendation:</strong> ${section.recommendation}</p>
+          </div>`;
+      });
+    }
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 10;
+      doc.setFontSize(14);
+      doc.text(reportData.report.title, 10, y);
+      y += 10;
+      doc.setFontSize(11);
+      doc.text(reportData.report.summary, 10, y);
+      y += 10;
+      reportData.report.sections.forEach(section => {
+        doc.text("📍 " + section.region, 10, y); y += 7;
+        doc.text("Trend: " + section.trend, 10, y); y += 7;
+        doc.text("Recommendation: " + section.recommendation, 10, y); y += 10;
+      });
+      doc.save("agri_report.pdf");
+    }
+
+    loadReport();
+  </script>
 </body>
 </html>
