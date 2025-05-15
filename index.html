@@ -1,23 +1,91 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>AgriNexus World - Ultimate Portal</title></head>
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus World - Upgraded Smart Platform</title>
+  <style>
+    body {
+      margin: 0; font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg); color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    :root {
+      --bg: #ffffff;
+      --text: #111;
+      --card-bg: #f5f5f5;
+    }
+    [data-theme='dark'] {
+      --bg: #121212;
+      --text: #eee;
+      --card-bg: #1e1e1e;
+    }
+    header {
+      background: #007c4d; color: white; padding: 12px 20px;
+      position: sticky; top: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    nav a {
+      margin: 0 10px; color: white; text-decoration: none;
+    }
+    .cards {
+      display: flex; flex-wrap: wrap; gap: 20px; padding: 30px;
+      justify-content: center;
+    }
+    .card {
+      background: var(--card-bg); padding: 20px; border-radius: 10px;
+      width: 280px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 { margin-top: 0; }
+    .toggle {
+      background: white; border: none; padding: 6px 12px; border-radius: 5px;
+      cursor: pointer; font-weight: bold; color: #007c4d;
+    }
+  </style>
+</head>
 <body>
-  <h1>🌿 AgriNexus World - Global Smart Agriculture Platform</h1>
-  <ul>
-    <li><a href="README.md">README.md</a></li>
-<li><a href="README_EN.md">README_EN.md</a></li>
-<li><a href="global_portal.html">global_portal.html</a></li>
-<li><a href="index.html">index.html</a></li>
-<li><a href="index_auto_lang.html">index_auto_lang.html</a></li>
-<li><a href="index_en.html">index_en.html</a></li>
-<li><a href="lang.json">lang.json</a></li>
-<li><a href="report_admin.html">report_admin.html</a></li>
-<li><a href="report_admin_export.html">report_admin_export.html</a></li>
-<li><a href="report_admin_filtered.html">report_admin_filtered.html</a></li>
-<li><a href="report_ai_email.html">report_ai_email.html</a></li>
-<li><a href="report_dynamic.html">report_dynamic.html</a></li>
-<li><a href="report_template.json">report_template.json</a></li>
-  </ul>
+  <header>
+    <div><b>🌿 AgriNexus World</b></div>
+    <div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="report_dynamic.html">Report</a>
+        <a href="report_ai_email.html">AI Email</a>
+        <a href="report_admin_dashboard.html">Admin</a>
+      </nav>
+      <button class="toggle" onclick="toggleTheme()">🌓</button>
+    </div>
+  </header>
+
+  <section class="cards">
+    <div class="card">
+      <h3>📄 Report Generator</h3>
+      <p>Create agriculture reports by region and trend.</p>
+      <a href="report_dynamic.html">Use Report Tool →</a>
+    </div>
+    <div class="card">
+      <h3>🧠 AI Summary + Email</h3>
+      <p>Generate GPT-based summaries + send PDF via email.</p>
+      <a href="report_ai_email.html">Try AI Email →</a>
+    </div>
+    <div class="card">
+      <h3>📊 Admin Dashboard</h3>
+      <p>View approved reports + category statistics chart.</p>
+      <a href="report_admin_dashboard.html">Go to Admin →</a>
+    </div>
+    <div class="card">
+      <h3>🌐 Global Portal</h3>
+      <p>Explore global policy, fund, and opportunity data.</p>
+      <a href="global_portal.html">Visit Portal →</a>
+    </div>
+  </section>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const dark = html.getAttribute("data-theme") === "dark";
+      html.setAttribute("data-theme", dark ? "light" : "dark");
+    }
+  </script>
 </body>
 </html>
