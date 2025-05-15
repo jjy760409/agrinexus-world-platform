@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus Report - Dynamic & Translatable</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    select, button { margin-top: 10px; padding: 8px; }
+    .section { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+  </style>
+</head>
+<body>
+  <h1>🌍 AgriNexus Report Generator</h1>
+  <label for="country">Choose Country:</label>
+  <select id="country" onchange="loadReport(this.value)">
+    <option value="asia">Asia</option>
+    <option value="europe">Europe</option>
+  </select>
+  <div id="reportContent"></div>
+  <button onclick="downloadPDF()">📥 Download PDF</button>
+  <button onclick="saveToServer()">💾 Save Report to Server (Simulated)</button>
+
+  <script>
+    const reports = {
+      asia: {
+        title: { en: "Asia Smart Farming Report", ko: "아시아 스마트 농업 리포트" },
+        summary: { en: "AI-based systems expanding in Asia.", ko: "AI 기반 시스템이 아시아에서 확장 중입니다." },
+        trends: [
+          { region: "South Korea", trend: "IoT greenhouses", rec: "Invest in smart sensors." },
+          { region: "Japan", trend: "Aging workforce", rec: "Promote autonomous farming." }
+        ]
+      },
+      europe: {
+        title: { en: "Europe Smart Farming Report", ko: "유럽 스마트 농업 리포트" },
+        summary: { en: "Eco regulations increase across EU.", ko: "EU 전역에서 친환경 규제가 강화되고 있습니다." },
+        trends: [
+          { region: "Germany", trend: "Carbon tracking", rec: "Use CO₂ traceable produce." },
+          { region: "France", trend: "Sustainable irrigation", rec: "Adopt AI water control." }
+        ]
+      }
+    };
+
+    let selected = "asia";
+    const lang = navigator.language.includes("ko") ? "ko" : "en";
+
+    function loadReport(country) {
+      selected = country;
+      const report = reports[country];
+      let html = `<h2>${report.title[lang]}</h2><p>${report.summary[lang]}</p>`;
+      report.trends.forEach(t =>
+        html += `<div class="section"><h3>📍 ${t.region}</h3><p><b>Trend:</b> ${t.trend}</p><p><b>Recommendation:</b> ${t.rec}</p></div>`
+      );
+      document.getElementById("reportContent").innerHTML = html;
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const report = reports[selected];
+      let y = 10;
+      doc.setFontSize(14);
+      doc.text(report.title[lang], 10, y); y += 10;
+      doc.setFontSize(11);
+      doc.text(report.summary[lang], 10, y); y += 10;
+      report.trends.forEach(t => {
+        doc.text(`📍 ${t.region}`, 10, y); y += 7;
+        doc.text("Trend: " + t.trend, 10, y); y += 7;
+        doc.text("Recommendation: " + t.rec, 10, y); y += 10;
+      });
+      doc.save("agri_report.pdf");
+    }
+
+    function saveToServer() {
+      const report = reports[selected];
+      const payload = {
+        title: report.title[lang],
+        summary: report.summary[lang],
+        timestamp: new Date().toISOString()
+      };
+      alert("Simulated save: " + JSON.stringify(payload));
+    }
+
+    loadReport(selected);
+  </script>
+</body>
+</html>
