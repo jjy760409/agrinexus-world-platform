@@ -3,18 +3,21 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>보고서 요약 생성기</title>
+    <title>보고서 요약 + PDF 생성</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="config.js"></script>
     <style>
         body { font-family: sans-serif; margin: 20px; }
-        textarea, button { width: 100%; padding: 10px; margin-top: 10px; }
-        #summary { margin-top: 20px; background: #f9f9f9; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
+        textarea, input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        #summary { margin-top: 20px; background: #f0f8ff; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h2>📊 보고서 요약 생성기</h2>
-    <textarea id="reportInput" rows="6" placeholder="요약할 내용을 입력하세요..."></textarea>
-    <button onclick="summarize()">요약 생성</button>
+    <h2>📊 보고서 요약 + PDF 생성기</h2>
+    <textarea id="reportInput" rows="6" placeholder="요약할 보고서 내용을 입력하세요..."></textarea>
+    <input type="email" id="email" placeholder="📩 이메일 주소 입력 (선택)">
+    <button onclick="summarize()">GPT 요약 생성</button>
+    <button onclick="generatePDF()">📄 PDF 저장</button>
     <div id="summary"></div>
 
     <script>
@@ -43,6 +46,17 @@
             } catch (e) {
                 summaryBox.innerHTML = "⚠️ 오류 발생: " + e.message;
             }
+        }
+
+        function generatePDF() {
+            const {{ jsPDF }} = window.jspdf;
+            const doc = new jsPDF();
+            const content = document.getElementById("summary").innerText;
+
+            doc.setFont("Helvetica");
+            doc.setFontSize(12);
+            doc.text(content, 10, 20);
+            doc.save("report_summary.pdf");
         }
     </script>
 </body>
