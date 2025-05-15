@@ -1,56 +1,16 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus - Smart Agriculture Report</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
-    .section { background: #fff; padding: 1em; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 5px #ccc; }
-  </style>
+  <title>AgriNexus World - Full Portal</title>
 </head>
 <body>
-  <h1>📄 Global Smart Agriculture Report</h1>
-  <div id="reportContent"></div>
-  <button onclick="downloadPDF()">📥 Download PDF</button>
-
-  <script>
-    let reportData;
-    async function loadReport() {
-      const res = await fetch('report_template.json');
-      reportData = await res.json();
-      const div = document.getElementById('reportContent');
-      div.innerHTML = `<h2>${reportData.report.title}</h2><p>${reportData.report.summary}</p>`;
-      reportData.report.sections.forEach(section => {
-        div.innerHTML += `
-          <div class="section">
-            <h3>📍 ${section.region}</h3>
-            <p><strong>Trend:</strong> ${section.trend}</p>
-            <p><strong>Recommendation:</strong> ${section.recommendation}</p>
-          </div>`;
-      });
-    }
-
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      let y = 10;
-      doc.setFontSize(14);
-      doc.text(reportData.report.title, 10, y);
-      y += 10;
-      doc.setFontSize(11);
-      doc.text(reportData.report.summary, 10, y);
-      y += 10;
-      reportData.report.sections.forEach(section => {
-        doc.text("📍 " + section.region, 10, y); y += 7;
-        doc.text("Trend: " + section.trend, 10, y); y += 7;
-        doc.text("Recommendation: " + section.recommendation, 10, y); y += 10;
-      });
-      doc.save("agri_report.pdf");
-    }
-
-    loadReport();
-  </script>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="report_dynamic.html">📝 Report Generator</a> |
+    <a href="report_admin.html">📋 Admin Report List</a>
+  </nav>
+  <h1>🌿 Welcome to AgriNexus World Portal</h1>
 </body>
 </html>
