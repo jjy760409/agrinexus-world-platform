@@ -1,88 +1,56 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus Report - Dynamic & Translatable</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>AgriNexus 보고서 생성기</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    select, button { margin-top: 10px; padding: 8px; }
-    .section { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    body { font-family: 'Arial', sans-serif; padding: 20px; }
+    select { padding: 6px; font-size: 1rem; }
+    .report { margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h1>🌍 AgriNexus Report Generator</h1>
-  <label for="country">Choose Country:</label>
-  <select id="country" onchange="loadReport(this.value)">
-    <option value="asia">Asia</option>
-    <option value="europe">Europe</option>
+  <h1>🌍 AgriNexus 보고서 생성기</h1>
+  <label for="country">국가 선택:</label>
+  <select id="country" onchange="showReport(this.value)">
+    <option value="">-- 선택 --</option>
+    <option value="korea">대한민국</option>
+    <option value="usa">미국</option>
+    <option value="japan">일본</option>
+    <option value="germany">독일</option>
+    <option value="france">프랑스</option>
+    <option value="india">인도</option>
+    <option value="brazil">브라질</option>
+    <option value="china">중국</option>
+    <option value="canada">캐나다</option>
+    <option value="uk">영국</option>
+    <option value="australia">호주</option>
+    <option value="europe">유럽</option>
   </select>
-  <div id="reportContent"></div>
-  <button onclick="downloadPDF()">📥 Download PDF</button>
-  <button onclick="saveToServer()">💾 Save Report to Server (Simulated)</button>
+
+  <div id="report" class="report"></div>
 
   <script>
     const reports = {
-      asia: {
-        title: { en: "Asia Smart Farming Report", ko: "아시아 스마트 농업 리포트" },
-        summary: { en: "AI-based systems expanding in Asia.", ko: "AI 기반 시스템이 아시아에서 확장 중입니다." },
-        trends: [
-          { region: "South Korea", trend: "IoT greenhouses", rec: "Invest in smart sensors." },
-          { region: "Japan", trend: "Aging workforce", rec: "Promote autonomous farming." }
-        ]
-      },
-      europe: {
-        title: { en: "Europe Smart Farming Report", ko: "유럽 스마트 농업 리포트" },
-        summary: { en: "Eco regulations increase across EU.", ko: "EU 전역에서 친환경 규제가 강화되고 있습니다." },
-        trends: [
-          { region: "Germany", trend: "Carbon tracking", rec: "Use CO₂ traceable produce." },
-          { region: "France", trend: "Sustainable irrigation", rec: "Adopt AI water control." }
-        ]
-      }
+      korea: "한국은 스마트팜 센서와 탄소중립 기반 설비가 빠르게 확산 중입니다.",
+      usa: "미국은 대규모 자율주행 농기계 시장이 성장하고 있습니다.",
+      japan: "일본은 고령화 대응형 로봇농업이 발달하고 있습니다.",
+      germany: "독일은 지속 가능한 농업을 위한 탄소 추적 시스템을 강화 중입니다.",
+      france: "프랑스는 수자원 절약형 농업 시스템이 각광받고 있습니다.",
+      india: "인도는 저비용 자동화 설비 보급이 확대되고 있습니다.",
+      brazil: "브라질은 열대 농업 최적화를 위한 AI 도입이 활발합니다.",
+      china: "중국은 위성기반 농업 모니터링 시스템이 전국에 확산되고 있습니다.",
+      canada: "캐나다는 고효율 농기계 자동화에 집중하고 있습니다.",
+      uk: "영국은 친환경 재배 기술 + ESG 인증이 확대되고 있습니다.",
+      australia: "호주는 기후위기 대응형 스마트팜 시범사업이 진행 중입니다.",
+      europe: "EU 전역에서 친환경 규제가 강화되고 있습니다."
     };
 
-    let selected = "asia";
-    const lang = navigator.language.includes("ko") ? "ko" : "en";
-
-    function loadReport(country) {
-      selected = country;
-      const report = reports[country];
-      let html = `<h2>${report.title[lang]}</h2><p>${report.summary[lang]}</p>`;
-      report.trends.forEach(t =>
-        html += `<div class="section"><h3>📍 ${t.region}</h3><p><b>Trend:</b> ${t.trend}</p><p><b>Recommendation:</b> ${t.rec}</p></div>`
-      );
-      document.getElementById("reportContent").innerHTML = html;
+    function showReport(code) {
+      const result = reports[code] || "해당 국가에 대한 보고서를 준비 중입니다.";
+      document.getElementById("report").innerHTML = `<h2>📄 ${document.querySelector('#country option:checked').text} 스마트 농업 리포트</h2><p>${result}</p>`;
     }
-
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const report = reports[selected];
-      let y = 10;
-      doc.setFontSize(14);
-      doc.text(report.title[lang], 10, y); y += 10;
-      doc.setFontSize(11);
-      doc.text(report.summary[lang], 10, y); y += 10;
-      report.trends.forEach(t => {
-        doc.text(`📍 ${t.region}`, 10, y); y += 7;
-        doc.text("Trend: " + t.trend, 10, y); y += 7;
-        doc.text("Recommendation: " + t.rec, 10, y); y += 10;
-      });
-      doc.save("agri_report.pdf");
-    }
-
-    function saveToServer() {
-      const report = reports[selected];
-      const payload = {
-        title: report.title[lang],
-        summary: report.summary[lang],
-        timestamp: new Date().toISOString()
-      };
-      alert("Simulated save: " + JSON.stringify(payload));
-    }
-
-    loadReport(selected);
   </script>
 </body>
 </html>
