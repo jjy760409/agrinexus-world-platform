@@ -2,51 +2,35 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World - 통합 포털</title>
+  <meta charset="UTF-8" />
+  <title>AgriNexus World - 로그 통계</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: 'Noto Sans KR', sans-serif; margin: 20px; background-color: #f9f9f9; }
-    nav a { margin-right: 12px; font-weight: bold; color: #2c3e50; text-decoration: none; }
-    nav a:hover { color: #16a085; }
-    .box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; margin-bottom: 20px; }
-  </style>
-</head>
-<body>
-  <nav>
-    <a href="index.html">홈</a>
-    <a href="contract.html">계약</a>
-    <a href="report.html">보고서</a>
-    <a href="ai.html">GPT</a>
-    <a href="smartfarm.html">스마트팜</a>
-    <a href="seeds.html">종자</a>
-    <a href="chart.html">시세</a>
-    <a href="firebase.html">저장</a>
-    <a href="firebase_log_input.html">📥 사용자 입력</a>
-    <a href="admin.html">🛠 관리자</a>
-  </nav>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-  <div class="box">
-    <h1>🌿 AgriNexus World - 통합 자동화 플랫폼</h1>
-    <p>스마트 농업 계약, 보고, 분석, 사용자 기록까지 모든 기능을 통합한 자동화 플랫폼입니다.</p>
-  </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
+      authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
+      projectId: "agrinexus-world-aa9b2",
+      storageBucket: "agrinexus-world-aa9b2.appspot.com",
+      messagingSenderId: "440786913965",
+      appId: "1:440786913965:web:d0d57105ee32999b5ad424"
+    };
 
-  <div class="box">
-    <h2>📊 실시간 로그 통계 시각화</h2>
-    <canvas id="logChart" height="100"></canvas>
-  </div>
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  <script>
     const ctx = document.getElementById('logChart').getContext('2d');
     const chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['월', '화', '수', '목', '금', '토', '일'],
+        labels: [],
         datasets: [{
           label: '일별 로그 수',
-          data: [5, 7, 4, 8, 6, 3, 9],
-          backgroundColor: 'rgba(26, 188, 156, 0.5)',
-          borderColor: 'rgba(26, 188, 156, 1)',
+          data: [],
+          backgroundColor: 'rgba(0, 180, 130, 0.5)',
+          borderColor: 'rgba(0, 180, 130, 1)',
           borderWidth: 1
         }]
       },
@@ -57,7 +41,29 @@
         }
       }
     });
-  </script>
 
+    function getDateKey(dateStr) {
+      return dateStr.substring(0, 10); // yyyy-mm-dd
+    }
+
+    const logRef = ref(db, 'logs/');
+    onValue(logRef, (snapshot) => {
+      const data = snapshot.val();
+      const dateMap = {};
+      for (let key in data) {
+        const date = getDateKey(data[key].timestamp || "");
+        dateMap[date] = (dateMap[date] || 0) + 1;
+      }
+      const labels = Object.keys(dateMap);
+      const counts = Object.values(dateMap);
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = counts;
+      chart.update();
+    });
+  </script>
+</head>
+<body>
+  <h1>📊 실시간 사용자 로그 수</h1>
+  <canvas id="logChart" width="600" height="300"></canvas>
 </body>
 </html>
