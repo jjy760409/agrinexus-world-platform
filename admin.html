@@ -4,47 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <title>AgriNexus 관리자 대시보드</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: sans-serif; padding: 20px; }
         h2 { color: #004085; }
         table { border-collapse: collapse; width: 100%; margin-top: 20px; }
         th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-        .summary { background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 20px; }
+        .summary, .chart-container { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 8px; }
+        .download-link { text-decoration: none; color: #007bff; }
     </style>
 </head>
 <body>
     <h2>🛠 AgriNexus 관리자 대시보드</h2>
     <div class="summary">
-        <p><strong>최근 접수된 이메일:</strong> <i>(이메일 자동 전송 기능은 서버 연동 후 활성화됨)</i></p>
-        <ul>
-            <li>📄 계약서 제출 요청: admin@agrinexus.world</li>
-            <li>📊 보고서 요약 요청: insight@agrinexus.world</li>
-        </ul>
+        <label>JWT 토큰 입력: <input type="text" id="token" placeholder="Bearer ..." style="width: 300px;"></label>
+        <button onclick="loadSubmissions()">제출 내역 보기</button>
+        <button onclick="loadStats()">통계 시각화 보기</button>
     </div>
 
-    <table>
+    <div class="chart-container">
+        <canvas id="statsChart" width="400" height="200"></canvas>
+    </div>
+
+    <table id="submissionsTable" style="display: none;">
         <thead>
             <tr>
-                <th>문서 종류</th>
-                <th>파일 이름</th>
-                <th>날짜</th>
-                <th>상태</th>
+                <th>제출일</th>
+                <th>이메일</th>
+                <th>파일명</th>
+                <th>다운로드</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>계약서</td>
-                <td>contract_agreement.pdf</td>
-                <td>2025-05-16</td>
-                <td>🟢 완료</td>
-            </tr>
-            <tr>
-                <td>보고서</td>
-                <td>report_summary.pdf</td>
-                <td>2025-05-16</td>
-                <td>🟢 완료</td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
+
+<script>
+    async function loadSubmissions() {
+        const token = document.getElementById("token").value;
+        const table = document.getElementById("submissionsTable");
+        const tbody = table.querySelector("tbody");
+        tbody.innerHTML = "";
+
+        const res = await fetch("http://localhost:5000/submissions", {
+            headers: { "Authorization": token }
+        });
+        const data = await res.json();
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${row.date}</td>
+                <td>${row.email}</td>
+                <td>${row.filename}</td>
+                <td><a class="download-link" href="http://localhost:5000${row.download_url}" target="_blank">📥 다운로드</a></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        table.style.display = "table";
+    }
+
+    async function loadStats() {
+        const token = document.getElementById("token").value;
+        const res = await fetch("http://localhost:5000/stats", {
+            headers: { "Authorization": token }
+        });
+        const data = await res.json();
+        const labels = Object.keys(data);
+        const contractData = labels.map(d => data[d].contract);
+        const reportData = labels.map(d => data[d].report);
+
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: '계약서', data: contractData, backgroundColor: 'rgba(75, 192, 192, 0.5)' },
+                    { label: '보고서', data: reportData, backgroundColor: 'rgba(255, 159, 64, 0.5)' }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: '제출 통계 (기능별, 일자별)' }
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

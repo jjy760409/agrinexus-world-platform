@@ -1,79 +1,105 @@
 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import os
-import smtplib
-from email.message import EmailMessage
-from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+import os, jwt, datetime
+from functools import wraps
 
 app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = './uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'supersecretkey'
 
-# 🔐 로그인용 테스트 사용자 (단순 예시용)
+# 샘플 사용자
 USERS = {
-    "admin@agrinexus.world": "password123"
+    "admin@agrinexus.world": generate_password_hash("password123")
 }
 
-# 로그인 기능
+# JWT 토큰 인증 데코레이터
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': '토큰이 없습니다!'}), 403
+        try:
+            jwt.decode(token.split(" ")[1], app.config['SECRET_KEY'], algorithms=["HS256"])
+        except:
+            return jsonify({'message': '토큰이 유효하지 않습니다!'}), 403
+        return f(*args, **kwargs)
+    return decorated
+
+# JWT 로그인
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     email = data.get("email")
     password = data.get("password")
-    if USERS.get(email) == password:
-        return jsonify({"status": "success", "message": "로그인 성공"})
-    return jsonify({"status": "error", "message": "잘못된 로그인 정보"})
+    if email in USERS and check_password_hash(USERS[email], password):
+        token = jwt.encode({
+            'user': email,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=12)
+        }, app.config['SECRET_KEY'], algorithm="HS256")
+        return jsonify({"token": token})
+    return jsonify({"message": "로그인 실패"}), 401
 
-# PDF 업로드 + 기록 저장
+# 업로드
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['file']
     email = request.form.get("email")
     if file:
-        filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+        filename = f"{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
         with open("submission_log.txt", "a") as log:
-            log.write(f"{filename} | {email}\n")
-        return jsonify({"status": "success", "message": "파일 업로드 완료"})
+            log.write(f"{datetime.datetime.now().isoformat()} | {email} | {filename}\n")
+        return jsonify({"status": "success", "filename": filename})
     return jsonify({"status": "error", "message": "파일 없음"})
 
-# 제출 목록 표시
+# 목록 + 다운로드 링크 제공
 @app.route('/submissions', methods=['GET'])
-def list_files():
+@token_required
+def list_submissions():
+    entries = []
     try:
         with open("submission_log.txt", "r") as log:
-            entries = log.readlines()
-        return jsonify({"entries": entries})
+            for line in log:
+                date, email, filename = line.strip().split(" | ")
+                entries.append({
+                    "date": date,
+                    "email": email,
+                    "filename": filename,
+                    "download_url": f"/download/{filename}"
+                })
     except FileNotFoundError:
-        return jsonify({"entries": []})
+        pass
+    return jsonify(entries)
 
-# 이메일 전송 기능 (테스트용)
-@app.route('/send-email', methods=['POST'])
-def send_email():
-    data = request.json
-    recipient = data.get("to")
-    subject = data.get("subject")
-    content = data.get("body")
+# 파일 다운로드
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
-    # SMTP 설정 필요: 아래는 Gmail 예시
+# 통계 API (기능별, 날짜별 카운트)
+@app.route('/stats', methods=['GET'])
+@token_required
+def stats():
+    stats = {}
     try:
-        msg = EmailMessage()
-        msg.set_content(content)
-        msg["Subject"] = subject
-        msg["From"] = "your_email@gmail.com"
-        msg["To"] = recipient
-
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login("your_email@gmail.com", "your_app_password")
-            smtp.send_message(msg)
-
-        return jsonify({"status": "success", "message": "이메일 전송 완료"})
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})
+        with open("submission_log.txt", "r") as log:
+            for line in log:
+                date, _, filename = line.strip().split(" | ")
+                day = date.split("T")[0]
+                key = "contract" if "contract" in filename else "report"
+                stats.setdefault(day, {"contract": 0, "report": 0})
+                stats[day][key] += 1
+    except FileNotFoundError:
+        pass
+    return jsonify(stats)
 
 if __name__ == '__main__':
     app.run(debug=True)
