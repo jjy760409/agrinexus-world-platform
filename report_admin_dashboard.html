@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Report Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIzOk9HBBW...JzTpk",
+      authDomain: "agrinexus-world-aa9b2.firebaseapp.com",
+      projectId: "agrinexus-world-aa9b2",
+      storageBucket: "agrinexus-world-aa9b2.appspot.com",
+      messagingSenderId: "440786913965",
+      appId: "1:440786913965:web:d0d57105ee32999b5ad424",
+      databaseURL: "https://agrinexus-world-aa9b2-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.onload = () => {
+      const reportRef = ref(db, 'reports/');
+      onValue(reportRef, (snapshot) => {
+        const data = snapshot.val() || {};
+        const approved = Object.entries(data).filter(([_, v]) => v.approved);
+        const counts = {};
+        approved.forEach(([_, v]) => {
+          const cat = v.category || "uncategorized";
+          counts[cat] = (counts[cat] || 0) + 1;
+        });
+
+        document.getElementById("reportList").innerHTML = approved.map(([_, v]) =>
+          `<li><b>${v.title}</b> - ${v.summary}
+            <br><small>${v.category} | ${v.timestamp}</small>
+            <br><button onclick="sendEmail('${v.title}', '${v.summary}')">📧 Send PDF</button></li>`
+        ).join("");
+
+        const ctx = document.getElementById("chart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: Object.keys(counts),
+            datasets: [{
+              label: "Approved Report Count",
+              data: Object.values(counts),
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      });
+    };
+
+    window.sendEmail = (title, summary) => {
+      emailjs.send("your_service_id", "your_template_id", {
+        subject: title,
+        message: summary,
+        to_email: "receiver@example.com"
+      }, "your_public_key").then(() => {
+        alert("📧 Email sent successfully!");
+      }, (err) => {
+        alert("❌ Failed to send email: " + JSON.stringify(err));
+      });
+    };
+  </script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>emailjs.init("your_public_key");</script>
+</head>
+<body>
+  <h1>📊 관리자 승인된 보고서 통계 + 이메일 전송</h1>
+  <canvas id="chart" width="600" height="250"></canvas>
+  <ul id="reportList">Loading approved reports...</ul>
+</body>
+</html>
