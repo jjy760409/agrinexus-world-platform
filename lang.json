@@ -1,0 +1,52 @@
+{
+  "title": {
+    "en": "AgriNexus World - Global Smart Agriculture Platform",
+    "ko": "AgriNexus 월드 - 글로벌 스마트 농업 플랫폼"
+  },
+  "subtitle": {
+    "en": "All-in-One Platform for Contracts, AI, Seeds, Reports, and Data",
+    "ko": "계약, AI, 종자, 리포트, 데이터 통합 플랫폼"
+  },
+  "menu": {
+    "home": {
+      "en": "Home",
+      "ko": "홈"
+    },
+    "contract": {
+      "en": "Contract",
+      "ko": "계약"
+    },
+    "report": {
+      "en": "Report",
+      "ko": "보고서"
+    },
+    "ai": {
+      "en": "GPT",
+      "ko": "GPT"
+    },
+    "smartfarm": {
+      "en": "SmartFarm",
+      "ko": "스마트팜"
+    },
+    "seeds": {
+      "en": "Seeds",
+      "ko": "종자"
+    },
+    "chart": {
+      "en": "Price Chart",
+      "ko": "시세"
+    },
+    "firebase": {
+      "en": "Save",
+      "ko": "저장"
+    },
+    "admin": {
+      "en": "Admin",
+      "ko": "관리자"
+    },
+    "global": {
+      "en": "Global Portal",
+      "ko": "글로벌 포털"
+    }
+  }
+}
