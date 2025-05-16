@@ -1,140 +1,23 @@
 
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>GPT 계약서 생성기</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-function uploadPDF(filename, email) {
-    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
-    const file = new File([blob], filename, { type: "application/pdf" });
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("email", email);
-
-    fetch("http://localhost:5000/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("✅ 서버에 PDF 제출 완료: " + data.message);
-    })
-    .catch(err => {
-        alert("⚠️ 제출 오류: " + err.message);
-    });
-}
-
-</script>
-    <script src="config.js">
-function uploadPDF(filename, email) {
-    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
-    const file = new File([blob], filename, { type: "application/pdf" });
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("email", email);
-
-    fetch("http://localhost:5000/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("✅ 서버에 PDF 제출 완료: " + data.message);
-    })
-    .catch(err => {
-        alert("⚠️ 제출 오류: " + err.message);
-    });
-}
-
-</script>
-    <style>
-        body { font-family: sans-serif; margin: 20px; }
-        textarea, input, button { width: 100%; padding: 10px; margin-top: 10px; }
-        #output { margin-top: 20px; background: #eef; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
-        .tip { color: #555; font-size: 14px; margin-top: 10px; }
-    </style>
-</head>
+<html>
+<head><meta charset="UTF-8"><title>Contract</title><script src="config.js"></script></head>
 <body>
-    <h2>📄 GPT 계약서 생성기</h2>
-    <textarea id="contractInput" rows="6" placeholder="계약 조건을 입력하세요 (예: A사와 B사 간 공급 계약)..."></textarea>
-    <input type="email" id="email" placeholder="📩 이메일 주소 입력 (선택)">
-    <button onclick="generateContract()">계약서 생성</button>
-    <button onclick="generatePDF()">📄 PDF 저장</button>
-<button onclick="uploadPDF('document_submit.pdf', document.getElementById('email').value)">☁️ 서버 제출</button>
-    <div class="tip">💡 생성된 계약서는 PDF로 저장하거나 이메일로 전송할 수 있습니다.</div>
-    <div id="output"></div>
-
-    <script>
-        async function generateContract() {
-            const input = document.getElementById("contractInput").value;
-            const output = document.getElementById("output");
-            output.innerHTML = "⏳ 계약서 생성 중입니다. 잠시만 기다려 주세요...";
-
-            try {
-                const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + CONFIG.OPENAI_API_KEY
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: [
-                            { role: "system", content: "당신은 법률 계약서 전문가입니다. 조건에 맞는 신뢰 가능한 계약서를 작성하세요." },
-                            { role: "user", content: input }
-                        ]
-                    })
-                });
-
-                if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.error?.message || "OpenAI API 오류 발생");
-                }
-
-                const data = await response.json();
-                output.innerHTML = "✅ 계약서 생성 완료:<br><br>" + data.choices[0].message.content;
-
-            } catch (e) {
-                output.innerHTML = "⚠️ 오류 발생: " + e.message + "<br><br>"
-                    + "👉 <b>해결 방법:</b><br>"
-                    + "- API 키가 정확한지 확인하세요.<br>"
-                    + "- 네트워크 오류일 수 있습니다. 다시 시도해보세요.<br>"
-                    + "- 문제가 지속되면 관리자에게 문의하세요.";
-            }
-        }
-
-        function generatePDF() {
-            const {{ jsPDF }} = window.jspdf;
-            const doc = new jsPDF();
-            const content = document.getElementById("output").innerText;
-
-            doc.setFont("Helvetica");
-            doc.setFontSize(12);
-            doc.text(content, 10, 20);
-            doc.save("contract_agreement.pdf");
-        }
-    
-function uploadPDF(filename, email) {
-    const blob = new Blob([document.getElementById("summary").innerText || document.getElementById("output").innerText], { type: 'text/plain' });
-    const file = new File([blob], filename, { type: "application/pdf" });
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("email", email);
-
-    fetch("http://localhost:5000/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("✅ 서버에 PDF 제출 완료: " + data.message);
-    })
-    .catch(err => {
-        alert("⚠️ 제출 오류: " + err.message);
-    });
+<h2>📄 계약서 생성</h2>
+<textarea id="input" rows="6" placeholder="계약 조건을 입력하세요"></textarea><br>
+<input type="email" id="email" placeholder="이메일 입력"><br>
+<button onclick="upload()">서버 제출</button>
+<script>
+function upload() {
+  const data = new Blob([document.getElementById('input').value], {type: 'application/pdf'});
+  const formData = new FormData();
+  formData.append("file", new File([data], "contract_agreement.pdf"));
+  formData.append("email", document.getElementById("email").value);
+  fetch(CONFIG.API_BASE_URL + "/upload", {
+    method: "POST",
+    body: formData
+  }).then(res => res.json()).then(d => alert("📤 제출 성공")).catch(e => alert("오류:" + e.message));
 }
-
 </script>
 </body>
 </html>

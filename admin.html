@@ -1,96 +1,34 @@
 
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>AgriNexus 관리자 대시보드</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        h2 { color: #004085; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-        .summary, .chart-container { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 8px; }
-        .download-link { text-decoration: none; color: #007bff; }
-    </style>
-</head>
+<html>
+<head><meta charset="UTF-8"><title>Admin</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="config.js"></script></head>
 <body>
-    <h2>🛠 AgriNexus 관리자 대시보드</h2>
-    <div class="summary">
-        <label>JWT 토큰 입력: <input type="text" id="token" placeholder="Bearer ..." style="width: 300px;"></label>
-        <button onclick="loadSubmissions()">제출 내역 보기</button>
-        <button onclick="loadStats()">통계 시각화 보기</button>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="statsChart" width="400" height="200"></canvas>
-    </div>
-
-    <table id="submissionsTable" style="display: none;">
-        <thead>
-            <tr>
-                <th>제출일</th>
-                <th>이메일</th>
-                <th>파일명</th>
-                <th>다운로드</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
+<h2>📊 제출 통계 보기</h2>
+<input id="token" placeholder="Bearer 토큰 입력" style="width:300px"><br>
+<button onclick="load()">제출 목록 & 통계 보기</button>
+<div><canvas id="statsChart" height="150"></canvas></div>
+<ul id="list"></ul>
 <script>
-    async function loadSubmissions() {
-        const token = document.getElementById("token").value;
-        const table = document.getElementById("submissionsTable");
-        const tbody = table.querySelector("tbody");
-        tbody.innerHTML = "";
+async function load() {
+  const token = document.getElementById("token").value;
+  const res1 = await fetch(CONFIG.API_BASE_URL + "/submissions", { headers: { Authorization: token } });
+  const list = await res1.json();
+  document.getElementById("list").innerHTML = list.map(x => `<li>${x.email} - <a href="${CONFIG.API_BASE_URL}${x.download_url}" target="_blank">${x.filename}</a></li>`).join("");
 
-        const res = await fetch("http://localhost:5000/submissions", {
-            headers: { "Authorization": token }
-        });
-        const data = await res.json();
-        data.forEach(row => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${row.date}</td>
-                <td>${row.email}</td>
-                <td>${row.filename}</td>
-                <td><a class="download-link" href="http://localhost:5000${row.download_url}" target="_blank">📥 다운로드</a></td>
-            `;
-            tbody.appendChild(tr);
-        });
-        table.style.display = "table";
+  const res2 = await fetch(CONFIG.API_BASE_URL + "/stats", { headers: { Authorization: token } });
+  const data = await res2.json();
+  const ctx = document.getElementById('statsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(data),
+      datasets: [
+        { label: '계약서', data: Object.values(data).map(d => d.contract), backgroundColor: 'skyblue' },
+        { label: '보고서', data: Object.values(data).map(d => d.report), backgroundColor: 'orange' }
+      ]
     }
-
-    async function loadStats() {
-        const token = document.getElementById("token").value;
-        const res = await fetch("http://localhost:5000/stats", {
-            headers: { "Authorization": token }
-        });
-        const data = await res.json();
-        const labels = Object.keys(data);
-        const contractData = labels.map(d => data[d].contract);
-        const reportData = labels.map(d => data[d].report);
-
-        const ctx = document.getElementById('statsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: '계약서', data: contractData, backgroundColor: 'rgba(75, 192, 192, 0.5)' },
-                    { label: '보고서', data: reportData, backgroundColor: 'rgba(255, 159, 64, 0.5)' }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top' },
-                    title: { display: true, text: '제출 통계 (기능별, 일자별)' }
-                }
-            }
-        });
-    }
+  });
+}
 </script>
 </body>
 </html>

@@ -1,6 +1,4 @@
 
-// 설정 파일
 const CONFIG = {
-    GNEWS_API_KEY: "YOUR_GNEWS_API_KEY",
-    OPENAI_API_KEY: "YOUR_OPENAI_KEY"
+  API_BASE_URL: "https://agrinexus-world-platform.onrender.com"
 };
