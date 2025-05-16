@@ -1,1 +1,30 @@
-<h1>AgriNexus World Platform</h1><ul><li><a href='contract.html'>📄 계약</a></li><li><a href='report.html'>📊 보고</a></li><li><a href='admin.html'>🛠 관리자</a></li></ul>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <title>AgriNexus World</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/serviceWorker.js')
+        .then(() => console.log("✅ PWA 서비스워커 등록 완료"));
+    }
+  </script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    a.btn { display: inline-block; margin: 10px; padding: 10px 20px; background: #4CAF50; color: white; border-radius: 8px; text-decoration: none; }
+    p { color: #444; }
+  </style>
+</head>
+<body>
+  <h1>🌱 AgriNexus World Platform</h1>
+  <p>스마트 계약·보고서·제출 자동화 시스템</p>
+  <a class="btn" href="contract.html">📄 계약서 작성</a>
+  <a class="btn" href="report.html">📊 보고서 요약</a>
+  <a class="btn" href="admin.html">🛠 관리자 보기</a>
+  <p style="margin-top:30px; font-size: 14px;">📱 이 웹사이트는 모바일 앱처럼 설치할 수 있습니다. <br> 브라우저 메뉴에서 <strong>"홈 화면에 추가"</strong>를 눌러보세요!</p>
+  <p>📧 제출 후 이메일로 확인 메일도 전송 가능합니다 (향후 SMTP 설정 필요)</p>
+</body>
+</html>

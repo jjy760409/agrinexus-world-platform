@@ -1,17 +1,11 @@
 
 self.addEventListener('install', function(e) {
-  console.log('Service Worker: Installed');
   e.waitUntil(
     caches.open('agrinexus-cache').then(function(cache) {
-      return cache.addAll([
-        '/',
-        '/index.html',
-        '/manifest.json'
-      ]);
+      return cache.addAll(['/', '/index.html']);
     })
   );
 });
-
 self.addEventListener('fetch', function(e) {
   e.respondWith(
     caches.match(e.request).then(function(response) {
