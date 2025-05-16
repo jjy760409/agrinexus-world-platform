@@ -13,12 +13,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'supersecretkey'
 
-# 샘플 사용자
 USERS = {
     "admin@agrinexus.world": generate_password_hash("password123")
 }
 
-# JWT 토큰 인증 데코레이터
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -32,7 +30,6 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# JWT 로그인
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -46,7 +43,6 @@ def login():
         return jsonify({"token": token})
     return jsonify({"message": "로그인 실패"}), 401
 
-# 업로드
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['file']
@@ -60,7 +56,6 @@ def upload_file():
         return jsonify({"status": "success", "filename": filename})
     return jsonify({"status": "error", "message": "파일 없음"})
 
-# 목록 + 다운로드 링크 제공
 @app.route('/submissions', methods=['GET'])
 @token_required
 def list_submissions():
@@ -79,12 +74,10 @@ def list_submissions():
         pass
     return jsonify(entries)
 
-# 파일 다운로드
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
-# 통계 API (기능별, 날짜별 카운트)
 @app.route('/stats', methods=['GET'])
 @token_required
 def stats():
