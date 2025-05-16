@@ -5,26 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest.json">
-  <title>AgriNexus World</title>
+  <title>AgriNexus SmartFarm</title>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/serviceWorker.js')
-        .then(() => console.log("✅ PWA 서비스워커 등록 완료"));
+      navigator.serviceWorker.register('/serviceWorker.js').then(() => {
+        console.log("✅ Service Worker registered");
+      });
     }
   </script>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 20px; }
-    a.btn { display: inline-block; margin: 10px; padding: 10px 20px; background: #4CAF50; color: white; border-radius: 8px; text-decoration: none; }
-    p { color: #444; }
+    a.btn { display: inline-block; margin: 10px; padding: 12px 24px; background: #28a745; color: white; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    p { color: #444; margin-top: 15px; }
   </style>
 </head>
 <body>
-  <h1>🌱 AgriNexus World Platform</h1>
-  <p>스마트 계약·보고서·제출 자동화 시스템</p>
+  <h1>🌿 AgriNexus SmartFarm</h1>
+  <p>계약서, 보고서, 제출 관리까지 한 번에!</p>
   <a class="btn" href="contract.html">📄 계약서 작성</a>
-  <a class="btn" href="report.html">📊 보고서 요약</a>
-  <a class="btn" href="admin.html">🛠 관리자 보기</a>
-  <p style="margin-top:30px; font-size: 14px;">📱 이 웹사이트는 모바일 앱처럼 설치할 수 있습니다. <br> 브라우저 메뉴에서 <strong>"홈 화면에 추가"</strong>를 눌러보세요!</p>
-  <p>📧 제출 후 이메일로 확인 메일도 전송 가능합니다 (향후 SMTP 설정 필요)</p>
+  <a class="btn" href="report.html">📊 보고서 제출</a>
+  <a class="btn" href="admin.html">🛠 관리자 대시보드</a>
+  <p>📬 <strong>제출 후 자동 이메일 알림</strong> 기능도 곧 연동됩니다.<br>관리자는 이메일로 PDF를 바로 받을 수 있어요!</p>
+  <p>📱 <strong>앱처럼 설치하려면</strong><br>브라우저 메뉴에서 <em>“홈 화면에 추가”</em>를 눌러주세요.</p>
 </body>
 </html>
