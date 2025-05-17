@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>계약 열람 히스토리 추적기</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h1>📊 계약 열람 히스토리</h1>
+  <ul id="logList"></ul>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project.firebaseapp.com",
+      databaseURL: "https://your-project.firebaseio.com",
+      projectId: "your-project"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function logView(contractId, viewer) {
+      const ref = db.ref("views").push();
+      ref.set({
+        contractId,
+        viewer,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // 호출 예시
+    logView("AGX-123456", "관리자");
+
+    db.ref("views").on("value", snapshot => {
+      const logs = snapshot.val();
+      const list = document.getElementById("logList");
+      list.innerHTML = "";
+      for (const key in logs) {
+        const log = logs[key];
+        const li = document.createElement("li");
+        li.textContent = `[${log.timestamp}] ${log.viewer} 열람 → 계약번호 ${log.contractId}`;
+        list.appendChild(li);
+      }
+    });
+  </script>
+</body>
+</html>
