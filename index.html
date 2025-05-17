@@ -3,44 +3,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus AI 통합 플랫폼</title>
+  <title>AgriNexus AI 통합 플랫폼 (API 연동 + Netlify용)</title>
   <style>
-    body { font-family: Arial; background: #f3f8fa; text-align: center; padding: 2rem; }
-    .btnbar { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
-    button { padding: 1rem 1.5rem; font-size: 1rem; border: none; border-radius: 8px; background: #007c4d; color: white; cursor: pointer; }
-    iframe, .block { max-width: 900px; margin: 1rem auto; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    body { font-family: Arial; background: #eef4f8; padding: 2rem; text-align: center; }
+    button { padding: 1rem 1.5rem; margin: 0.5rem; font-size: 1rem; border-radius: 8px; border: none; background: #007c4d; color: white; cursor: pointer; }
+    iframe, .block { width: 100%; max-width: 900px; margin: 1rem auto; padding: 1rem; border-radius: 12px; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: none; }
     .block h3 { color: #007c4d; }
   </style>
 </head>
 <body>
 
-  <h1>🌎 AgriNexus AI 기반 스마트팜 통합 플랫폼</h1>
+  <h1>🌾 AgriNexus AI 통합 플랫폼 (실시간 연동)</h1>
 
-  <div class="btnbar">
+  <div>
     <button onclick="showBlock('gaia')">🌌 Gaia 좌표 시각화</button>
-    <button onclick="showBlock('satellite')">🛰 Sentinel NDVI 분석</button>
-    <button onclick="showBlock('ml')">🤖 작물 예측 (TensorFlow)</button>
+    <button onclick="showBlock('satellite')">🛰 Sentinel NDVI 실시간 API</button>
+    <button onclick="showBlock('ml')">🤖 작물별 TensorFlow 모델 예측</button>
     <button onclick="showBlock('firebase')">📊 Firebase 관리자 리포트</button>
   </div>
 
-  <div id="gaia" class="block" style="display:none;">
+  <div id="gaia" class="block">
     <h3>Gaia 기반 스마트팜 위치 시각화</h3>
     <iframe src="https://agrinexus.world/gaia-sky.html" width="100%" height="400"></iframe>
   </div>
 
-  <div id="satellite" class="block" style="display:none;">
-    <h3>Sentinel 기반 NDVI 실시간 분석</h3>
-    <iframe src="https://apps.sentinel-hub.com/eo-browser" width="100%" height="400"></iframe>
+  <div id="satellite" class="block">
+    <h3>Sentinel API 기반 NDVI 분석 (실시간)</h3>
+    <iframe src="https://custom-sentinel-api-viewer.vercel.app" width="100%" height="400"></iframe>
   </div>
 
-  <div id="ml" class="block" style="display:none;">
-    <h3>TensorFlow 기반 AI 작물 수확 예측</h3>
-    <iframe src="https://tfhub.dev/google/tfjs-model/efficientnet/lite0/classification/1" width="100%" height="300"></iframe>
+  <div id="ml" class="block">
+    <h3>TensorFlow 작물 예측 모델 (작물 분류)</h3>
+    <iframe src="https://agrinexus-crop-tfmodel.netlify.app" width="100%" height="400"></iframe>
   </div>
 
-  <div id="firebase" class="block" style="display:none;">
-    <h3>Firebase 관리자 리포트 자동화</h3>
-    <iframe src="https://console.firebase.google.com/project" width="100%" height="400"></iframe>
+  <div id="firebase" class="block">
+    <h3>Firebase 리포트 자동화</h3>
+    <iframe src="https://agrinexus.firebaseapp.com/admin-dashboard" width="100%" height="400"></iframe>
   </div>
 
   <script>
