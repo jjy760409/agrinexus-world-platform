@@ -2,43 +2,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus 클릭 기반 맞춤 알림 + IoT 제어 + 메일 전송</title>
+  <meta charset="UTF-8">
+  <title>AgriNexus IoT 연동 + GPT 예측 + 워크플로우 대시보드</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f4f9fc; text-align: center; }
-    input, button { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; margin: 2rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-    canvas { margin-top: 1rem; background: white; border-radius: 10px; }
+    body { font-family: Arial; padding: 2rem; background: #f7fafc; text-align: center; }
+    input, button { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    .section { background: white; margin: 2rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.06); }
+    #workflow { background: #fff; padding: 1rem; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>🔔 AgriNexus 스마트 알림 + IoT 제어 + PDF 메일 전송</h1>
+  <h1>🌐 AgriNexus IoT 제어 + GPT 예측 + 워크플로우 시각화</h1>
 
   <div class="section">
-    <h3>⏱️ 클릭 시간대 분석 → 최적 알림 타이밍 제안</h3>
-    <canvas id="clickChart" width="700" height="300"></canvas>
-    <button onclick="suggestTiming()">최적 타이밍 제안</button>
-    <div id="timingSuggestion" style="margin-top:1rem; font-weight:bold;"></div>
-  </div>
-
-  <div class="section">
-    <h3>🔁 IoT 행동 유도 API 실행 (모의)</h3>
-    <button onclick="triggerIoT('vent')">🌬️ 온실 창문 열기</button>
-    <button onclick="triggerIoT('water')">💧 관수 시작</button>
+    <h3>🛠 IoT 명령 실행 (실제 API 연동 구조)</h3>
+    <button onclick="sendIoTCommand('vent-open')">🌬️ 온실 환기 시작</button>
+    <button onclick="sendIoTCommand('water-start')">💧 물 주기 시작</button>
     <div id="iotStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>📄 자동 리포트 생성 + 관리자/사용자 메일 발송</h3>
-    <input id="adminEmail" placeholder="관리자 이메일" />
-    <input id="userEmail" placeholder="사용자 이메일" />
-    <button onclick="generateAndSend()">PDF 생성 + 메일 전송</button>
-    <div id="mailStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>🧠 GPT 기반 행동 예측 (시뮬레이션)</h3>
+    <input id="situation" placeholder="상황 입력 (예: 토양 건조)" />
+    <button onclick="simulatePrediction()">예측 실행</button>
+    <div id="gptPrediction" style="margin-top:1rem; font-weight:bold;"></div>
+  </div>
+
+  <div class="section">
+    <h3>📈 스마트 대시보드: 전체 자동화 워크플로우</h3>
+    <div id="workflow" class="mermaid">
+      graph TD
+        알림[알림 수신]
+        예측[GPT 예측]
+        승인[관리자 승인]
+        제어[IoT 제어 명령 실행]
+        저장[DB 저장 및 리포트]
+        알림 --> 예측 --> 승인 --> 제어 --> 저장
+    </div>
   </div>
 
   <script>
@@ -51,71 +56,29 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 클릭 시각 통계 차트
-    db.ref("userActions").on("value", snapshot => {
-      const data = snapshot.val() || {};
-      const hours = {};
-      for (const key in data) {
-        const h = new Date(data[key].time).getHours();
-        hours[h] = (hours[h] || 0) + 1;
-      }
-      const ctx = document.getElementById("clickChart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: Object.keys(hours),
-          datasets: [{
-            label: "알림 클릭 수 (시간대별)",
-            data: Object.values(hours),
-            backgroundColor: "#007c4d"
-          }]
-        }
-      });
-    });
-
-    function suggestTiming() {
-      db.ref("userActions").once("value").then(snapshot => {
-        const data = snapshot.val() || {};
-        const hourCount = {};
-        for (const key in data) {
-          const h = new Date(data[key].time).getHours();
-          hourCount[h] = (hourCount[h] || 0) + 1;
-        }
-        const bestHour = Object.entries(hourCount).sort((a, b) => b[1] - a[1])[0][0];
-        document.getElementById("timingSuggestion").innerText = `⏰ 추천 알림 타이밍: ${bestHour}시`;
-      });
-    }
-
-    function triggerIoT(action) {
-      // 모의 IoT API
-      const map = { vent: "온실 창문 열기", water: "관수 시작" };
-      db.ref("iotCommands").push({ action, time: new Date().toISOString() });
-      document.getElementById("iotStatus").innerText = `✅ IoT 제어 명령 전송됨: ${map[action]}`;
-    }
-
-    async function generateAndSend() {
-      const { jsPDF } = window.jspdf;
-      const admin = document.getElementById("adminEmail").value;
-      const user = document.getElementById("userEmail").value;
-
-      const doc = new jsPDF();
-      doc.text("🌿 AgriNexus 자동 리포트", 20, 20);
-      doc.text("발행 시각: " + new Date().toLocaleString(), 20, 30);
-      doc.text("내용: 최근 알림 트리거 및 클릭 로그 분석", 20, 50);
-      const blob = doc.output("blob");
-
-      const formData = new FormData();
-      formData.append("pdf", blob, "report.pdf");
-      formData.append("admin", admin);
-      formData.append("user", user);
-
-      await fetch("https://your-server.com/send-multimail", {
+    function sendIoTCommand(action) {
+      // 실제 IoT 장비 제어 API (모의 POST)
+      fetch("https://iot-server.example.com/control", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, time: new Date().toISOString() })
       });
-
-      document.getElementById("mailStatus").innerText = "📩 관리자/사용자 메일 전송 완료!";
+      db.ref("iotLogs").push({ action, time: new Date().toISOString() });
+      document.getElementById("iotStatus").innerText = "✅ 명령 전송됨: " + action;
     }
+
+    function simulatePrediction() {
+      const situation = document.getElementById("situation").value;
+      const recommendation = {
+        "토양 건조": "💧 수분 공급이 필요합니다.",
+        "기온 상승": "🌬️ 환기가 필요합니다.",
+        "고온/다습": "⚠️ 병충해 예방 조치 필요"
+      };
+      const response = recommendation[situation] || "❓ 분석된 결과 없음";
+      document.getElementById("gptPrediction").innerText = response;
+    }
+
+    mermaid.initialize({ startOnLoad: true });
   </script>
 
 </body>
