@@ -2,33 +2,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus AI 예측 + PDF + 이메일 + DB + TF.js</title>
+  <meta charset="UTF-8">
+  <title>AgriNexus Mail + TF Model + Firebase 대시보드</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #eef6f9; text-align: center; }
-    input, button { padding: 0.7rem; margin: 0.4rem; border-radius: 6px; font-size: 1rem; width: 90%; max-width: 500px; }
-    canvas { margin-top: 2rem; background: white; border-radius: 8px; }
-    .output { margin-top: 1rem; color: #007c4d; font-size: 1.1rem; }
+    body { font-family: Arial; padding: 2rem; background: #f6f9fc; text-align: center; }
+    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    .section { margin: 2rem auto; max-width: 700px; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
+    input, button { width: 90%; padding: 0.8rem; font-size: 1rem; margin-top: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
 
-  <h1>🌾 AgriNexus 예측 + PDF 리포트 + DB 저장 + 메일 발송</h1>
+  <h1>📊 AgriNexus 관리자 리포트 + 메일 발송 + TF 모델 예측</h1>
 
-  <input id="email" placeholder="📧 이메일 주소" /><br/>
-  일사량 (W/m²): <input id="sun" type="number" /><br/>
-  수분 (%): <input id="moist" type="number" /><br/>
-  온도 (°C): <input id="temp" type="number" /><br/>
-  <button onclick="predictGrowth()">AI 예측</button>
-  <button onclick="generateAndSend()">📄 PDF 생성 + 이메일 발송</button>
+  <div class="section">
+    <h3>📈 Firebase 실시간 생육 로그 시각화</h3>
+    <canvas id="logChart" width="700" height="300"></canvas>
+  </div>
 
-  <div class="output" id="predictionOut"></div>
-  <canvas id="growthChart" width="700" height="300"></canvas>
+  <div class="section">
+    <h3>✉️ 메일 발송 (PDF 리포트 전송)</h3>
+    <input id="email" type="email" placeholder="이메일 주소 입력" />
+    <button onclick="sendMail()">메일로 리포트 전송</button>
+    <div id="mailStatus" style="margin-top:1rem; color:#007c4d;"></div>
+  </div>
+
+  <div class="section">
+    <h3>🤖 TensorFlow.js 생육 상태 분류 예시</h3>
+    <button onclick="runTFModel()">AI 분류 실행</button>
+    <div id="tfOut" style="margin-top:1rem; font-weight:bold;"></div>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -40,79 +47,57 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const growthData = [];
-
-    async function predictGrowth() {
-      const sun = parseFloat(document.getElementById("sun").value);
-      const moist = parseFloat(document.getElementById("moist").value);
-      const temp = parseFloat(document.getElementById("temp").value);
-      const email = document.getElementById("email").value;
-
-      // Firebase 저장
-      db.ref("growthLogs").push({ sun, moist, temp, email, time: new Date().toISOString() });
-
-      // 간단한 예측
-      let result = "🌱 정상";
-      if (sun < 200 || moist < 20 || temp < 10) result = "⚠️ 저조";
-      else if (moist > 80 && temp > 30) result = "💧 과잉";
-      document.getElementById("predictionOut").innerText = "예측 결과: " + result;
-
-      growthData.push({ x: new Date().toISOString(), y: moist });
-      renderChart();
-    }
-
-    function renderChart() {
-      const ctx = document.getElementById("growthChart").getContext("2d");
+    db.ref("growthLogs").on("value", (snapshot) => {
+      const data = snapshot.val();
+      const labels = [], values = [];
+      for (const key in data) {
+        labels.push(new Date(data[key].time).toLocaleString());
+        values.push(data[key].moist);
+      }
+      const ctx = document.getElementById("logChart").getContext("2d");
       new Chart(ctx, {
         type: "line",
         data: {
+          labels,
           datasets: [{
-            label: "🌿 토양 수분 추적",
-            data: growthData,
+            label: "토양 수분 (%)",
+            data: values,
             borderColor: "#007c4d",
             fill: false
           }]
         },
         options: {
-          parsing: false,
+          responsive: true,
+          plugins: { legend: { position: 'top' }},
           scales: {
-            x: { type: 'time', time: { unit: 'minute' }, title: { display: true, text: '시간' } },
-            y: { beginAtZero: true, max: 100, title: { display: true, text: '수분 (%)' } }
+            y: { beginAtZero: true, max: 100 }
           }
         }
       });
+    });
+
+    function sendMail() {
+      const email = document.getElementById("email").value;
+      fetch("https://your-server.com/send-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      }).then(r => r.json())
+        .then(data => {
+          document.getElementById("mailStatus").innerText = "✅ " + data.status;
+        });
     }
 
-    async function generateAndSend() {
-      const { jsPDF } = window.jspdf;
-      const email = document.getElementById("email").value;
-      const sun = document.getElementById("sun").value;
-      const moist = document.getElementById("moist").value;
-      const temp = document.getElementById("temp").value;
-      const pred = document.getElementById("predictionOut").innerText;
-
-      const doc = new jsPDF();
-      doc.text("🌾 AgriNexus 작물 생육 예측 리포트", 20, 20);
-      doc.text(`이메일: ${email}`, 20, 30);
-      doc.text(`일사량: ${sun}`, 20, 40);
-      doc.text(`수분: ${moist}`, 20, 50);
-      doc.text(`온도: ${temp}`, 20, 60);
-      doc.text(`예측 결과: ${pred}`, 20, 80);
-      doc.text(`발행일: ${new Date().toLocaleString()}`, 20, 100);
-
-      const pdfBlob = doc.output("blob");
-
-      const formData = new FormData();
-      formData.append("pdf", pdfBlob, "AgriNexus_Report.pdf");
-      formData.append("email", email);
-
-      // Mail 전송 API 호출 (서버 필요)
-      await fetch("https://your-server.com/send-report", {
-        method: "POST",
-        body: formData
+    async function runTFModel() {
+      // TensorFlow 모델 로드 및 예측 (예시)
+      const model = await tf.loadLayersModel("https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json");
+      const input = tf.tensor2d([[5.1, 3.5, 1.4, 0.2]]);
+      const prediction = model.predict(input);
+      prediction.array().then(arr => {
+        const max = arr[0].indexOf(Math.max(...arr[0]));
+        const label = ["Setosa", "Versicolor", "Virginica"][max];
+        document.getElementById("tfOut").innerText = `예측된 작물 클래스: ${label}`;
       });
-
-      alert("✅ PDF 리포트가 메일로 전송되었습니다.");
     }
   </script>
 
