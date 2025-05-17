@@ -3,56 +3,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus x Gaia Precision SkyMap</title>
+  <title>AgriNexus GPS + AI 생육 위치 추천 대시보드</title>
   <style>
-    body { margin: 0; background: black; color: white; font-family: sans-serif; text-align: center; }
-    canvas { display: block; margin: auto; background: #000; }
-    #info { padding: 1rem; }
-    input, button { padding: 0.5rem; font-size: 1rem; margin: 0.2rem; border-radius: 4px; border: none; }
+    body { background: #f0f5f9; font-family: Arial; text-align: center; padding: 2rem; }
+    button, input { padding: 0.7rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    canvas { background: #000; display: block; margin: 2rem auto; border-radius: 12px; }
+    .output { margin-top: 1rem; font-size: 1.1rem; color: #007c4d; }
   </style>
 </head>
 <body>
-  <h1>🌌 AgriNexus 스마트팜 위치를 Gaia처럼 시각화</h1>
-  <div id="info">
-    위도: <input id="lat" type="number" value="36.5" step="0.01" /> 
-    경도: <input id="lon" type="number" value="127.5" step="0.01" />
-    고도: <input id="alt" type="number" value="150" /> m
-    <button onclick="plotPoint()">위치 시각화</button>
-  </div>
-  <canvas id="sky" width="800" height="600"></canvas>
+
+  <h1>🛰 AgriNexus 실시간 GPS + AI 생육 위치 대시보드</h1>
+  <button onclick="getLocation()">📍 내 위치 기반 위치 시각화</button>
+  <button onclick="simulateOptimal()">🌱 생육 최적 위치 AI 시뮬레이션</button>
+
+  <div class="output" id="coords"></div>
+  <div class="output" id="recommend"></div>
+
+  <canvas id="map" width="800" height="500"></canvas>
 
   <script>
-    const canvas = document.getElementById("sky");
+    const canvas = document.getElementById("map");
     const ctx = canvas.getContext("2d");
 
-    function plotPoint() {
-      const lat = parseFloat(document.getElementById("lat").value);
-      const lon = parseFloat(document.getElementById("lon").value);
-      const alt = parseFloat(document.getElementById("alt").value);
-
-      const x = Math.floor((lon + 180) / 360 * canvas.width);
-      const y = Math.floor((90 - lat) / 180 * canvas.height);
-
-      ctx.fillStyle = "white";
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, 2 * Math.PI);
-      ctx.fill();
-
-      ctx.fillStyle = "#0ff";
-      ctx.font = "12px Arial";
-      ctx.fillText(`📍AgriFarm: (${lat.toFixed(2)}, ${lon.toFixed(2)}, ${alt}m)`, x + 8, y - 8);
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("GPS를 지원하지 않는 브라우저입니다.");
+      }
     }
 
-    // 별자리 배경
-    for (let i = 0; i < 200; i++) {
+    function showPosition(pos) {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      document.getElementById("coords").innerText = `현재 위치: 위도 ${lat.toFixed(4)}, 경도 ${lon.toFixed(4)}`;
+      drawPoint(lat, lon, "🧭 현재 위치");
+    }
+
+    function drawPoint(lat, lon, label) {
+      const x = Math.floor((lon + 180) / 360 * canvas.width);
+      const y = Math.floor((90 - lat) / 180 * canvas.height);
+      ctx.fillStyle = "#0ff";
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.fillText(label, x + 8, y - 10);
+    }
+
+    function simulateOptimal() {
+      const lat = 35 + Math.random() * 5;
+      const lon = 125 + Math.random() * 5;
+      const label = "🌿 AI 추천 위치";
+      document.getElementById("recommend").innerText = `추천 위치: 위도 ${lat.toFixed(4)}, 경도 ${lon.toFixed(4)}`;
+      drawPoint(lat, lon, label);
+    }
+
+    // 배경 위성 스타일 시각화
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 300; i++) {
       const x = Math.random() * canvas.width;
       const y = Math.random() * canvas.height;
       const r = Math.random() * 1.5;
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "#aaa";
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
       ctx.fill();
     }
   </script>
+
 </body>
 </html>
