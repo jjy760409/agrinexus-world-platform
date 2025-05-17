@@ -3,37 +3,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 권한별 알림 + GPT 자동 생성</title>
+  <title>AgriNexus 관리자 알림 승인 + 행동 분석 + GPT 요약</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f3f9fc; text-align: center; padding: 2rem; }
-    input, button, textarea { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.4rem; border-radius: 6px; border: 1px solid #ccc; }
-    .admin-only { display: none; background: white; padding: 1rem; margin: 1rem auto; border-radius: 12px; max-width: 800px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
-    canvas { margin-top: 1rem; }
+    body { font-family: Arial; padding: 2rem; background: #f8fcff; text-align: center; }
+    input, button, textarea { padding: 0.8rem; font-size: 1rem; margin: 0.4rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
+    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    .section { margin: 1.5rem auto; background: white; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
 
-  <h1>🔐 AgriNexus 권한 기반 알림 시스템 + GPT 자동 메시지</h1>
+  <h1>📣 AgriNexus 관리자 알림 + GPT 요약 + 사용자 행동 분석</h1>
 
-  <input id="email" placeholder="이메일" />
-  <input id="password" type="password" placeholder="비밀번호" />
-  <button onclick="login()">로그인</button>
-  <div id="authStatus" style="color:#007c4d; margin-top:1rem;"></div>
-
-  <div class="admin-only" id="adminPanel">
-    <h3>📊 알림 전송 이력 시각화</h3>
-    <canvas id="alertChart" width="700" height="300"></canvas>
+  <div class="section">
+    <h3>✅ 관리자 알림 승인 후 다중 사용자에게 발송</h3>
+    <textarea id="alertContent" placeholder="알림 내용 입력"></textarea>
+    <button onclick="approveAndSend()">승인 및 발송</button>
+    <div id="sendStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
-  <div class="admin-only" id="gptPanel">
-    <h3>🧠 GPT 기반 자동 알림 콘텐츠 생성 (예시)</h3>
-    <textarea id="topic" placeholder="알림 주제 입력 (예: 수분 부족 경고)"></textarea>
-    <button onclick="generateMessage()">자동 메시지 생성</button>
-    <div id="gptMessage" style="margin-top:1rem; font-weight:bold;"></div>
+  <div class="section">
+    <h3>🧠 GPT 기반 요약 알림 메시지 생성 (예시)</h3>
+    <textarea id="gptSummaryTopic" placeholder="이슈/경고 요약 입력"></textarea>
+    <button onclick="generateSummary()">요약 메시지 생성</button>
+    <div id="gptSummary" style="margin-top:1rem; font-weight:bold;"></div>
+  </div>
+
+  <div class="section">
+    <h3>📈 사용자 알림 클릭 이력 분석</h3>
+    <canvas id="clickChart" width="700" height="300"></canvas>
   </div>
 
   <script>
@@ -44,56 +46,61 @@
       projectId: "your-project"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
     const db = firebase.database();
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
+    function approveAndSend() {
+      const message = document.getElementById("alertContent").value;
+      db.ref("approvedAlerts").push({
+        message,
+        time: new Date().toISOString()
+      });
 
-      auth.signInWithEmailAndPassword(email, pw).then((cred) => {
-        document.getElementById("authStatus").innerText = "✅ 로그인 성공: " + email;
-        const isAdmin = email.includes("admin"); // 간단한 권한 구분
-        if (isAdmin) {
-          document.getElementById("adminPanel").style.display = "block";
-          document.getElementById("gptPanel").style.display = "block";
-          loadAlertLogs();
+      db.ref("subscribers").once("value").then(snapshot => {
+        const users = snapshot.val();
+        for (const key in users) {
+          db.ref("userAlerts").push({
+            email: users[key].email,
+            message,
+            time: new Date().toISOString(),
+            clicked: false
+          });
         }
-      }).catch(err => {
-        document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message;
+        document.getElementById("sendStatus").innerText = "📨 전체 사용자에게 알림이 발송되었습니다.";
       });
     }
 
-    function loadAlertLogs() {
-      db.ref("alerts").once("value").then(snapshot => {
-        const data = snapshot.val() || {};
-        const labels = [], statuses = [];
-        for (const key in data) {
-          labels.push(new Date(data[key].time).toLocaleString());
-          statuses.push(data[key].status === "성공" ? 1 : 0);
-        }
-        const ctx = document.getElementById("alertChart").getContext("2d");
-        new Chart(ctx, {
-          type: "line",
-          data: {
-            labels,
-            datasets: [{
-              label: "전송 성공 여부 (1=성공, 0=실패)",
-              data: statuses,
-              borderColor: "#007c4d",
-              fill: false
-            }]
-          },
-          options: { responsive: true }
-        });
-      });
+    function generateSummary() {
+      const topic = document.getElementById("gptSummaryTopic").value;
+      const simulatedSummary = `요약: "${topic}" 상황 발생. 농장 관리자 확인 필요.`;
+      document.getElementById("gptSummary").innerText = simulatedSummary;
     }
 
-    function generateMessage() {
-      const topic = document.getElementById("topic").value;
-      const message = `🚨 AgriNexus 알림: "${topic}" 상황이 감지되었습니다. 빠른 조치 바랍니다.`;
-      document.getElementById("gptMessage").innerText = message;
-    }
+    db.ref("userAlerts").on("value", snapshot => {
+      const data = snapshot.val();
+      const logs = {};
+      for (const key in data) {
+        const alert = data[key];
+        if (alert.clicked) {
+          const date = new Date(alert.time).toLocaleDateString();
+          logs[date] = (logs[date] || 0) + 1;
+        }
+      }
+      const labels = Object.keys(logs);
+      const values = Object.values(logs);
+      const ctx = document.getElementById("clickChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "알림 클릭 수",
+            data: values,
+            backgroundColor: "#007c4d"
+          }]
+        },
+        options: { responsive: true }
+      });
+    });
   </script>
 
 </body>
