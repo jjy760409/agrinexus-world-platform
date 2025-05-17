@@ -3,56 +3,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus NFT Platform - Final Deployment</title>
+  <title>AgriNexus x Gaia Precision SkyMap</title>
   <style>
-    body { font-family: Arial, background: #f0f5f9; padding: 2rem; text-align: center; }
-    textarea, input, button { width: 100%; padding: 1rem; margin-top: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
-    button { background-color: #007c4d; color: white; border: none; cursor: pointer; }
-    .card {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      border-radius: 12px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-    .card img {
-      width: 80px;
-      border-radius: 50%;
-    }
+    body { margin: 0; background: black; color: white; font-family: sans-serif; text-align: center; }
+    canvas { display: block; margin: auto; background: #000; }
+    #info { padding: 1rem; }
+    input, button { padding: 0.5rem; font-size: 1rem; margin: 0.2rem; border-radius: 4px; border: none; }
   </style>
 </head>
 <body>
-
-  <h1>🌿 AgriNexus NFT 계약 플랫폼 (Remix + Pinata + Design)</h1>
-
-  <textarea id="desc" rows="4" placeholder="NFT 설명을 입력하세요..."></textarea>
-  <input id="nftName" placeholder="NFT 이름" />
-  <input id="wallet" placeholder="수신자 지갑 주소 (0x...)" />
-  <button onclick="showCard()">NFT 카드 생성</button>
-
-  <div class="card" id="nftCard" style="display:none;">
-    <img src="ai_character.png" />
-    <h3 id="title"></h3>
-    <p id="description"></p>
-    <small>Wallet: <span id="walletOut"></span></small><br/>
-    <small>IPFS: <span id="ipfsOut">https://gateway.pinata.cloud/ipfs/QmExample</span></small>
+  <h1>🌌 AgriNexus 스마트팜 위치를 Gaia처럼 시각화</h1>
+  <div id="info">
+    위도: <input id="lat" type="number" value="36.5" step="0.01" /> 
+    경도: <input id="lon" type="number" value="127.5" step="0.01" />
+    고도: <input id="alt" type="number" value="150" /> m
+    <button onclick="plotPoint()">위치 시각화</button>
   </div>
+  <canvas id="sky" width="800" height="600"></canvas>
 
   <script>
-    function showCard() {
-      const title = document.getElementById("nftName").value;
-      const desc = document.getElementById("desc").value;
-      const wallet = document.getElementById("wallet").value;
+    const canvas = document.getElementById("sky");
+    const ctx = canvas.getContext("2d");
 
-      document.getElementById("title").textContent = title;
-      document.getElementById("description").textContent = desc;
-      document.getElementById("walletOut").textContent = wallet;
-      document.getElementById("nftCard").style.display = "block";
+    function plotPoint() {
+      const lat = parseFloat(document.getElementById("lat").value);
+      const lon = parseFloat(document.getElementById("lon").value);
+      const alt = parseFloat(document.getElementById("alt").value);
+
+      const x = Math.floor((lon + 180) / 360 * canvas.width);
+      const y = Math.floor((90 - lat) / 180 * canvas.height);
+
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = "#0ff";
+      ctx.font = "12px Arial";
+      ctx.fillText(`📍AgriFarm: (${lat.toFixed(2)}, ${lon.toFixed(2)}, ${alt}m)`, x + 8, y - 8);
+    }
+
+    // 별자리 배경
+    for (let i = 0; i < 200; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const r = Math.random() * 1.5;
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fill();
     }
   </script>
-
 </body>
 </html>
