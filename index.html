@@ -2,62 +2,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World - MOHET Style (Multi-language)</title>
+  <title>AgriNexus PWA + Email + AI</title>
+  <link rel="manifest" href="manifest.json">
   <style>
-    body { margin: 0; font-family: 'Arial'; background: #f9f9f9; color: #222; }
-    header { background: #111; color: #fff; padding: 2rem; text-align: center; }
-    section { padding: 2rem; text-align: center; }
-    h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-    .features { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
-    .card { background: #fff; border-radius: 12px; padding: 1.5rem; width: 280px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .card a { text-decoration: none; color: #007c4d; font-weight: bold; }
-    footer { position: fixed; bottom: 0; width: 100%; background: #222; color: #fff; text-align: center; padding: 1rem; }
-    footer a { margin: 0 10px; color: #fff; text-decoration: none; font-weight: bold; }
+    body { font-family: Arial; margin: 0; background: #f2f2f2; padding-bottom: 80px; }
+    header { background: #0b3d91; color: white; padding: 1.5rem; text-align: center; }
+    section { padding: 2rem; }
+    footer { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 1rem; }
+    a { color: #0b3d91; text-decoration: none; font-weight: bold; }
+    form { background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    label, input, textarea { display: block; width: 100%; margin-bottom: 1rem; }
+    input, textarea { padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
+    button { background: #0b3d91; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; }
   </style>
   <script>
-    const userLang = navigator.language || navigator.userLanguage;
-    window.onload = () => {
-      if (userLang.startsWith('ko')) {
-        document.getElementById('title').innerText = 'AgriNexus 월드';
-        document.getElementById('desc').innerText = 'MOHET 스타일 기반 글로벌 스마트 플랫폼';
-        document.getElementById('features-title').innerText = '주요 기능 바로가기';
-        const links = document.querySelectorAll('.card a');
-        links[0].innerText = '계약서 자동화';
-        links[1].innerText = '보고서 생성';
-        links[2].innerText = '글로벌 펀드 매칭';
-        links[3].innerText = '위성 시각화';
-        links[4].innerText = 'AI 추천/상담';
-        const footerLinks = document.querySelectorAll('footer a');
-        footerLinks[0].innerText = '관리자 페이지';
-        footerLinks[1].innerText = '문의하기';
-        footerLinks[2].innerText = '회사소개';
-      }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
     }
   </script>
 </head>
 <body>
   <header>
-    <h1 id="title">AgriNexus World</h1>
-    <p id="desc">MOHET style global smart platform</p>
+    <h1>AgriNexus World</h1>
+    <p>🌐 PWA + 📩 Email Submit + 🧠 GPT Assistant</p>
   </header>
 
   <section>
-    <h2 id="features-title">Main Functions</h2>
-    <div class="features">
-      <div class="card"><a href="contract.html">Contract Automation</a></div>
-      <div class="card"><a href="report.html">Report Generator</a></div>
-      <div class="card"><a href="funding.html">Funding Match</a></div>
-      <div class="card"><a href="satellite.html">Satellite Visualization</a></div>
-      <div class="card"><a href="ai.html">AI Assistant</a></div>
-    </div>
+    <h2>📩 문의 / 제안 제출</h2>
+    <form action="mailto:your@email.com" method="POST" enctype="text/plain">
+      <label for="name">이름 / Name</label>
+      <input type="text" name="name" required>
+      <label for="email">이메일 / Email</label>
+      <input type="email" name="email" required>
+      <label for="message">내용 / Message</label>
+      <textarea name="message" rows="4" required></textarea>
+      <button type="submit">제출 / Submit</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>🧠 AI Chatbot (GPT)</h2>
+    <p>스마트 상담봇을 통해 언제든지 문의하거나 추천을 받아보세요.</p>
+    <a href="https://chat.openai.com" target="_blank">GPT 챗봇 열기 →</a>
   </section>
 
   <footer>
-    <a href="admin.html">Admin</a>
-    <a href="contact.html">Contact</a>
-    <a href="about.html">About</a>
+    <a href="index.html">🏠 홈</a> | 
+    <a href="admin.html">관리자</a>
   </footer>
 </body>
 </html>
