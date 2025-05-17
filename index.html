@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus World - MOHET Style</title>
+  <title>AgriNexus World - MOHET Style (Multi-language)</title>
   <style>
     body { margin: 0; font-family: 'Arial'; background: #f9f9f9; color: #222; }
     header { background: #111; color: #fff; padding: 2rem; text-align: center; }
@@ -16,28 +16,48 @@
     footer { position: fixed; bottom: 0; width: 100%; background: #222; color: #fff; text-align: center; padding: 1rem; }
     footer a { margin: 0 10px; color: #fff; text-decoration: none; font-weight: bold; }
   </style>
+  <script>
+    const userLang = navigator.language || navigator.userLanguage;
+    window.onload = () => {
+      if (userLang.startsWith('ko')) {
+        document.getElementById('title').innerText = 'AgriNexus 월드';
+        document.getElementById('desc').innerText = 'MOHET 스타일 기반 글로벌 스마트 플랫폼';
+        document.getElementById('features-title').innerText = '주요 기능 바로가기';
+        const links = document.querySelectorAll('.card a');
+        links[0].innerText = '계약서 자동화';
+        links[1].innerText = '보고서 생성';
+        links[2].innerText = '글로벌 펀드 매칭';
+        links[3].innerText = '위성 시각화';
+        links[4].innerText = 'AI 추천/상담';
+        const footerLinks = document.querySelectorAll('footer a');
+        footerLinks[0].innerText = '관리자 페이지';
+        footerLinks[1].innerText = '문의하기';
+        footerLinks[2].innerText = '회사소개';
+      }
+    }
+  </script>
 </head>
 <body>
   <header>
-    <h1>AgriNexus World</h1>
-    <p>MOHET 스타일 기반 글로벌 스마트 플랫폼</p>
+    <h1 id="title">AgriNexus World</h1>
+    <p id="desc">MOHET style global smart platform</p>
   </header>
 
   <section>
-    <h2>주요 기능 바로가기</h2>
+    <h2 id="features-title">Main Functions</h2>
     <div class="features">
-      <div class="card"><a href="contract.html">계약서 자동화</a></div>
-      <div class="card"><a href="report.html">보고서 생성</a></div>
-      <div class="card"><a href="funding.html">글로벌 펀드 매칭</a></div>
-      <div class="card"><a href="satellite.html">위성 시각화</a></div>
-      <div class="card"><a href="ai.html">AI 추천/상담</a></div>
+      <div class="card"><a href="contract.html">Contract Automation</a></div>
+      <div class="card"><a href="report.html">Report Generator</a></div>
+      <div class="card"><a href="funding.html">Funding Match</a></div>
+      <div class="card"><a href="satellite.html">Satellite Visualization</a></div>
+      <div class="card"><a href="ai.html">AI Assistant</a></div>
     </div>
   </section>
 
   <footer>
-    <a href="admin.html">관리자 페이지</a>
-    <a href="contact.html">문의하기</a>
-    <a href="about.html">회사소개</a>
+    <a href="admin.html">Admin</a>
+    <a href="contact.html">Contact</a>
+    <a href="about.html">About</a>
   </footer>
 </body>
 </html>
