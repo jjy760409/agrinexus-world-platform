@@ -3,76 +3,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus Realtime AI + Firebase Auth</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <title>AgriNexus AI 예측 + PDF 리포트 + 관리자 차트</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #eef4f6; padding: 2rem; text-align: center; }
-    input, button { padding: 0.7rem; font-size: 1rem; margin: 0.4rem; border-radius: 6px; border: 1px solid #ccc; width: 90%; max-width: 500px; }
-    .section { background: white; border-radius: 12px; margin: 1rem auto; padding: 1rem; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    body { font-family: Arial; background: #eef6f9; padding: 2rem; text-align: center; }
+    input, button { padding: 0.7rem; margin: 0.4rem; width: 90%; max-width: 500px; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
+    canvas { margin-top: 2rem; background: white; border-radius: 8px; }
+    .output { margin-top: 1rem; color: #007c4d; font-size: 1.1rem; }
   </style>
 </head>
 <body>
 
-  <h1>🌿 AgriNexus 실시간 작물 예측 + 관리자 인증</h1>
+  <h1>🌾 AgriNexus AI 기반 생육 예측 리포트</h1>
 
-  <div class="section">
-    <h3>🔐 Firebase 관리자 로그인</h3>
-    <input id="email" type="email" placeholder="이메일 입력" />
-    <input id="password" type="password" placeholder="비밀번호 입력" />
-    <button onclick="login()">로그인</button>
-    <div id="loginStatus" style="margin-top:1rem; color:#007c4d;"></div>
+  <div>
+    일사량 (W/m²): <input id="sun" type="number" /><br/>
+    수분 (%): <input id="moist" type="number" /><br/>
+    온도 (°C): <input id="temp" type="number" /><br/>
+    <button onclick="predictGrowth()">📈 AI 예측 실행</button>
+    <button onclick="generatePDF()">📄 PDF 리포트 생성</button>
   </div>
 
-  <div class="section">
-    <h3>📊 실시간 작물 생육 로그 입력</h3>
-    생육 단계: <input id="growthStage" /><br/>
-    일사량 (W/m²): <input id="sunlight" type="number" /><br/>
-    토양 수분 (%): <input id="moisture" type="number" /><br/>
-    <button onclick="submitLog()">로그 저장 + 예측</button>
-    <div id="predictionOut" style="margin-top:1rem; color:#007c4d;"></div>
-  </div>
+  <div class="output" id="predictionOut"></div>
+
+  <canvas id="growthChart" width="700" height="300"></canvas>
 
   <script>
-    // Firebase 설정
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
+    const growthData = [];
 
-    const auth = firebase.auth();
-    const db = firebase.database();
+    function predictGrowth() {
+      const sun = parseFloat(document.getElementById("sun").value);
+      const moist = parseFloat(document.getElementById("moist").value);
+      const temp = parseFloat(document.getElementById("temp").value);
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, pw)
-        .then(() => {
-          document.getElementById("loginStatus").innerText = "✅ 로그인 성공";
-        })
-        .catch(err => {
-          document.getElementById("loginStatus").innerText = "❌ 로그인 실패: " + err.message;
-        });
+      let result = "🌱 성장 정상";
+      if (sun < 200 || moist < 20 || temp < 10) result = "⚠️ 성장 불량 위험";
+      else if (moist > 80 && temp > 30) result = "💧 과잉 수분 주의";
+
+      document.getElementById("predictionOut").innerText = "AI 예측 결과: " + result;
+
+      growthData.push({ x: new Date().toISOString(), y: moist });
+
+      renderChart();
     }
 
-    function submitLog() {
-      const stage = document.getElementById("growthStage").value;
-      const sun = parseFloat(document.getElementById("sunlight").value);
-      const moist = parseFloat(document.getElementById("moisture").value);
+    function renderChart() {
+      const ctx = document.getElementById("growthChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          datasets: [{
+            label: "🌿 실시간 토양 수분 변화율",
+            data: growthData,
+            borderColor: "#007c4d",
+            fill: false
+          }]
+        },
+        options: {
+          parsing: false,
+          scales: {
+            x: { type: 'time', time: { unit: 'minute' }, title: { display: true, text: '시간' } },
+            y: { beginAtZero: true, max: 100, title: { display: true, text: '수분 (%)' } }
+          }
+        }
+      });
+    }
 
-      const ref = db.ref("growthLogs").push();
-      ref.set({ stage, sun, moist, time: new Date().toISOString() });
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const sun = document.getElementById("sun").value;
+      const moist = document.getElementById("moist").value;
+      const temp = document.getElementById("temp").value;
+      const prediction = document.getElementById("predictionOut").innerText;
 
-      // 간단한 AI 예측 로직
-      let result = "적정 성장 예측";
-      if (sun < 200 || moist < 20) result = "성장 저하 위험";
-      else if (sun > 800 && moist > 80) result = "과잉 수분 경고";
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("AgriNexus AI 작물 생육 예측 리포트", 20, 20);
+      doc.setFontSize(11);
+      doc.text(`일사량: ${sun} W/m²`, 20, 40);
+      doc.text(`수분: ${moist} %`, 20, 50);
+      doc.text(`온도: ${temp} °C`, 20, 60);
+      doc.text(`예측 결과: ${prediction}`, 20, 80);
+      doc.text(`발행 시각: ${new Date().toLocaleString()}`, 20, 100);
 
-      document.getElementById("predictionOut").innerText = "🌱 예측 결과: " + result;
+      doc.save("AgriNexus_Growth_Report.pdf");
     }
   </script>
 
