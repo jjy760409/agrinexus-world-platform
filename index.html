@@ -3,74 +3,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus GPS + AI 생육 위치 추천 대시보드</title>
+  <title>AgriNexus AI 작물 추천 + 위성 예측 대시보드</title>
   <style>
-    body { background: #f0f5f9; font-family: Arial; text-align: center; padding: 2rem; }
-    button, input { padding: 0.7rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
-    canvas { background: #000; display: block; margin: 2rem auto; border-radius: 12px; }
-    .output { margin-top: 1rem; font-size: 1.1rem; color: #007c4d; }
+    body { font-family: Arial; background: #eef4f6; padding: 2rem; text-align: center; }
+    input, select, button { padding: 0.7rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; width: 80%; }
+    .section { background: white; padding: 1.5rem; border-radius: 12px; margin: 1rem auto; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .output { color: #007c4d; margin-top: 1rem; font-size: 1.1rem; }
+    iframe { border: 0; width: 100%; height: 300px; margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-  <h1>🛰 AgriNexus 실시간 GPS + AI 생육 위치 대시보드</h1>
-  <button onclick="getLocation()">📍 내 위치 기반 위치 시각화</button>
-  <button onclick="simulateOptimal()">🌱 생육 최적 위치 AI 시뮬레이션</button>
+  <h1>🌾 AgriNexus AI 작물 추천 + 위성 기반 수확 예측</h1>
 
-  <div class="output" id="coords"></div>
-  <div class="output" id="recommend"></div>
+  <div class="section">
+    <h2>① 위치 및 조건 입력</h2>
+    위도: <input id="lat" type="number" step="0.01" value="36.5" /><br/>
+    경도: <input id="lon" type="number" step="0.01" value="127.5" /><br/>
+    토양 유형:
+    <select id="soil">
+      <option value="loam">Loam</option>
+      <option value="clay">Clay</option>
+      <option value="sandy">Sandy</option>
+    </select><br/>
+    최근 강수량 (mm): <input id="rain" type="number" value="40" /><br/>
+    최근 기온 (°C): <input id="temp" type="number" value="24" /><br/>
+    <button onclick="recommend()">🌱 작물 추천</button>
+    <div class="output" id="recommendOut"></div>
+  </div>
 
-  <canvas id="map" width="800" height="500"></canvas>
+  <div class="section">
+    <h2>② 위성 영상 시뮬레이션 (데모)</h2>
+    <iframe src="https://apps.sentinel-hub.com/eo-browser/" title="Sentinel Viewer"></iframe>
+  </div>
+
+  <div class="section">
+    <h2>③ AI 수확량 예측 (데모 모델)</h2>
+    <button onclick="predict()">📈 수확량 예측 실행</button>
+    <div class="output" id="yieldOut"></div>
+  </div>
 
   <script>
-    const canvas = document.getElementById("map");
-    const ctx = canvas.getContext("2d");
+    function recommend() {
+      const soil = document.getElementById("soil").value;
+      const rain = parseFloat(document.getElementById("rain").value);
+      const temp = parseFloat(document.getElementById("temp").value);
 
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      } else {
-        alert("GPS를 지원하지 않는 브라우저입니다.");
-      }
+      let crop = "옥수수";
+      if (soil === "clay" && rain > 60) crop = "벼";
+      else if (soil === "sandy" && temp > 25) crop = "고구마";
+      else if (soil === "loam" && temp > 20) crop = "토마토";
+
+      document.getElementById("recommendOut").innerText = `✅ AI 추천 작물: ${crop}`;
     }
 
-    function showPosition(pos) {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
-      document.getElementById("coords").innerText = `현재 위치: 위도 ${lat.toFixed(4)}, 경도 ${lon.toFixed(4)}`;
-      drawPoint(lat, lon, "🧭 현재 위치");
-    }
-
-    function drawPoint(lat, lon, label) {
-      const x = Math.floor((lon + 180) / 360 * canvas.width);
-      const y = Math.floor((90 - lat) / 180 * canvas.height);
-      ctx.fillStyle = "#0ff";
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.fillStyle = "#fff";
-      ctx.fillText(label, x + 8, y - 10);
-    }
-
-    function simulateOptimal() {
-      const lat = 35 + Math.random() * 5;
-      const lon = 125 + Math.random() * 5;
-      const label = "🌿 AI 추천 위치";
-      document.getElementById("recommend").innerText = `추천 위치: 위도 ${lat.toFixed(4)}, 경도 ${lon.toFixed(4)}`;
-      drawPoint(lat, lon, label);
-    }
-
-    // 배경 위성 스타일 시각화
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < 300; i++) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      const r = Math.random() * 1.5;
-      ctx.fillStyle = "#aaa";
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, 2 * Math.PI);
-      ctx.fill();
+    function predict() {
+      const rand = (Math.random() * 8 + 2).toFixed(1);
+      document.getElementById("yieldOut").innerText = `예상 수확량: ${rand} 톤/ha`;
     }
   </script>
 
