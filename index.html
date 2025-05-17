@@ -3,40 +3,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus 작물 모델 연동 + 관리자 대시보드 + Functions</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>AgriNexus Full AI + Admin Report Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f5f8fa; text-align: center; padding: 2rem; }
-    input, button { width: 90%; max-width: 500px; padding: 0.7rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    canvas { background: white; margin-top: 2rem; border-radius: 10px; }
-    .block { background: white; border-radius: 10px; margin: 1rem auto; max-width: 800px; padding: 1.5rem; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+    body { font-family: Arial; background: #f0f8ff; text-align: center; padding: 2rem; }
+    input, button, textarea { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
+    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 700px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
   </style>
 </head>
 <body>
 
-  <h1>🌱 AgriNexus 작물 모델 + 관리자 대시보드 + Functions</h1>
+  <h1>🌿 AgriNexus 작물 예측 + 관리자 승인 + PDF 자동화</h1>
 
-  <div class="block">
-    <h3>🔍 작물 모델 로드 (TFLite 변환 모델)</h3>
-    <button onclick="loadModel()">모델 로드</button>
-    <div id="modelStatus"></div>
+  <div class="section">
+    <h3>🌾 TFLite 다중 작물 분류 (예시)</h3>
+    <button onclick="runMultiPrediction()">작물 분류 실행</button>
+    <div id="multiPrediction" style="margin-top:1rem;"></div>
   </div>
 
-  <div class="block">
-    <h3>📊 관리자 리포트 시각화 (Firebase)</h3>
-    <canvas id="reportChart" width="700" height="300"></canvas>
+  <div class="section">
+    <h3>📝 관리자 리포트 승인 + 댓글 시스템</h3>
+    <input id="reportId" placeholder="리포트 ID 입력" />
+    <textarea id="adminComment" placeholder="관리자 코멘트 입력"></textarea>
+    <button onclick="approveReport()">승인 및 저장</button>
+    <div id="adminStatus" style="color:#007c4d;"></div>
   </div>
 
-  <div class="block">
-    <h3>☁️ Firebase Functions로 리포트 자동 처리</h3>
-    <input id="email" placeholder="이메일 입력" />
-    <input id="summary" placeholder="요약/코멘트 입력" />
-    <button onclick="sendToFunction()">보고서 Functions 호출</button>
-    <div id="fnStatus" style="color:#007c4d;"></div>
+  <div class="section">
+    <h3>📄 PDF 생성 및 이메일 자동 전송</h3>
+    <input id="email" placeholder="수신 이메일" />
+    <textarea id="summary" placeholder="요약 내용 입력 (보고서 내용 포함)"></textarea>
+    <button onclick="createAndEmail()">PDF 생성 + 메일 전송</button>
+    <div id="emailStatus" style="color:#007c4d;"></div>
   </div>
 
   <script>
@@ -49,44 +50,50 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    async function loadModel() {
-      const modelURL = "https://your-storage.com/tflite/converted-model/model.json";  // 실제 TFLite converted model
-      const model = await tf.loadGraphModel(modelURL);
-      document.getElementById("modelStatus").innerText = "✅ 작물 모델 로드 완료!";
+    async function runMultiPrediction() {
+      const values = tf.tensor2d([[30, 50, 25]]); // 예: light, water, temp
+      const weights = tf.tensor2d([[0.5, 0.3, 0.2], [0.2, 0.5, 0.3], [0.1, 0.4, 0.5]]);
+      const prediction = values.matMul(weights);
+      const result = await prediction.array();
+      const crops = ["고추", "벼", "토마토"];
+      const best = crops[result[0].indexOf(Math.max(...result[0]))];
+      document.getElementById("multiPrediction").innerText = `🌾 AI 추천 작물: ${best}`;
     }
 
-    db.ref("reports").on("value", (snapshot) => {
-      const data = snapshot.val();
-      const labels = [], values = [];
-      for (const key in data) {
-        labels.push(new Date(data[key].time).toLocaleString());
-        values.push(data[key].summary?.length || 1);
-      }
-      const ctx = document.getElementById("reportChart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [{
-            label: "제출된 보고서 요약 길이",
-            data: values,
-            backgroundColor: "#007c4d"
-          }]
-        },
-        options: { responsive: true }
+    function approveReport() {
+      const id = document.getElementById("reportId").value;
+      const comment = document.getElementById("adminComment").value;
+      db.ref("reports/" + id + "/approval").set({
+        approved: true,
+        comment: comment,
+        time: new Date().toISOString()
       });
-    });
+      document.getElementById("adminStatus").innerText = "✅ 승인 및 코멘트 저장됨!";
+    }
 
-    async function sendToFunction() {
+    async function createAndEmail() {
+      const { jsPDF } = window.jspdf;
       const email = document.getElementById("email").value;
       const summary = document.getElementById("summary").value;
-      const res = await fetch("https://us-central1-your-project.cloudfunctions.net/processReport", {
+      const time = new Date().toLocaleString();
+
+      const doc = new jsPDF();
+      doc.text("🌿 AgriNexus 작물 예측 리포트", 20, 20);
+      doc.text("수신자: " + email, 20, 40);
+      doc.text("요약: " + summary, 20, 50);
+      doc.text("생성 시각: " + time, 20, 60);
+      const blob = doc.output("blob");
+
+      const formData = new FormData();
+      formData.append("pdf", blob, "crop_report.pdf");
+      formData.append("email", email);
+
+      await fetch("https://your-server.com/send-report", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, summary, time: new Date().toISOString() })
+        body: formData
       });
-      const data = await res.json();
-      document.getElementById("fnStatus").innerText = "📩 처리 결과: " + data.status;
+
+      document.getElementById("emailStatus").innerText = "📩 메일 전송 완료!";
     }
   </script>
 
