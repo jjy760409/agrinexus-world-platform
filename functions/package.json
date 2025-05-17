@@ -1,6 +1,6 @@
 
 {
-  "name": "agrinexus-feedback-functions",
+  "name": "agrinexus-crop-alert-function",
   "engines": { "node": "16" },
   "dependencies": {
     "firebase-admin": "^11.0.0",

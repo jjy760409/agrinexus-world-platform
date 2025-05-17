@@ -3,18 +3,26 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-exports.processFeedback = functions.https.onRequest(async (req, res) => {
-  const { crop, feedback } = req.body;
-  const ref = admin.database().ref("feedbacks").push();
-  await ref.set({ crop, feedback, time: req.body.time });
+let lastRecommended = "";
 
-  const summaryRef = admin.database().ref("feedbackSummary/" + crop);
-  const current = (await summaryRef.once("value")).val() || 0;
-  if (feedback === "정확") {
-    await summaryRef.set(current + 1);
-  } else {
-    await summaryRef.set(current - 1);
-  }
+exports.sendCropChangeAlert = functions.database
+  .ref("/feedbackSummary")
+  .onWrite(async (change, context) => {
+    const data = change.after.val();
+    const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    const currentBest = sorted[0][0];
 
-  res.json({ status: "피드백 저장 및 학습 반영 완료" });
+    if (currentBest !== lastRecommended) {
+      lastRecommended = currentBest;
+
+      const subscribersSnap = await admin.database().ref("subscribers").once("value");
+      const emails = Object.values(subscribersSnap.val() || {}).map(d => d.email);
+
+      for (let email of emails) {
+        console.log(`📩 알림 발송 대상: ${email} → 추천 작물 변경: ${currentBest}`);
+        // 실제 이메일 발송 로직 Mailgun 또는 SendGrid 등 연결 필요
+      }
+    }
+
+    return null;
 });
