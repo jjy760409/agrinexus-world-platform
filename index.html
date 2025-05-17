@@ -4,75 +4,87 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus 계약 생성기 + 전자서명</title>
+  <title>AgriNexus 계약 자동 생성 + PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f4f4f4; }
+    body { font-family: Arial; padding: 2rem; background: #f0f0f0; }
+    h1, h2 { color: #004b8d; }
     input, textarea, button { width: 100%; padding: 0.8rem; margin-top: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    #contractResult { white-space: pre-wrap; background: #fff; padding: 1rem; margin-top: 1rem; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    h1, h2 { color: #004b8d; }
+    #contractResult { white-space: pre-wrap; background: white; padding: 1rem; margin-top: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
-  <h1>📄 AgriNexus 계약서 자동 생성 + 전자서명</h1>
+  <h1>📄 AgriNexus 계약서 자동 생성 + PDF 디자인</h1>
 
   <h2>① 계약 조건 입력</h2>
-  <input id="partyA" placeholder="계약 당사자 A (예: 회사명 또는 이름)" />
-  <input id="partyB" placeholder="계약 당사자 B (예: 상대방 회사명 또는 이름)" />
-  <textarea id="terms" placeholder="계약 내용 요약 (예: 스마트팜 설치, 공급 조건 등)" rows="4"></textarea>
+  <input id="partyA" placeholder="계약 당사자 A" />
+  <input id="partyB" placeholder="계약 당사자 B" />
+  <textarea id="terms" placeholder="간단한 계약 설명 (예: 스마트팜 설치, 수출 계약 등)" rows="3"></textarea>
   <input id="date" type="date" />
-
-  <button onclick="generateContract()">📄 계약서 생성</button>
-  <div id="contractResult">여기에 계약서가 생성됩니다...</div>
+  <button onclick="generateWithGPT()">🤖 GPT로 계약서 자동 생성</button>
 
   <h2>② 전자서명</h2>
-  <input id="signature" placeholder="전자서명 입력 (성명 또는 이니셜)" />
-  <button onclick="downloadPDF()">📥 계약서 PDF 다운로드</button>
+  <input id="signature" placeholder="전자서명 (이름 또는 이니셜)" />
+  <button onclick="downloadStyledPDF()">📥 PDF 다운로드</button>
+
+  <div id="contractResult">GPT가 작성한 계약서가 여기에 표시됩니다...</div>
 
   <script>
-    function generateContract() {
+    async function generateWithGPT() {
       const a = document.getElementById("partyA").value;
       const b = document.getElementById("partyB").value;
       const t = document.getElementById("terms").value;
       const d = document.getElementById("date").value;
 
-      const text = `
-AgriNexus 공식 계약서
+      const prompt = `
+다음 정보로 간단하고 명확한 공식 계약서를 작성해줘.
 
-계약 당사자:
- - A: ${a}
- - B: ${b}
-
-계약 일자: ${d}
-
-계약 내용:
-${t}
-
-본 계약은 상호 신뢰와 합의에 기반하여 체결되며, 아래 전자서명란에 서명함으로써 효력을 가집니다.
-
-서명:
-당사자 A: _______________
-당사자 B: _______________
-
-날짜: ${d}
+계약 당사자 A: ${a}
+계약 당사자 B: ${b}
+계약 내용 요약: ${t}
+계약 날짜: ${d}
       `;
-      document.getElementById("contractResult").innerText = text;
-      window.latestContract = text;
+
+      const responseBox = document.getElementById("contractResult");
+      responseBox.innerText = "⏳ GPT가 계약서를 생성 중입니다...";
+
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: prompt }]
+          })
+        });
+        const data = await res.json();
+        const contractText = data.choices[0].message.content;
+        responseBox.innerText = contractText;
+        window.latestContract = contractText;
+      } catch (err) {
+        responseBox.innerText = "❌ 오류 발생: " + err.message;
+      }
     }
 
-    function downloadPDF() {
-      const content = window.latestContract || document.getElementById("contractResult").innerText;
+    async function downloadStyledPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const text = window.latestContract || document.getElementById("contractResult").innerText;
       const signature = document.getElementById("signature").value;
-      const finalText = content + `
 
-전자서명: ${signature}
-`;
-      const blob = new Blob([finalText], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "AgriNexus_Contract_Signed.pdf";
-      link.click();
+      doc.setFontSize(14);
+      doc.text("AgriNexus 공식 계약서", 20, 20);
+      doc.setFontSize(11);
+
+      const lines = doc.splitTextToSize(text + "
+
+전자서명: " + signature, 170);
+      doc.text(lines, 20, 30);
+      doc.save("AgriNexus_Contract_Generated.pdf");
     }
   </script>
 </body>
