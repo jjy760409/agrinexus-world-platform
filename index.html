@@ -2,49 +2,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus GPT + Firebase + Chart</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <title>AgriNexus AI Platform</title>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f9f9f9; }
-    h1 { color: #004b8d; }
-    textarea, input { width: 100%; margin: 0.5rem 0; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
-    button { background: #004b8d; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; }
-    canvas { max-width: 100%; margin-top: 2rem; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; padding-bottom: 100px; }
+    header { background: #004b8d; color: white; padding: 2rem; text-align: center; }
+    section { padding: 2rem; }
+    h1 { margin: 0; }
+    textarea, button { width: 100%; padding: 1rem; margin-top: 1rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    #response { white-space: pre-wrap; background: #fff; padding: 1rem; border-radius: 8px; margin-top: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .links a { display: inline-block; margin: 10px 10px 0 0; padding: 0.5rem 1rem; background: #eee; border-radius: 6px; text-decoration: none; color: #004b8d; }
+    footer { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
-  <h1>🧠 AI Chat + 📩 Submission + 📊 Stats</h1>
+  <header>
+    <h1>AgriNexus AI Platform</h1>
+    <p>💬 GPT 기반 자동화 명령 시스템</p>
+  </header>
 
   <section>
-    <h2>1. GPT 챗봇 (API 연동)</h2>
-    <textarea id="userInput" placeholder="질문을 입력하세요..."></textarea>
-    <button onclick="askGPT()">Send to GPT</button>
-    <pre id="gptResponse">답변이 여기에 표시됩니다...</pre>
+    <h2>🧠 NexusBot에게 물어보세요</h2>
+    <textarea id="userInput" placeholder="예: 계약서 작성해줘, 글로벌 펀드 알려줘, 보고서 요약해줘 등..."></textarea>
+    <button onclick="askGPT()">전송</button>
+    <div id="response">GPT 응답이 여기에 표시됩니다...</div>
   </section>
 
-  <section>
-    <h2>2. 문의/제안 제출 (Firebase 저장)</h2>
-    <input type="text" id="name" placeholder="이름 / Name" required />
-    <input type="email" id="email" placeholder="이메일 / Email" required />
-    <textarea id="message" placeholder="내용 / Message" rows="4"></textarea>
-    <button onclick="submitForm()">제출</button>
+  <section class="links">
+    <h2>🔗 기능 바로가기</h2>
+    <a href="contract.html">계약서 자동화</a>
+    <a href="report.html">보고서 생성</a>
+    <a href="funding.html">펀드 매칭</a>
+    <a href="satellite.html">위성 시각화</a>
+    <a href="admin.html">관리자 대시보드</a>
   </section>
 
-  <section>
-    <h2>3. 제출 통계 (Chart.js 시각화)</h2>
-    <canvas id="statsChart"></canvas>
-  </section>
+  <footer>
+    AgriNexus World © AI 통합 자동화 시스템
+  </footer>
 
   <script>
-    // GPT API 연동
     async function askGPT() {
-      const prompt = document.getElementById("userInput").value;
-      const responseBox = document.getElementById("gptResponse");
-      responseBox.innerText = "답변 생성 중...";
+      const input = document.getElementById("userInput").value;
+      const resBox = document.getElementById("response");
+      resBox.innerText = "⏳ NexusBot이 응답 중입니다...";
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
@@ -54,67 +57,15 @@
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: prompt }]
+            messages: [{ role: "user", content: input }]
           })
         });
         const data = await res.json();
-        responseBox.innerText = data.choices[0].message.content;
-      } catch (err) {
-        responseBox.innerText = "❌ 오류 발생: " + err.message;
+        resBox.innerText = data.choices[0].message.content;
+      } catch (e) {
+        resBox.innerText = "❌ 오류: " + e.message;
       }
     }
-
-    // Firebase 초기화
-    const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-      projectId: "your-project",
-      storageBucket: "your-project.appspot.com",
-      messagingSenderId: "000000000000",
-      appId: "1:000000000000:web:xxxxxxxxxxxxxx"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // 데이터 저장
-    function submitForm() {
-      const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        message: document.getElementById("message").value,
-        timestamp: Date.now()
-      };
-      db.ref("submissions").push(data);
-      alert("📬 제출 완료!");
-    }
-
-    // Chart.js 통계
-    db.ref("submissions").on("value", snapshot => {
-      const submissions = snapshot.val() || {};
-      const labels = [];
-      const counts = [];
-      const dateMap = {};
-      for (const id in submissions) {
-        const date = new Date(submissions[id].timestamp).toLocaleDateString();
-        dateMap[date] = (dateMap[date] || 0) + 1;
-      }
-      for (const date in dateMap) {
-        labels.push(date);
-        counts.push(dateMap[date]);
-      }
-      new Chart(document.getElementById("statsChart"), {
-        type: "bar",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: '제출 수',
-            data: counts,
-            backgroundColor: '#007c4d'
-          }]
-        }
-      });
-    });
   </script>
 </body>
 </html>
