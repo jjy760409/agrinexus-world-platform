@@ -2,39 +2,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus Mail + TF Model + Firebase 대시보드</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>AgriNexus Full AI Platform (Auth + PDF + TFLite + Report)</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f6f9fc; text-align: center; }
-    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
-    .section { margin: 2rem auto; max-width: 700px; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
-    input, button { width: 90%; padding: 0.8rem; font-size: 1rem; margin-top: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #f0f5f9; padding: 2rem; text-align: center; }
+    input, button, select { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
+    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 700px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
   </style>
 </head>
 <body>
 
-  <h1>📊 AgriNexus 관리자 리포트 + 메일 발송 + TF 모델 예측</h1>
+  <h1>🌱 AgriNexus AI 플랫폼 (PDF + 인증 + 작물 AI + 보고서)</h1>
 
   <div class="section">
-    <h3>📈 Firebase 실시간 생육 로그 시각화</h3>
-    <canvas id="logChart" width="700" height="300"></canvas>
+    <h3>🔐 관리자 로그인 (Firebase Auth)</h3>
+    <input id="email" placeholder="이메일 입력" />
+    <input id="password" type="password" placeholder="비밀번호 입력" />
+    <button onclick="login()">로그인</button>
+    <div id="authStatus" style="color:#007c4d; margin-top:0.5rem;"></div>
   </div>
 
   <div class="section">
-    <h3>✉️ 메일 발송 (PDF 리포트 전송)</h3>
-    <input id="email" type="email" placeholder="이메일 주소 입력" />
-    <button onclick="sendMail()">메일로 리포트 전송</button>
-    <div id="mailStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>🌾 작물 모델 예측 (TFLite 기반)</h3>
+    <select id="modelSelect">
+      <option value="corn">🌽 옥수수 모델</option>
+      <option value="rice">🌾 벼 모델</option>
+      <option value="pepper">🌶 고추 모델</option>
+    </select>
+    <button onclick="runPrediction()">AI 예측 실행</button>
+    <div id="tfOut" style="margin-top:1rem;"></div>
   </div>
 
   <div class="section">
-    <h3>🤖 TensorFlow.js 생육 상태 분류 예시</h3>
-    <button onclick="runTFModel()">AI 분류 실행</button>
-    <div id="tfOut" style="margin-top:1rem; font-weight:bold;"></div>
+    <h3>📄 PDF 생성 및 자동 메일 전송</h3>
+    <input id="recipient" placeholder="수신 이메일 입력" />
+    <input id="notes" placeholder="예측 결과 요약 또는 메모" />
+    <button onclick="createAndSend()">PDF 생성 + 메일 전송</button>
+    <div id="mailStatus" style="color:#007c4d; margin-top:0.5rem;"></div>
   </div>
 
   <script>
@@ -45,59 +54,56 @@
       projectId: "your-project"
     };
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.database();
 
-    db.ref("growthLogs").on("value", (snapshot) => {
-      const data = snapshot.val();
-      const labels = [], values = [];
-      for (const key in data) {
-        labels.push(new Date(data[key].time).toLocaleString());
-        values.push(data[key].moist);
-      }
-      const ctx = document.getElementById("logChart").getContext("2d");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          labels,
-          datasets: [{
-            label: "토양 수분 (%)",
-            data: values,
-            borderColor: "#007c4d",
-            fill: false
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: 'top' }},
-          scales: {
-            y: { beginAtZero: true, max: 100 }
-          }
-        }
-      });
-    });
-
-    function sendMail() {
+    function login() {
       const email = document.getElementById("email").value;
-      fetch("https://your-server.com/send-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      }).then(r => r.json())
-        .then(data => {
-          document.getElementById("mailStatus").innerText = "✅ " + data.status;
-        });
+      const pw = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, pw)
+        .then(() => document.getElementById("authStatus").innerText = "✅ 로그인 성공")
+        .catch(err => document.getElementById("authStatus").innerText = "❌ 실패: " + err.message);
     }
 
-    async function runTFModel() {
-      // TensorFlow 모델 로드 및 예측 (예시)
-      const model = await tf.loadLayersModel("https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json");
-      const input = tf.tensor2d([[5.1, 3.5, 1.4, 0.2]]);
-      const prediction = model.predict(input);
-      prediction.array().then(arr => {
-        const max = arr[0].indexOf(Math.max(...arr[0]));
-        const label = ["Setosa", "Versicolor", "Virginica"][max];
-        document.getElementById("tfOut").innerText = `예측된 작물 클래스: ${label}`;
+    async function runPrediction() {
+      const type = document.getElementById("modelSelect").value;
+      const url = {
+        corn: "https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json",
+        rice: "https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json",
+        pepper: "https://storage.googleapis.com/tfjs-models/tfjs/mnist/model.json"
+      }[type];
+      const model = await tf.loadGraphModel(url);
+      document.getElementById("tfOut").innerText = "✅ 모델 로드 완료: " + type;
+    }
+
+    async function createAndSend() {
+      const { jsPDF } = window.jspdf;
+      const email = document.getElementById("recipient").value;
+      const notes = document.getElementById("notes").value;
+      const time = new Date().toLocaleString();
+
+      // PDF 생성
+      const doc = new jsPDF();
+      doc.text("AgriNexus AI 작물 예측 보고서", 20, 20);
+      doc.text("수신자: " + email, 20, 40);
+      doc.text("메모/요약: " + notes, 20, 50);
+      doc.text("발행 시각: " + time, 20, 60);
+      const blob = doc.output("blob");
+
+      const formData = new FormData();
+      formData.append("pdf", blob, "report.pdf");
+      formData.append("email", email);
+
+      // 보고서 DB 저장
+      db.ref("reports").push({ email, notes, time });
+
+      // 메일 발송
+      await fetch("https://your-server.com/send-report", {
+        method: "POST",
+        body: formData
       });
+
+      document.getElementById("mailStatus").innerText = "📩 리포트가 이메일로 전송되었습니다.";
     }
   </script>
 
