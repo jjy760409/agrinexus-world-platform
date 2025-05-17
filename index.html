@@ -3,39 +3,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 알림 기반 행동 유도 + 재배 일정 + 패턴 분석</title>
+  <title>AgriNexus 클릭 기반 맞춤 알림 + IoT 제어 + 메일 전송</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f7fbfd; text-align: center; padding: 2rem; }
-    .section { margin: 2rem auto; padding: 1.5rem; background: white; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-    input, button, textarea { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    body { font-family: Arial; padding: 2rem; background: #f4f9fc; text-align: center; }
+    input, button { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
+    .section { background: white; margin: 2rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    canvas { margin-top: 1rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>🚀 AgriNexus 알림 → 행동 + 일정 추천 + AI 최적화</h1>
+  <h1>🔔 AgriNexus 스마트 알림 + IoT 제어 + PDF 메일 전송</h1>
 
   <div class="section">
-    <h3>📲 알림 클릭 → 즉시 행동 유도</h3>
-    <button onclick="simulateClick('온실 창문 열기')">🌡️ 고온 알림 클릭</button>
-    <button onclick="simulateClick('수분 조절 시작')">💧 수분 부족 클릭</button>
-    <div id="actionResult" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>⏱️ 클릭 시간대 분석 → 최적 알림 타이밍 제안</h3>
+    <canvas id="clickChart" width="700" height="300"></canvas>
+    <button onclick="suggestTiming()">최적 타이밍 제안</button>
+    <div id="timingSuggestion" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <div class="section">
-    <h3>📅 추천 작물 기반 재배 일정 자동 생성</h3>
-    <button onclick="recommendSchedule('고추')">고추 일정</button>
-    <button onclick="recommendSchedule('배추')">배추 일정</button>
-    <button onclick="recommendSchedule('상추')">상추 일정</button>
-    <div id="schedule" style="margin-top:1rem; font-weight:bold;"></div>
+    <h3>🔁 IoT 행동 유도 API 실행 (모의)</h3>
+    <button onclick="triggerIoT('vent')">🌬️ 온실 창문 열기</button>
+    <button onclick="triggerIoT('water')">💧 관수 시작</button>
+    <div id="iotStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>📊 사용자 행동 패턴 분석 (클릭 시각 통계)</h3>
-    <canvas id="behaviorChart" width="700" height="300"></canvas>
+    <h3>📄 자동 리포트 생성 + 관리자/사용자 메일 발송</h3>
+    <input id="adminEmail" placeholder="관리자 이메일" />
+    <input id="userEmail" placeholder="사용자 이메일" />
+    <button onclick="generateAndSend()">PDF 생성 + 메일 전송</button>
+    <div id="mailStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <script>
@@ -48,46 +51,71 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function simulateClick(action) {
-      db.ref("userActions").push({ action, time: new Date().toISOString() });
-      document.getElementById("actionResult").innerText = `✅ ${action} 작업 지시가 전달되었습니다.`;
-    }
-
-    function recommendSchedule(crop) {
-      const plans = {
-        고추: "3월 파종 → 5월 정식 → 7~10월 수확",
-        배추: "8월 파종 → 9월 정식 → 10~11월 수확",
-        상추: "3~6월 파종 → 5~7월 수확"
-      };
-      document.getElementById("schedule").innerText = `📆 ${crop} 재배 일정: ${plans[crop]}`;
-    }
-
-    db.ref("userActions").on("value", (snapshot) => {
+    // 클릭 시각 통계 차트
+    db.ref("userActions").on("value", snapshot => {
       const data = snapshot.val() || {};
       const hours = {};
       for (const key in data) {
         const h = new Date(data[key].time).getHours();
         hours[h] = (hours[h] || 0) + 1;
       }
-      const ctx = document.getElementById("behaviorChart").getContext("2d");
+      const ctx = document.getElementById("clickChart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
           labels: Object.keys(hours),
           datasets: [{
-            label: "알림 클릭 빈도 (시간대별)",
+            label: "알림 클릭 수 (시간대별)",
             data: Object.values(hours),
             backgroundColor: "#007c4d"
           }]
-        },
-        options: {
-          scales: {
-            x: { title: { display: true, text: "시간대 (시)" } },
-            y: { beginAtZero: true }
-          }
         }
       });
     });
+
+    function suggestTiming() {
+      db.ref("userActions").once("value").then(snapshot => {
+        const data = snapshot.val() || {};
+        const hourCount = {};
+        for (const key in data) {
+          const h = new Date(data[key].time).getHours();
+          hourCount[h] = (hourCount[h] || 0) + 1;
+        }
+        const bestHour = Object.entries(hourCount).sort((a, b) => b[1] - a[1])[0][0];
+        document.getElementById("timingSuggestion").innerText = `⏰ 추천 알림 타이밍: ${bestHour}시`;
+      });
+    }
+
+    function triggerIoT(action) {
+      // 모의 IoT API
+      const map = { vent: "온실 창문 열기", water: "관수 시작" };
+      db.ref("iotCommands").push({ action, time: new Date().toISOString() });
+      document.getElementById("iotStatus").innerText = `✅ IoT 제어 명령 전송됨: ${map[action]}`;
+    }
+
+    async function generateAndSend() {
+      const { jsPDF } = window.jspdf;
+      const admin = document.getElementById("adminEmail").value;
+      const user = document.getElementById("userEmail").value;
+
+      const doc = new jsPDF();
+      doc.text("🌿 AgriNexus 자동 리포트", 20, 20);
+      doc.text("발행 시각: " + new Date().toLocaleString(), 20, 30);
+      doc.text("내용: 최근 알림 트리거 및 클릭 로그 분석", 20, 50);
+      const blob = doc.output("blob");
+
+      const formData = new FormData();
+      formData.append("pdf", blob, "report.pdf");
+      formData.append("admin", admin);
+      formData.append("user", user);
+
+      await fetch("https://your-server.com/send-multimail", {
+        method: "POST",
+        body: formData
+      });
+
+      document.getElementById("mailStatus").innerText = "📩 관리자/사용자 메일 전송 완료!";
+    }
   </script>
 
 </body>
