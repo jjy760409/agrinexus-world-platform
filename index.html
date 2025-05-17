@@ -3,33 +3,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus 맞춤 추천 + 작물 변경 알림</title>
+  <title>AgriNexus 사용자 추천 그래프 + 알림 연동</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f2f9f6; text-align: center; padding: 2rem; }
-    input, button, select { width: 90%; max-width: 500px; padding: 0.8rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; border-radius: 12px; margin: 1rem auto; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
+    body { font-family: Arial; background: #f6f9fc; padding: 2rem; text-align: center; }
+    input, button { padding: 0.8rem; width: 90%; max-width: 500px; font-size: 1rem; margin: 0.4rem; border-radius: 6px; border: 1px solid #ccc; }
+    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 800px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
 
-  <h1>🌾 AgriNexus 추천 작물 알림 + 사용자 맞춤 추천</h1>
+  <h1>🌿 AgriNexus 사용자 히스토리 + 알림 연동</h1>
 
   <div class="section">
-    <h3>📢 추천 작물 변경 알림</h3>
-    <input id="userEmail" placeholder="📧 사용자 이메일" />
-    <button onclick="subscribeToAlerts()">알림 수신 등록</button>
-    <div id="alertStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>🔐 사용자 로그인 (Firebase Auth)</h3>
+    <input id="email" placeholder="이메일" />
+    <input id="password" type="password" placeholder="비밀번호" />
+    <button onclick="login()">로그인</button>
+    <div id="authStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🌿 사용자 선호 기반 모델 조정</h3>
-    고추 선호: <input type="range" min="0" max="1" step="0.1" id="pepperWeight" /><br/>
-    배추 선호: <input type="range" min="0" max="1" step="0.1" id="cabbageWeight" /><br/>
-    상추 선호: <input type="range" min="0" max="1" step="0.1" id="lettuceWeight" /><br/>
-    <button onclick="adjustModel()">모델 조정 저장</button>
-    <div id="adjustStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>📊 사용자별 추천 결과 히스토리</h3>
+    <canvas id="historyChart" width="700" height="300"></canvas>
+  </div>
+
+  <div class="section">
+    <h3>📩 메일 / SMS 실 발송 (SendGrid, Twilio 구조)</h3>
+    <input id="msg" placeholder="알림 메시지 입력" />
+    <button onclick="sendAlert()">알림 전송</button>
+    <div id="alertStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <script>
@@ -40,25 +47,58 @@
       projectId: "your-project"
     };
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.database();
 
-    function subscribeToAlerts() {
-      const email = document.getElementById("userEmail").value;
-      db.ref("subscribers").push({ email, subscribedAt: new Date().toISOString() });
-      document.getElementById("alertStatus").innerText = "✅ 작물 변경 알림 수신 등록 완료!";
+    let currentUser = null;
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const pw = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, pw)
+        .then(user => {
+          currentUser = user.user;
+          document.getElementById("authStatus").innerText = "✅ 로그인 성공";
+          loadChart();
+        })
+        .catch(err => {
+          document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message;
+        });
     }
 
-    function adjustModel() {
-      const pepper = parseFloat(document.getElementById("pepperWeight").value);
-      const cabbage = parseFloat(document.getElementById("cabbageWeight").value);
-      const lettuce = parseFloat(document.getElementById("lettuceWeight").value);
-      db.ref("userPreferences").push({
-        pepperWeight: pepper,
-        cabbageWeight: cabbage,
-        lettuceWeight: lettuce,
-        updatedAt: new Date().toISOString()
+    function loadChart() {
+      db.ref("cropReports").orderByChild("email").equalTo(currentUser.email).once("value").then(snapshot => {
+        const data = snapshot.val() || {};
+        const labels = [], counts = {};
+        for (const key in data) {
+          const crop = data[key].result.split(" ")[0];
+          counts[crop] = (counts[crop] || 0) + 1;
+        }
+        const ctx = document.getElementById("historyChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: Object.keys(counts),
+            datasets: [{
+              label: "예측된 작물 수",
+              data: Object.values(counts),
+              backgroundColor: "#007c4d"
+            }]
+          },
+          options: { responsive: true }
+        });
       });
-      document.getElementById("adjustStatus").innerText = "✅ 모델 선호 조정 저장 완료!";
+    }
+
+    async function sendAlert() {
+      const message = document.getElementById("msg").value;
+      const res = await fetch("https://your-server.com/send-alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email, message })
+      });
+      const data = await res.json();
+      document.getElementById("alertStatus").innerText = "📩 알림 상태: " + data.status;
     }
   </script>
 
