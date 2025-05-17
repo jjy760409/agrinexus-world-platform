@@ -3,39 +3,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 관리자 알림 승인 + 행동 분석 + GPT 요약</title>
+  <title>AgriNexus 알림 기반 행동 유도 + 재배 일정 + 패턴 분석</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f8fcff; text-align: center; }
-    input, button, textarea { padding: 0.8rem; font-size: 1rem; margin: 0.4rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #f7fbfd; text-align: center; padding: 2rem; }
+    .section { margin: 2rem auto; padding: 1.5rem; background: white; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    input, button, textarea { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
     canvas { margin-top: 2rem; background: white; border-radius: 10px; }
-    .section { margin: 1.5rem auto; background: white; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
 
-  <h1>📣 AgriNexus 관리자 알림 + GPT 요약 + 사용자 행동 분석</h1>
+  <h1>🚀 AgriNexus 알림 → 행동 + 일정 추천 + AI 최적화</h1>
 
   <div class="section">
-    <h3>✅ 관리자 알림 승인 후 다중 사용자에게 발송</h3>
-    <textarea id="alertContent" placeholder="알림 내용 입력"></textarea>
-    <button onclick="approveAndSend()">승인 및 발송</button>
-    <div id="sendStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>📲 알림 클릭 → 즉시 행동 유도</h3>
+    <button onclick="simulateClick('온실 창문 열기')">🌡️ 고온 알림 클릭</button>
+    <button onclick="simulateClick('수분 조절 시작')">💧 수분 부족 클릭</button>
+    <div id="actionResult" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🧠 GPT 기반 요약 알림 메시지 생성 (예시)</h3>
-    <textarea id="gptSummaryTopic" placeholder="이슈/경고 요약 입력"></textarea>
-    <button onclick="generateSummary()">요약 메시지 생성</button>
-    <div id="gptSummary" style="margin-top:1rem; font-weight:bold;"></div>
+    <h3>📅 추천 작물 기반 재배 일정 자동 생성</h3>
+    <button onclick="recommendSchedule('고추')">고추 일정</button>
+    <button onclick="recommendSchedule('배추')">배추 일정</button>
+    <button onclick="recommendSchedule('상추')">상추 일정</button>
+    <div id="schedule" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <div class="section">
-    <h3>📈 사용자 알림 클릭 이력 분석</h3>
-    <canvas id="clickChart" width="700" height="300"></canvas>
+    <h3>📊 사용자 행동 패턴 분석 (클릭 시각 통계)</h3>
+    <canvas id="behaviorChart" width="700" height="300"></canvas>
   </div>
 
   <script>
@@ -48,57 +48,44 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function approveAndSend() {
-      const message = document.getElementById("alertContent").value;
-      db.ref("approvedAlerts").push({
-        message,
-        time: new Date().toISOString()
-      });
-
-      db.ref("subscribers").once("value").then(snapshot => {
-        const users = snapshot.val();
-        for (const key in users) {
-          db.ref("userAlerts").push({
-            email: users[key].email,
-            message,
-            time: new Date().toISOString(),
-            clicked: false
-          });
-        }
-        document.getElementById("sendStatus").innerText = "📨 전체 사용자에게 알림이 발송되었습니다.";
-      });
+    function simulateClick(action) {
+      db.ref("userActions").push({ action, time: new Date().toISOString() });
+      document.getElementById("actionResult").innerText = `✅ ${action} 작업 지시가 전달되었습니다.`;
     }
 
-    function generateSummary() {
-      const topic = document.getElementById("gptSummaryTopic").value;
-      const simulatedSummary = `요약: "${topic}" 상황 발생. 농장 관리자 확인 필요.`;
-      document.getElementById("gptSummary").innerText = simulatedSummary;
+    function recommendSchedule(crop) {
+      const plans = {
+        고추: "3월 파종 → 5월 정식 → 7~10월 수확",
+        배추: "8월 파종 → 9월 정식 → 10~11월 수확",
+        상추: "3~6월 파종 → 5~7월 수확"
+      };
+      document.getElementById("schedule").innerText = `📆 ${crop} 재배 일정: ${plans[crop]}`;
     }
 
-    db.ref("userAlerts").on("value", snapshot => {
-      const data = snapshot.val();
-      const logs = {};
+    db.ref("userActions").on("value", (snapshot) => {
+      const data = snapshot.val() || {};
+      const hours = {};
       for (const key in data) {
-        const alert = data[key];
-        if (alert.clicked) {
-          const date = new Date(alert.time).toLocaleDateString();
-          logs[date] = (logs[date] || 0) + 1;
-        }
+        const h = new Date(data[key].time).getHours();
+        hours[h] = (hours[h] || 0) + 1;
       }
-      const labels = Object.keys(logs);
-      const values = Object.values(logs);
-      const ctx = document.getElementById("clickChart").getContext("2d");
+      const ctx = document.getElementById("behaviorChart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
-          labels,
+          labels: Object.keys(hours),
           datasets: [{
-            label: "알림 클릭 수",
-            data: values,
+            label: "알림 클릭 빈도 (시간대별)",
+            data: Object.values(hours),
             backgroundColor: "#007c4d"
           }]
         },
-        options: { responsive: true }
+        options: {
+          scales: {
+            x: { title: { display: true, text: "시간대 (시)" } },
+            y: { beginAtZero: true }
+          }
+        }
       });
     });
   </script>
