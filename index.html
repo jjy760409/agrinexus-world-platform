@@ -4,55 +4,85 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus PWA + Email + AI</title>
+  <title>AgriNexus World - Full Integration</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    body { font-family: Arial; margin: 0; background: #f2f2f2; padding-bottom: 80px; }
-    header { background: #0b3d91; color: white; padding: 1.5rem; text-align: center; }
+    body { font-family: Arial; margin: 0; background: #f4f4f4; padding-bottom: 100px; }
+    header { background: #004b8d; color: white; padding: 2rem; text-align: center; }
     section { padding: 2rem; }
-    footer { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 1rem; }
-    a { color: #0b3d91; text-decoration: none; font-weight: bold; }
+    footer { position: fixed; bottom: 0; width: 100%; background: #222; color: white; text-align: center; padding: 1rem; }
+    a { color: #007c4d; text-decoration: none; font-weight: bold; }
     form { background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     label, input, textarea { display: block; width: 100%; margin-bottom: 1rem; }
     input, textarea { padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
-    button { background: #0b3d91; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; }
+    button { background: #004b8d; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; }
+    iframe { width: 100%; height: 400px; border: none; margin-top: 1rem; }
   </style>
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js');
-      });
+    const userLang = navigator.language || navigator.userLanguage;
+    window.onload = () => {
+      if (userLang.startsWith('ko')) {
+        document.getElementById('title').innerText = 'AgriNexus 월드';
+        document.getElementById('desc').innerText = 'AI 챗봇 + 이메일 제출 + 관리자 대시보드 + 다국어 지원';
+        document.getElementById('chat-title').innerText = '🧠 인공지능 상담 챗봇';
+        document.getElementById('form-title').innerText = '📩 문의 / 제안 제출';
+        document.getElementById('dashboard-title').innerText = '📊 관리자 통계 대시보드';
+        document.querySelector("label[for='name']").innerText = "이름 / Name";
+        document.querySelector("label[for='email']").innerText = "이메일 / Email";
+        document.querySelector("label[for='message']").innerText = "내용 / Message";
+        document.querySelector("button").innerText = "제출 / Submit";
+      }
     }
   </script>
 </head>
 <body>
   <header>
-    <h1>AgriNexus World</h1>
-    <p>🌐 PWA + 📩 Email Submit + 🧠 GPT Assistant</p>
+    <h1 id="title">AgriNexus World</h1>
+    <p id="desc">AI Chatbot + Email Submit + Admin Stats + Multilingual</p>
   </header>
 
   <section>
-    <h2>📩 문의 / 제안 제출</h2>
-    <form action="mailto:your@email.com" method="POST" enctype="text/plain">
-      <label for="name">이름 / Name</label>
-      <input type="text" name="name" required>
-      <label for="email">이메일 / Email</label>
-      <input type="email" name="email" required>
-      <label for="message">내용 / Message</label>
-      <textarea name="message" rows="4" required></textarea>
-      <button type="submit">제출 / Submit</button>
+    <h2 id="chat-title">🧠 AI Chatbot Assistant</h2>
+    <iframe src="https://chat.openai.com/chat" title="GPT Chatbot"></iframe>
+  </section>
+
+  <section>
+    <h2 id="form-title">📩 Submit Inquiry</h2>
+    <form action="save.html" method="POST" onsubmit="saveSubmission(); return false;">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" required>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required>
+      <label for="message">Message</label>
+      <textarea name="message" id="message" rows="4" required></textarea>
+      <button type="submit">Submit</button>
     </form>
   </section>
 
   <section>
-    <h2>🧠 AI Chatbot (GPT)</h2>
-    <p>스마트 상담봇을 통해 언제든지 문의하거나 추천을 받아보세요.</p>
-    <a href="https://chat.openai.com" target="_blank">GPT 챗봇 열기 →</a>
+    <h2 id="dashboard-title">📊 Admin Dashboard (Mock)</h2>
+    <iframe src="admin.html"></iframe>
   </section>
 
   <footer>
-    <a href="index.html">🏠 홈</a> | 
-    <a href="admin.html">관리자</a>
+    <a href="index.html">🏠 Home</a>
   </footer>
+
+  <script>
+    function saveSubmission() {
+      const data = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        message: document.getElementById('message').value,
+        time: new Date().toISOString()
+      };
+      let logs = localStorage.getItem('formLogs');
+      logs = logs ? JSON.parse(logs) : [];
+      logs.push(data);
+      localStorage.setItem('formLogs', JSON.stringify(logs));
+      alert("📬 Submission saved (locally for demo)!");
+      document.querySelector("form").reset();
+    }
+  </script>
 </body>
 </html>
