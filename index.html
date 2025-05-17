@@ -2,39 +2,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus Crop AI + PDF with Image + Auth Logs</title>
+  <meta charset="UTF-8">
+  <title>AgriNexus 작물 모델 연동 + 관리자 대시보드 + Functions</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f3f7f9; text-align: center; padding: 2rem; }
-    input, button { width: 90%; max-width: 500px; padding: 0.8rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    canvas, img { margin-top: 1rem; max-width: 100%; border-radius: 8px; }
-    .log { color: #007c4d; margin-top: 1rem; font-weight: bold; }
+    body { font-family: Arial; background: #f5f8fa; text-align: center; padding: 2rem; }
+    input, button { width: 90%; max-width: 500px; padding: 0.7rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    canvas { background: white; margin-top: 2rem; border-radius: 10px; }
+    .block { background: white; border-radius: 10px; margin: 1rem auto; max-width: 800px; padding: 1.5rem; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
 
-  <h1>🌽 AgriNexus 작물 진단 + PDF 리포트 + 관리자 인증 로그</h1>
+  <h1>🌱 AgriNexus 작물 모델 + 관리자 대시보드 + Functions</h1>
 
-  <div>
-    <input id="email" placeholder="관리자 이메일" />
-    <input id="password" type="password" placeholder="비밀번호" />
-    <button onclick="login()">🔐 로그인</button>
-    <div class="log" id="authStatus"></div>
+  <div class="block">
+    <h3>🔍 작물 모델 로드 (TFLite 변환 모델)</h3>
+    <button onclick="loadModel()">모델 로드</button>
+    <div id="modelStatus"></div>
   </div>
 
-  <div>
-    <input type="file" id="imageUpload" accept="image/*" />
-    <img id="preview" style="display:none;" />
-    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-    <input id="userEmail" placeholder="📧 보고서 수신 이메일" />
-    <button onclick="detectAndReport()">🔎 진단 + PDF 생성 + DB 저장</button>
-    <div class="log" id="resultLog"></div>
+  <div class="block">
+    <h3>📊 관리자 리포트 시각화 (Firebase)</h3>
+    <canvas id="reportChart" width="700" height="300"></canvas>
+  </div>
+
+  <div class="block">
+    <h3>☁️ Firebase Functions로 리포트 자동 처리</h3>
+    <input id="email" placeholder="이메일 입력" />
+    <input id="summary" placeholder="요약/코멘트 입력" />
+    <button onclick="sendToFunction()">보고서 Functions 호출</button>
+    <div id="fnStatus" style="color:#007c4d;"></div>
   </div>
 
   <script>
@@ -45,71 +47,46 @@
       projectId: "your-project"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
     const db = firebase.database();
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, pw)
-        .then(() => document.getElementById("authStatus").innerText = "✅ 관리자 로그인 성공")
-        .catch(err => document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message);
+    async function loadModel() {
+      const modelURL = "https://your-storage.com/tflite/converted-model/model.json";  // 실제 TFLite converted model
+      const model = await tf.loadGraphModel(modelURL);
+      document.getElementById("modelStatus").innerText = "✅ 작물 모델 로드 완료!";
     }
 
-    let model;
-    async function detectAndReport() {
-      const file = document.getElementById("imageUpload").files[0];
-      const email = document.getElementById("userEmail").value;
-      const img = document.getElementById("preview");
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
+    db.ref("reports").on("value", (snapshot) => {
+      const data = snapshot.val();
+      const labels = [], values = [];
+      for (const key in data) {
+        labels.push(new Date(data[key].time).toLocaleString());
+        values.push(data[key].summary?.length || 1);
+      }
+      const ctx = document.getElementById("reportChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "제출된 보고서 요약 길이",
+            data: values,
+            backgroundColor: "#007c4d"
+          }]
+        },
+        options: { responsive: true }
+      });
+    });
 
-      if (!file || !email) return alert("이미지 및 이메일 입력 필요");
-
-      const reader = new FileReader();
-      reader.onload = async () => {
-        img.src = reader.result;
-        img.onload = async () => {
-          canvas.style.display = "block";
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          if (!model) model = await cocoSsd.load(); // 향후 Corn/Tomato 전용 모델로 교체 가능
-
-          const predictions = await model.detect(canvas);
-          predictions.forEach(pred => {
-            ctx.strokeStyle = "#007c4d";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(...pred.bbox);
-            ctx.fillStyle = "#007c4d";
-            ctx.fillText(pred.class + " " + Math.round(pred.score * 100) + "%", pred.bbox[0], pred.bbox[1] - 5);
-          });
-
-          const timestamp = new Date().toISOString();
-          document.getElementById("resultLog").innerText = `진단 완료: ${predictions.length}건`;
-
-          // Firebase 저장
-          db.ref("diagnostics").push({
-            email,
-            count: predictions.length,
-            time: timestamp
-          });
-
-          // 이미지 → base64 for PDF
-          const imgData = canvas.toDataURL("image/png");
-
-          // PDF 생성
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          doc.text("🌽 AgriNexus 작물 이미지 진단 보고서", 20, 20);
-          doc.text("이메일: " + email, 20, 30);
-          doc.text("예측 수: " + predictions.length, 20, 40);
-          doc.text("진단 시각: " + timestamp, 20, 50);
-          doc.addImage(imgData, 'PNG', 20, 60, 160, 90);
-          doc.save("AgriNexus_Crop_Report.pdf");
-        };
-      };
-      reader.readAsDataURL(file);
-      img.style.display = "block";
+    async function sendToFunction() {
+      const email = document.getElementById("email").value;
+      const summary = document.getElementById("summary").value;
+      const res = await fetch("https://us-central1-your-project.cloudfunctions.net/processReport", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, summary, time: new Date().toISOString() })
+      });
+      const data = await res.json();
+      document.getElementById("fnStatus").innerText = "📩 처리 결과: " + data.status;
     }
   </script>
 

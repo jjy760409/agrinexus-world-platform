@@ -3,12 +3,9 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-exports.saveContract = functions.https.onRequest((req, res) => {
-  const content = req.body.content;
-  const ref = admin.database().ref("contracts").push();
-  ref.set({
-    content: content,
-    timestamp: new Date().toISOString()
-  });
-  res.json({ status: "OK", id: ref.key });
+exports.processReport = functions.https.onRequest((req, res) => {
+  const { email, summary, time } = req.body;
+  const ref = admin.database().ref("reports").push();
+  ref.set({ email, summary, time });
+  res.json({ status: "저장 완료", id: ref.key });
 });
