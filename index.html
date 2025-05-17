@@ -3,35 +3,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus 관리자 대시보드 + 추천 + 피드백 루프</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>AgriNexus 피드백 학습 + 재배 계획 추천</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f5f8fa; padding: 2rem; text-align: center; }
-    .section { margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
-    input, button, select { padding: 0.8rem; margin: 0.5rem; font-size: 1rem; border-radius: 6px; width: 90%; max-width: 500px; border: 1px solid #ccc; }
-    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    body { font-family: Arial; background: #f4f9fc; padding: 2rem; text-align: center; }
+    input, button, select { width: 90%; max-width: 500px; padding: 0.8rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    .section { background: white; border-radius: 12px; padding: 1.5rem; margin: 1rem auto; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
 
-  <h1>📊 AgriNexus 관리자 대시보드 + 추천 + 피드백 시스템</h1>
+  <h1>🌱 AgriNexus 피드백 학습 + 작물 추천 + 재배 계획</h1>
 
   <div class="section">
-    <h3>🧭 실시간 예측 결과 요약</h3>
-    <canvas id="summaryChart" width="700" height="300"></canvas>
-  </div>
-
-  <div class="section">
-    <h3>🌾 작물 추천 시스템 (이력 기반)</h3>
-    <button onclick="recommend()">추천 작물 보기</button>
-    <div id="recommendation" style="margin-top:1rem; font-weight:bold;"></div>
-  </div>
-
-  <div class="section">
-    <h3>🔁 예측 결과 피드백 입력</h3>
-    <select id="cropChoice">
+    <h3>🔁 작물 예측 결과 피드백 제출</h3>
+    <select id="crop">
       <option value="고추">고추</option>
       <option value="배추">배추</option>
       <option value="상추">상추</option>
@@ -40,8 +27,14 @@
       <option value="정확">정확</option>
       <option value="부정확">부정확</option>
     </select>
-    <button onclick="submitFeedback()">피드백 저장</button>
-    <div id="feedbackLog" style="margin-top:1rem; color:#007c4d;"></div>
+    <button onclick="submitFeedback()">피드백 제출</button>
+    <div id="status" style="margin-top:1rem; color:#007c4d;"></div>
+  </div>
+
+  <div class="section">
+    <h3>🌾 추천 작물 기반 재배 계획 자동 생성</h3>
+    <button onclick="generatePlan()">재배 계획 보기</button>
+    <div id="plan" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <script>
@@ -54,47 +47,31 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 요약 대시보드
-    db.ref("cropReports").on("value", snapshot => {
-      const data = snapshot.val();
-      const labels = {}, counts = {};
-      for (const key in data) {
-        const crop = data[key].result.split(" ")[0];
-        labels[crop] = (labels[crop] || 0) + 1;
-      }
-      const crops = Object.keys(labels);
-      const values = crops.map(c => labels[c]);
-      const ctx = document.getElementById("summaryChart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: crops,
-          datasets: [{ label: "예측된 작물 수", data: values, backgroundColor: "#007c4d" }]
-        },
-        options: { responsive: true }
-      });
-    });
+    async function submitFeedback() {
+      const crop = document.getElementById("crop").value;
+      const feedback = document.getElementById("feedback").value;
 
-    // 추천 시스템 (가장 예측된 작물)
-    function recommend() {
-      db.ref("cropReports").once("value").then(snapshot => {
-        const data = snapshot.val();
-        const freq = {};
-        for (const key in data) {
-          const crop = data[key].result.split(" ")[0];
-          freq[crop] = (freq[crop] || 0) + 1;
-        }
-        const best = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById("recommendation").innerText = `🌟 추천 작물: ${best[0]}`;
+      const res = await fetch("https://us-central1-your-project.cloudfunctions.net/processFeedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ crop, feedback, time: new Date().toISOString() })
       });
+      const data = await res.json();
+      document.getElementById("status").innerText = "✅ " + data.status;
     }
 
-    // 피드백 루프
-    function submitFeedback() {
-      const crop = document.getElementById("cropChoice").value;
-      const fb = document.getElementById("feedback").value;
-      db.ref("feedbacks").push({ crop, feedback: fb, time: new Date().toISOString() });
-      document.getElementById("feedbackLog").innerText = "✅ 피드백 저장 완료!";
+    function generatePlan() {
+      db.ref("feedbackSummary").once("value").then(snapshot => {
+        const data = snapshot.val() || {};
+        const mostRecommended = Object.entries(data).sort((a, b) => b[1] - a[1])[0];
+        const crop = mostRecommended ? mostRecommended[0] : "고추";
+        const plan = {
+          고추: "3월 파종, 5월 정식, 7~10월 수확, 배수 관리 철저",
+          배추: "8월 파종, 9월 정식, 10~11월 수확, 저온 관리 필요",
+          상추: "4~6월 파종, 6~8월 수확, 햇빛과 수분 조절"
+        };
+        document.getElementById("plan").innerText = `🌿 추천 작물: ${crop} → 재배 계획: ${plan[crop]}`;
+      });
     }
   </script>
 
