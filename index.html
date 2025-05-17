@@ -1,71 +1,58 @@
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus AI 계약 NFT 플랫폼</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>AgriNexus NFT + TTS + Firebase Platform</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f8f8f8; padding: 2rem; text-align: center; }
-    img { width: 200px; margin: 1rem auto; }
-    textarea, input, button { width: 100%; padding: 1rem; font-size: 1rem; margin: 0.5rem 0; border-radius: 6px; border: 1px solid #ccc; }
-    button { background-color: #007c4d; color: white; border: none; cursor: pointer; }
+    body { font-family: Arial; padding: 2rem; background: #f4f4f4; text-align: center; }
+    textarea, input, button { width: 100%; padding: 1rem; margin: 0.5rem 0; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <h1>📄 AgriNexus AI 계약 NFT 플랫폼</h1>
-  <img src="logo.png" alt="로고" />
-  <textarea id="contractText" rows="6" placeholder="계약서 내용을 입력하세요..."></textarea>
-  <input type="text" id="recipient" placeholder="계약서 수신자 이메일 주소" />
-  <button onclick="createPDF()">📥 계약서 PDF 생성 + NFT 카드 시각화</button>
+  <h1>🌐 AgriNexus 계약 NFT + 음성 안내 + Firebase 배포 플랫폼</h1>
 
-  <div id="output" style="margin-top:2rem;"></div>
+  <textarea id="contractText" placeholder="계약 내용을 입력하세요..." rows="6"></textarea>
+  <input id="recipient" placeholder="NFT 발행 대상 주소 (0x...)" />
+  <button onclick="mintNFT()">🪙 NFT 발행 (Polygon)</button>
+  <button onclick="playVoice()">🔊 AI 음성으로 안내</button>
+
+  <div id="result" style="margin-top:2rem;"></div>
 
   <script>
-    const { jsPDF } = window.jspdf;
-
-    async function createPDF() {
-      const text = document.getElementById("contractText").value;
+    async function mintNFT() {
       const recipient = document.getElementById("recipient").value;
-      const doc = new jsPDF();
+      const contractText = document.getElementById("contractText").value;
+      const web3 = new Web3(window.ethereum);
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await web3.eth.getAccounts();
+      const from = accounts[0];
 
-      // 로고
-      const logoImg = new Image();
-      logoImg.src = "logo.png";
+      const contract = new web3.eth.Contract(
+        [{"inputs":[{"internalType":"string","name":"uri","type":"string"},{"internalType":"address","name":"to","type":"address"}],"name":"mintNFT","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+        "YOUR_CONTRACT_ADDRESS"
+      );
 
-      // 캐릭터
-      const charImg = new Image();
-      charImg.src = "ai_character.png";
+      try {
+        const uri = "https://your-nft-storage.com/meta/" + Date.now();
+        await contract.methods.mintNFT(uri, recipient).send({ from });
+        document.getElementById("result").innerText = "✅ NFT 발행 완료!";
+      } catch (err) {
+        console.error(err);
+        document.getElementById("result").innerText = "❌ NFT 발행 실패!";
+      }
+    }
 
-      logoImg.onload = () => {
-        doc.addImage(logoImg, "PNG", 150, 10, 40, 20);
-        charImg.onload = () => {
-          doc.addImage(charImg, "PNG", 10, 260, 30, 30);
-          doc.setFontSize(12);
-          doc.text("AgriNexus 계약서", 20, 30);
-          doc.text(`수신자: ${recipient}`, 20, 40);
-          const lines = doc.splitTextToSize(text, 170);
-          doc.text(lines, 20, 50);
-          doc.save("AgriNexus_Contract_with_Logo.pdf");
-        };
-      };
-
-      // NFT 시각화 카드
-      const nftCard = `
-        <div style="border:2px solid #007c4d; padding:1rem; background:#fff; border-radius:10px; max-width:400px; margin:1rem auto;">
-          <img src="ai_character.png" style="width:80px;"><br/>
-          <strong>📄 계약 NFT</strong><br/>
-          수신자: ${recipient}<br/>
-          고유번호: AGX-${Date.now().toString().slice(-6)}<br/>
-          <small>시각화 전용 카드로 블록체인 발행 가능</small>
-        </div>
-      `;
-      document.getElementById("output").innerHTML = nftCard;
-
-      // 캐릭터 음성 출력
-      const voice = new SpeechSynthesisUtterance(`AgriNexus 계약서가 생성되었습니다. 수신자는 ${recipient}입니다.`);
+    function playVoice() {
+      const contract = document.getElementById("contractText").value;
+      const voice = new SpeechSynthesisUtterance(contract);
       voice.lang = "ko-KR";
+      voice.pitch = 1;
+      voice.rate = 1;
+      voice.voice = speechSynthesis.getVoices().find(v => v.lang.includes('ko'));
       speechSynthesis.speak(voice);
     }
   </script>
