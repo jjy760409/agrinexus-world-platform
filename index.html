@@ -2,98 +2,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus Full AI + Admin Report Management</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <meta charset="UTF-8" />
+  <title>AgriNexus 실시간 이미지 작물 예측 + Netlify 배포</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
   <style>
-    body { font-family: Arial; background: #f0f8ff; text-align: center; padding: 2rem; }
-    input, button, textarea { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 700px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
+    body { font-family: Arial; text-align: center; background: #f4f9fc; padding: 2rem; }
+    input, button { padding: 1rem; width: 90%; max-width: 500px; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    img, canvas { max-width: 100%; margin-top: 1rem; border-radius: 8px; }
+    .result { color: #007c4d; font-weight: bold; margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-  <h1>🌿 AgriNexus 작물 예측 + 관리자 승인 + PDF 자동화</h1>
+  <h1>🌱 AgriNexus 실시간 작물 이미지 예측</h1>
 
-  <div class="section">
-    <h3>🌾 TFLite 다중 작물 분류 (예시)</h3>
-    <button onclick="runMultiPrediction()">작물 분류 실행</button>
-    <div id="multiPrediction" style="margin-top:1rem;"></div>
-  </div>
+  <input type="file" id="imgUpload" accept="image/*" />
+  <img id="preview" style="display:none;" />
+  <button onclick="predict()">🔍 AI 예측 실행</button>
 
-  <div class="section">
-    <h3>📝 관리자 리포트 승인 + 댓글 시스템</h3>
-    <input id="reportId" placeholder="리포트 ID 입력" />
-    <textarea id="adminComment" placeholder="관리자 코멘트 입력"></textarea>
-    <button onclick="approveReport()">승인 및 저장</button>
-    <div id="adminStatus" style="color:#007c4d;"></div>
-  </div>
-
-  <div class="section">
-    <h3>📄 PDF 생성 및 이메일 자동 전송</h3>
-    <input id="email" placeholder="수신 이메일" />
-    <textarea id="summary" placeholder="요약 내용 입력 (보고서 내용 포함)"></textarea>
-    <button onclick="createAndEmail()">PDF 생성 + 메일 전송</button>
-    <div id="emailStatus" style="color:#007c4d;"></div>
-  </div>
+  <div class="result" id="output">결과: 없음</div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    let model;
 
-    async function runMultiPrediction() {
-      const values = tf.tensor2d([[30, 50, 25]]); // 예: light, water, temp
-      const weights = tf.tensor2d([[0.5, 0.3, 0.2], [0.2, 0.5, 0.3], [0.1, 0.4, 0.5]]);
-      const prediction = values.matMul(weights);
-      const result = await prediction.array();
-      const crops = ["고추", "벼", "토마토"];
-      const best = crops[result[0].indexOf(Math.max(...result[0]))];
-      document.getElementById("multiPrediction").innerText = `🌾 AI 추천 작물: ${best}`;
-    }
+    async function predict() {
+      const file = document.getElementById("imgUpload").files[0];
+      if (!file) return alert("이미지를 선택해주세요.");
 
-    function approveReport() {
-      const id = document.getElementById("reportId").value;
-      const comment = document.getElementById("adminComment").value;
-      db.ref("reports/" + id + "/approval").set({
-        approved: true,
-        comment: comment,
-        time: new Date().toISOString()
-      });
-      document.getElementById("adminStatus").innerText = "✅ 승인 및 코멘트 저장됨!";
-    }
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const img = document.getElementById("preview");
+        img.src = reader.result;
+        img.style.display = "block";
 
-    async function createAndEmail() {
-      const { jsPDF } = window.jspdf;
-      const email = document.getElementById("email").value;
-      const summary = document.getElementById("summary").value;
-      const time = new Date().toLocaleString();
+        if (!model) {
+          model = await mobilenet.load();
+        }
 
-      const doc = new jsPDF();
-      doc.text("🌿 AgriNexus 작물 예측 리포트", 20, 20);
-      doc.text("수신자: " + email, 20, 40);
-      doc.text("요약: " + summary, 20, 50);
-      doc.text("생성 시각: " + time, 20, 60);
-      const blob = doc.output("blob");
-
-      const formData = new FormData();
-      formData.append("pdf", blob, "crop_report.pdf");
-      formData.append("email", email);
-
-      await fetch("https://your-server.com/send-report", {
-        method: "POST",
-        body: formData
-      });
-
-      document.getElementById("emailStatus").innerText = "📩 메일 전송 완료!";
+        img.onload = async () => {
+          const result = await model.classify(img);
+          document.getElementById("output").innerText =
+            result.length ? `결과: ${result[0].className} (${(result[0].probability * 100).toFixed(2)}%)` : "예측 실패";
+        };
+      };
+      reader.readAsDataURL(file);
     }
   </script>
 
