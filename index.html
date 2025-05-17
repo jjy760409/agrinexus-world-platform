@@ -3,63 +3,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus AI 작물 추천 + 위성 예측 대시보드</title>
+  <title>AgriNexus AI 통합 플랫폼</title>
   <style>
-    body { font-family: Arial; background: #eef4f6; padding: 2rem; text-align: center; }
-    input, select, button { padding: 0.7rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; width: 80%; }
-    .section { background: white; padding: 1.5rem; border-radius: 12px; margin: 1rem auto; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .output { color: #007c4d; margin-top: 1rem; font-size: 1.1rem; }
-    iframe { border: 0; width: 100%; height: 300px; margin-top: 1rem; }
+    body { font-family: Arial; background: #f3f8fa; text-align: center; padding: 2rem; }
+    .btnbar { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+    button { padding: 1rem 1.5rem; font-size: 1rem; border: none; border-radius: 8px; background: #007c4d; color: white; cursor: pointer; }
+    iframe, .block { max-width: 900px; margin: 1rem auto; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .block h3 { color: #007c4d; }
   </style>
 </head>
 <body>
 
-  <h1>🌾 AgriNexus AI 작물 추천 + 위성 기반 수확 예측</h1>
+  <h1>🌎 AgriNexus AI 기반 스마트팜 통합 플랫폼</h1>
 
-  <div class="section">
-    <h2>① 위치 및 조건 입력</h2>
-    위도: <input id="lat" type="number" step="0.01" value="36.5" /><br/>
-    경도: <input id="lon" type="number" step="0.01" value="127.5" /><br/>
-    토양 유형:
-    <select id="soil">
-      <option value="loam">Loam</option>
-      <option value="clay">Clay</option>
-      <option value="sandy">Sandy</option>
-    </select><br/>
-    최근 강수량 (mm): <input id="rain" type="number" value="40" /><br/>
-    최근 기온 (°C): <input id="temp" type="number" value="24" /><br/>
-    <button onclick="recommend()">🌱 작물 추천</button>
-    <div class="output" id="recommendOut"></div>
+  <div class="btnbar">
+    <button onclick="showBlock('gaia')">🌌 Gaia 좌표 시각화</button>
+    <button onclick="showBlock('satellite')">🛰 Sentinel NDVI 분석</button>
+    <button onclick="showBlock('ml')">🤖 작물 예측 (TensorFlow)</button>
+    <button onclick="showBlock('firebase')">📊 Firebase 관리자 리포트</button>
   </div>
 
-  <div class="section">
-    <h2>② 위성 영상 시뮬레이션 (데모)</h2>
-    <iframe src="https://apps.sentinel-hub.com/eo-browser/" title="Sentinel Viewer"></iframe>
+  <div id="gaia" class="block" style="display:none;">
+    <h3>Gaia 기반 스마트팜 위치 시각화</h3>
+    <iframe src="https://agrinexus.world/gaia-sky.html" width="100%" height="400"></iframe>
   </div>
 
-  <div class="section">
-    <h2>③ AI 수확량 예측 (데모 모델)</h2>
-    <button onclick="predict()">📈 수확량 예측 실행</button>
-    <div class="output" id="yieldOut"></div>
+  <div id="satellite" class="block" style="display:none;">
+    <h3>Sentinel 기반 NDVI 실시간 분석</h3>
+    <iframe src="https://apps.sentinel-hub.com/eo-browser" width="100%" height="400"></iframe>
+  </div>
+
+  <div id="ml" class="block" style="display:none;">
+    <h3>TensorFlow 기반 AI 작물 수확 예측</h3>
+    <iframe src="https://tfhub.dev/google/tfjs-model/efficientnet/lite0/classification/1" width="100%" height="300"></iframe>
+  </div>
+
+  <div id="firebase" class="block" style="display:none;">
+    <h3>Firebase 관리자 리포트 자동화</h3>
+    <iframe src="https://console.firebase.google.com/project" width="100%" height="400"></iframe>
   </div>
 
   <script>
-    function recommend() {
-      const soil = document.getElementById("soil").value;
-      const rain = parseFloat(document.getElementById("rain").value);
-      const temp = parseFloat(document.getElementById("temp").value);
-
-      let crop = "옥수수";
-      if (soil === "clay" && rain > 60) crop = "벼";
-      else if (soil === "sandy" && temp > 25) crop = "고구마";
-      else if (soil === "loam" && temp > 20) crop = "토마토";
-
-      document.getElementById("recommendOut").innerText = `✅ AI 추천 작물: ${crop}`;
-    }
-
-    function predict() {
-      const rand = (Math.random() * 8 + 2).toFixed(1);
-      document.getElementById("yieldOut").innerText = `예상 수확량: ${rand} 톤/ha`;
+    function showBlock(id) {
+      const blocks = document.querySelectorAll(".block");
+      blocks.forEach(b => b.style.display = "none");
+      document.getElementById(id).style.display = "block";
     }
   </script>
 
