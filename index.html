@@ -2,41 +2,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus 사용자 추천 그래프 + 알림 연동</title>
+  <meta charset="UTF-8" />
+  <title>AgriNexus 권한별 알림 + GPT 자동 생성</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f6f9fc; padding: 2rem; text-align: center; }
-    input, button { padding: 0.8rem; width: 90%; max-width: 500px; font-size: 1rem; margin: 0.4rem; border-radius: 6px; border: 1px solid #ccc; }
-    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
-    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 800px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    body { font-family: Arial; background: #f3f9fc; text-align: center; padding: 2rem; }
+    input, button, textarea { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.4rem; border-radius: 6px; border: 1px solid #ccc; }
+    .admin-only { display: none; background: white; padding: 1rem; margin: 1rem auto; border-radius: 12px; max-width: 800px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+    canvas { margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-  <h1>🌿 AgriNexus 사용자 히스토리 + 알림 연동</h1>
+  <h1>🔐 AgriNexus 권한 기반 알림 시스템 + GPT 자동 메시지</h1>
 
-  <div class="section">
-    <h3>🔐 사용자 로그인 (Firebase Auth)</h3>
-    <input id="email" placeholder="이메일" />
-    <input id="password" type="password" placeholder="비밀번호" />
-    <button onclick="login()">로그인</button>
-    <div id="authStatus" style="margin-top:1rem; color:#007c4d;"></div>
+  <input id="email" placeholder="이메일" />
+  <input id="password" type="password" placeholder="비밀번호" />
+  <button onclick="login()">로그인</button>
+  <div id="authStatus" style="color:#007c4d; margin-top:1rem;"></div>
+
+  <div class="admin-only" id="adminPanel">
+    <h3>📊 알림 전송 이력 시각화</h3>
+    <canvas id="alertChart" width="700" height="300"></canvas>
   </div>
 
-  <div class="section">
-    <h3>📊 사용자별 추천 결과 히스토리</h3>
-    <canvas id="historyChart" width="700" height="300"></canvas>
-  </div>
-
-  <div class="section">
-    <h3>📩 메일 / SMS 실 발송 (SendGrid, Twilio 구조)</h3>
-    <input id="msg" placeholder="알림 메시지 입력" />
-    <button onclick="sendAlert()">알림 전송</button>
-    <div id="alertStatus" style="margin-top:1rem; color:#007c4d;"></div>
+  <div class="admin-only" id="gptPanel">
+    <h3>🧠 GPT 기반 자동 알림 콘텐츠 생성 (예시)</h3>
+    <textarea id="topic" placeholder="알림 주제 입력 (예: 수분 부족 경고)"></textarea>
+    <button onclick="generateMessage()">자동 메시지 생성</button>
+    <div id="gptMessage" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <script>
@@ -50,39 +47,41 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    let currentUser = null;
-
     function login() {
       const email = document.getElementById("email").value;
       const pw = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, pw)
-        .then(user => {
-          currentUser = user.user;
-          document.getElementById("authStatus").innerText = "✅ 로그인 성공";
-          loadChart();
-        })
-        .catch(err => {
-          document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message;
-        });
+
+      auth.signInWithEmailAndPassword(email, pw).then((cred) => {
+        document.getElementById("authStatus").innerText = "✅ 로그인 성공: " + email;
+        const isAdmin = email.includes("admin"); // 간단한 권한 구분
+        if (isAdmin) {
+          document.getElementById("adminPanel").style.display = "block";
+          document.getElementById("gptPanel").style.display = "block";
+          loadAlertLogs();
+        }
+      }).catch(err => {
+        document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message;
+      });
     }
 
-    function loadChart() {
-      db.ref("cropReports").orderByChild("email").equalTo(currentUser.email).once("value").then(snapshot => {
+    function loadAlertLogs() {
+      db.ref("alerts").once("value").then(snapshot => {
         const data = snapshot.val() || {};
-        const labels = [], counts = {};
+        const labels = [], statuses = [];
         for (const key in data) {
-          const crop = data[key].result.split(" ")[0];
-          counts[crop] = (counts[crop] || 0) + 1;
+          labels.push(new Date(data[key].time).toLocaleString());
+          statuses.push(data[key].status === "성공" ? 1 : 0);
         }
-        const ctx = document.getElementById("historyChart").getContext("2d");
+        const ctx = document.getElementById("alertChart").getContext("2d");
         new Chart(ctx, {
-          type: "bar",
+          type: "line",
           data: {
-            labels: Object.keys(counts),
+            labels,
             datasets: [{
-              label: "예측된 작물 수",
-              data: Object.values(counts),
-              backgroundColor: "#007c4d"
+              label: "전송 성공 여부 (1=성공, 0=실패)",
+              data: statuses,
+              borderColor: "#007c4d",
+              fill: false
             }]
           },
           options: { responsive: true }
@@ -90,15 +89,10 @@
       });
     }
 
-    async function sendAlert() {
-      const message = document.getElementById("msg").value;
-      const res = await fetch("https://your-server.com/send-alert", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email, message })
-      });
-      const data = await res.json();
-      document.getElementById("alertStatus").innerText = "📩 알림 상태: " + data.status;
+    function generateMessage() {
+      const topic = document.getElementById("topic").value;
+      const message = `🚨 AgriNexus 알림: "${topic}" 상황이 감지되었습니다. 빠른 조치 바랍니다.`;
+      document.getElementById("gptMessage").innerText = message;
     }
   </script>
 
