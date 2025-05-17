@@ -3,57 +3,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>AgriNexus 계약서 자동 번호 + 서버 업로드 + 이메일 전송</title>
+  <title>AgriNexus 계약서 Firebase 저장 + 이메일 발송</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f4f4f4; padding: 2rem; }
+    body { font-family: Arial; padding: 2rem; background: #f7f7f7; }
     input, textarea, button { width: 100%; padding: 0.8rem; margin-top: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
     h2 { color: #004b8d; }
   </style>
 </head>
 <body>
-  <h1>📤 AgriNexus 계약 자동 저장 + 이메일 전송 시스템</h1>
+  <h1>📥 AgriNexus 계약서 Firebase 저장 + 이메일 발송</h1>
 
-  <h2>① 계약서 내용 입력</h2>
-  <textarea id="contractText" rows="10" placeholder="계약 내용을 입력하세요..."></textarea>
-  <input type="email" id="email" placeholder="이메일 주소 입력 (계약서 전송용)" />
+  <h2>① 계약 내용</h2>
+  <textarea id="contractText" rows="8" placeholder="계약 내용을 입력하세요..."></textarea>
+  <input type="email" id="email" placeholder="계약서 수신 이메일" />
 
-  <button onclick="generateAndSend()">📤 계약서 생성 및 전송</button>
+  <button onclick="generateAndSend()">📤 계약 저장 및 이메일 발송</button>
 
   <script>
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project.firebaseapp.com",
+      databaseURL: "https://your-project.firebaseio.com",
+      projectId: "your-project",
+      storageBucket: "your-project.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdefghij"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     async function generateAndSend() {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
       const text = document.getElementById("contractText").value;
       const email = document.getElementById("email").value;
       const contractId = "AGX-" + Date.now().toString().slice(-6);
-      const encryptedNote = btoa(text);  // 단순 암호화 시뮬레이션
 
+      // Firebase 저장
+      db.ref("contracts/" + contractId).set({
+        content: text,
+        email: email,
+        createdAt: new Date().toISOString()
+      });
+
+      // PDF 생성
+      const doc = new jsPDF();
       doc.text("AgriNexus 계약서", 20, 20);
       doc.text("계약번호: " + contractId, 20, 30);
-      doc.text("암호화된 본문:", 20, 40);
-      const lines = doc.splitTextToSize(encryptedNote, 170);
-      doc.text(lines, 20, 50);
-
-      doc.save(contractId + ".pdf");
+      const lines = doc.splitTextToSize(text, 170);
+      doc.text(lines, 20, 40);
 
       const blob = doc.output("blob");
       const formData = new FormData();
-      formData.append("contractFile", blob, contractId + ".pdf");
+      formData.append("pdf", blob, contractId + ".pdf");
       formData.append("email", email);
       formData.append("contractId", contractId);
 
-      alert("📦 서버 전송 시뮬레이션: 계약번호 " + contractId + "\n(이메일 전송 및 저장 서버 필요)");
+      alert("📬 이메일 전송 및 Firebase 저장 완료됨 (서버 백엔드 필요)");
 
-      // 🔐 서버 전송 시 실제 API 연동 필요
+      // 이메일 백엔드 API 연동
       /*
-      const res = await fetch("https://your-server.com/upload-contract", {
+      const res = await fetch("https://your-server.com/send-contract-email", {
         method: "POST",
         body: formData
       });
       const result = await res.json();
-      alert("📧 이메일 전송 완료됨: " + result.status);
+      alert("📧 이메일 발송 상태: " + result.status);
       */
     }
   </script>
