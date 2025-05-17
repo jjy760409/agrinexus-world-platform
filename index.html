@@ -2,28 +2,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus Custom Crop Model + PDF + Firebase</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <title>AgriNexus 관리자 대시보드 + 추천 + 피드백 루프</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; text-align: center; background: #f2f7f9; padding: 2rem; }
-    input, button { padding: 1rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    img { margin-top: 1rem; max-width: 100%; border-radius: 10px; }
-    .log { color: #007c4d; margin-top: 1rem; font-weight: bold; }
+    body { font-family: Arial; background: #f5f8fa; padding: 2rem; text-align: center; }
+    .section { margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
+    input, button, select { padding: 0.8rem; margin: 0.5rem; font-size: 1rem; border-radius: 6px; width: 90%; max-width: 500px; border: 1px solid #ccc; }
+    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>🌾 AgriNexus Custom 작물 예측 + PDF 리포트 + Firebase 연동</h1>
+  <h1>📊 AgriNexus 관리자 대시보드 + 추천 + 피드백 시스템</h1>
 
-  <input type="file" id="imgUpload" accept="image/*" />
-  <img id="preview" style="display:none;" />
-  <input id="email" placeholder="📧 수신자 이메일" />
-  <button onclick="predictAndSend()">🔍 예측 + 저장 + PDF + 메일</button>
-  <div class="log" id="output"></div>
+  <div class="section">
+    <h3>🧭 실시간 예측 결과 요약</h3>
+    <canvas id="summaryChart" width="700" height="300"></canvas>
+  </div>
+
+  <div class="section">
+    <h3>🌾 작물 추천 시스템 (이력 기반)</h3>
+    <button onclick="recommend()">추천 작물 보기</button>
+    <div id="recommendation" style="margin-top:1rem; font-weight:bold;"></div>
+  </div>
+
+  <div class="section">
+    <h3>🔁 예측 결과 피드백 입력</h3>
+    <select id="cropChoice">
+      <option value="고추">고추</option>
+      <option value="배추">배추</option>
+      <option value="상추">상추</option>
+    </select>
+    <select id="feedback">
+      <option value="정확">정확</option>
+      <option value="부정확">부정확</option>
+    </select>
+    <button onclick="submitFeedback()">피드백 저장</button>
+    <div id="feedbackLog" style="margin-top:1rem; color:#007c4d;"></div>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -35,59 +54,47 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let model;
+    // 요약 대시보드
+    db.ref("cropReports").on("value", snapshot => {
+      const data = snapshot.val();
+      const labels = {}, counts = {};
+      for (const key in data) {
+        const crop = data[key].result.split(" ")[0];
+        labels[crop] = (labels[crop] || 0) + 1;
+      }
+      const crops = Object.keys(labels);
+      const values = crops.map(c => labels[c]);
+      const ctx = document.getElementById("summaryChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: crops,
+          datasets: [{ label: "예측된 작물 수", data: values, backgroundColor: "#007c4d" }]
+        },
+        options: { responsive: true }
+      });
+    });
 
-    async function predictAndSend() {
-      const file = document.getElementById("imgUpload").files[0];
-      const email = document.getElementById("email").value;
-      const img = document.getElementById("preview");
-
-      if (!file || !email) return alert("이미지 및 이메일을 입력하세요.");
-
-      const reader = new FileReader();
-      reader.onload = async () => {
-        img.src = reader.result;
-        img.style.display = "block";
-
-        if (!model) {
-          model = await tf.loadGraphModel("https://your-storage.com/models/crop-detect/model.json");
+    // 추천 시스템 (가장 예측된 작물)
+    function recommend() {
+      db.ref("cropReports").once("value").then(snapshot => {
+        const data = snapshot.val();
+        const freq = {};
+        for (const key in data) {
+          const crop = data[key].result.split(" ")[0];
+          freq[crop] = (freq[crop] || 0) + 1;
         }
+        const best = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById("recommendation").innerText = `🌟 추천 작물: ${best[0]}`;
+      });
+    }
 
-        img.onload = async () => {
-          const tensor = tf.browser.fromPixels(img).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
-          const prediction = model.predict(tensor);
-          const arr = await prediction.data();
-          const crops = ["고추", "배추", "상추"];
-          const maxIdx = arr.indexOf(Math.max(...arr));
-          const resultText = `${crops[maxIdx]} (${(arr[maxIdx] * 100).toFixed(2)}%)`;
-
-          document.getElementById("output").innerText = "🌱 예측 결과: " + resultText;
-
-          // Firebase 저장
-          db.ref("cropReports").push({ email, result: resultText, time: new Date().toISOString() });
-
-          // PDF 생성
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          doc.text("🌿 AgriNexus 작물 예측 보고서", 20, 20);
-          doc.text("수신자: " + email, 20, 40);
-          doc.text("예측 결과: " + resultText, 20, 50);
-          doc.text("생성 시각: " + new Date().toLocaleString(), 20, 60);
-
-          const blob = doc.output("blob");
-          const formData = new FormData();
-          formData.append("pdf", blob, "crop_report.pdf");
-          formData.append("email", email);
-
-          await fetch("https://your-server.com/send-report", {
-            method: "POST",
-            body: formData
-          });
-
-          document.getElementById("output").innerText += " ✅ PDF 메일 전송 완료!";
-        };
-      };
-      reader.readAsDataURL(file);
+    // 피드백 루프
+    function submitFeedback() {
+      const crop = document.getElementById("cropChoice").value;
+      const fb = document.getElementById("feedback").value;
+      db.ref("feedbacks").push({ crop, feedback: fb, time: new Date().toISOString() });
+      document.getElementById("feedbackLog").innerText = "✅ 피드백 저장 완료!";
     }
   </script>
 
