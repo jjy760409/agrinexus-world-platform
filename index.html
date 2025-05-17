@@ -4,44 +4,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgriNexus AI Platform</title>
+  <title>AgriNexus AI Platform - Contracts + Voice</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; padding-bottom: 100px; }
-    header { background: #004b8d; color: white; padding: 2rem; text-align: center; }
-    section { padding: 2rem; }
-    h1 { margin: 0; }
+    body { font-family: Arial; padding: 2rem; background: #f9f9f9; }
+    h1 { color: #004b8d; }
     textarea, button { width: 100%; padding: 1rem; margin-top: 1rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
     #response { white-space: pre-wrap; background: #fff; padding: 1rem; border-radius: 8px; margin-top: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .links a { display: inline-block; margin: 10px 10px 0 0; padding: 0.5rem 1rem; background: #eee; border-radius: 6px; text-decoration: none; color: #004b8d; }
-    footer { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>AgriNexus AI Platform</h1>
-    <p>💬 GPT 기반 자동화 명령 시스템</p>
-  </header>
+  <h1>🧠 AgriNexus AI + 계약서 자동 작성 + 음성 응답</h1>
 
-  <section>
-    <h2>🧠 NexusBot에게 물어보세요</h2>
-    <textarea id="userInput" placeholder="예: 계약서 작성해줘, 글로벌 펀드 알려줘, 보고서 요약해줘 등..."></textarea>
-    <button onclick="askGPT()">전송</button>
-    <div id="response">GPT 응답이 여기에 표시됩니다...</div>
-  </section>
-
-  <section class="links">
-    <h2>🔗 기능 바로가기</h2>
-    <a href="contract.html">계약서 자동화</a>
-    <a href="report.html">보고서 생성</a>
-    <a href="funding.html">펀드 매칭</a>
-    <a href="satellite.html">위성 시각화</a>
-    <a href="admin.html">관리자 대시보드</a>
-  </section>
-
-  <footer>
-    AgriNexus World © AI 통합 자동화 시스템
-  </footer>
+  <textarea id="userInput" placeholder="예: 계약서 작성해줘, 투자 제안서 만들어줘 등..."></textarea>
+  <button onclick="askGPT()">GPT에게 요청</button>
+  <div id="response">GPT 응답이 여기에 표시됩니다...</div>
+  <button onclick="generatePDF()">📄 계약서(PDF) 자동 생성</button>
 
   <script>
     async function askGPT() {
@@ -61,10 +39,29 @@
           })
         });
         const data = await res.json();
-        resBox.innerText = data.choices[0].message.content;
+        const reply = data.choices[0].message.content;
+        resBox.innerText = reply;
+
+        // 음성 출력 (다국어 지원)
+        const utterance = new SpeechSynthesisUtterance(reply);
+        utterance.lang = navigator.language || "en-US";
+        speechSynthesis.speak(utterance);
+
+        // PDF 저장용 텍스트 설정
+        window.latestResponse = reply;
       } catch (e) {
-        resBox.innerText = "❌ 오류: " + e.message;
+        resBox.innerText = "❌ 오류 발생: " + e.message;
       }
+    }
+
+    function generatePDF() {
+      const text = window.latestResponse || document.getElementById("response").innerText;
+      const blob = new Blob([text], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "AgriNexus_Contract.pdf";
+      link.click();
     }
   </script>
 </body>
