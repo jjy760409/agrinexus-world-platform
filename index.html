@@ -3,30 +3,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 작물 진단 + PDF 보고서 + Firebase 저장</title>
+  <title>AgriNexus Crop AI + PDF with Image + Auth Logs</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f8f9fa; text-align: center; padding: 2rem; }
-    input, button { padding: 0.8rem; width: 90%; max-width: 500px; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    canvas, img { max-width: 100%; margin-top: 1rem; border-radius: 8px; }
-    .log { color: #007c4d; font-weight: bold; margin-top: 1rem; }
+    body { font-family: Arial; background: #f3f7f9; text-align: center; padding: 2rem; }
+    input, button { width: 90%; max-width: 500px; padding: 0.8rem; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+    canvas, img { margin-top: 1rem; max-width: 100%; border-radius: 8px; }
+    .log { color: #007c4d; margin-top: 1rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h1>🌿 AgriNexus 작물 이미지 진단 + PDF 보고서 + Firebase 저장</h1>
+  <h1>🌽 AgriNexus 작물 진단 + PDF 리포트 + 관리자 인증 로그</h1>
 
-  <input type="file" id="imageUpload" accept="image/*" />
-  <img id="preview" style="display:none;" />
-  <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-  <input id="email" placeholder="📧 보고서 전송 이메일 입력" />
-  <button onclick="detectAndReport()">🔎 진단 + PDF 생성 + 저장</button>
+  <div>
+    <input id="email" placeholder="관리자 이메일" />
+    <input id="password" type="password" placeholder="비밀번호" />
+    <button onclick="login()">🔐 로그인</button>
+    <div class="log" id="authStatus"></div>
+  </div>
 
-  <div class="log" id="resultLog"></div>
+  <div>
+    <input type="file" id="imageUpload" accept="image/*" />
+    <img id="preview" style="display:none;" />
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <input id="userEmail" placeholder="📧 보고서 수신 이메일" />
+    <button onclick="detectAndReport()">🔎 진단 + PDF 생성 + DB 저장</button>
+    <div class="log" id="resultLog"></div>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -36,17 +45,26 @@
       projectId: "your-project"
     };
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.database();
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const pw = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, pw)
+        .then(() => document.getElementById("authStatus").innerText = "✅ 관리자 로그인 성공")
+        .catch(err => document.getElementById("authStatus").innerText = "❌ 로그인 실패: " + err.message);
+    }
 
     let model;
     async function detectAndReport() {
       const file = document.getElementById("imageUpload").files[0];
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("userEmail").value;
       const img = document.getElementById("preview");
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
 
-      if (!file || !email) return alert("이미지와 이메일을 입력해주세요.");
+      if (!file || !email) return alert("이미지 및 이메일 입력 필요");
 
       const reader = new FileReader();
       reader.onload = async () => {
@@ -55,7 +73,7 @@
           canvas.style.display = "block";
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          if (!model) model = await cocoSsd.load(); // 교체 가능
+          if (!model) model = await cocoSsd.load(); // 향후 Corn/Tomato 전용 모델로 교체 가능
 
           const predictions = await model.detect(canvas);
           predictions.forEach(pred => {
@@ -67,36 +85,27 @@
           });
 
           const timestamp = new Date().toISOString();
-          const resultText = `예측 수: ${predictions.length}, 시각: ${timestamp}`;
-          document.getElementById("resultLog").innerText = resultText;
+          document.getElementById("resultLog").innerText = `진단 완료: ${predictions.length}건`;
 
           // Firebase 저장
           db.ref("diagnostics").push({
             email,
-            predictionCount: predictions.length,
+            count: predictions.length,
             time: timestamp
           });
+
+          // 이미지 → base64 for PDF
+          const imgData = canvas.toDataURL("image/png");
 
           // PDF 생성
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF();
-          doc.text("🌿 AgriNexus 작물 이미지 진단 리포트", 20, 20);
+          doc.text("🌽 AgriNexus 작물 이미지 진단 보고서", 20, 20);
           doc.text("이메일: " + email, 20, 30);
           doc.text("예측 수: " + predictions.length, 20, 40);
-          doc.text("발행 시각: " + timestamp, 20, 50);
-          doc.save("AgriNexus_Detection_Report.pdf");
-
-          // 서버로 전송 (선택)
-          /*
-          const blob = doc.output("blob");
-          const formData = new FormData();
-          formData.append("pdf", blob, "report.pdf");
-          formData.append("email", email);
-          await fetch("https://your-server.com/send-report", {
-            method: "POST",
-            body: formData
-          });
-          */
+          doc.text("진단 시각: " + timestamp, 20, 50);
+          doc.addImage(imgData, 'PNG', 20, 60, 160, 90);
+          doc.save("AgriNexus_Crop_Report.pdf");
         };
       };
       reader.readAsDataURL(file);
