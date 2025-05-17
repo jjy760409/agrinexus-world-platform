@@ -3,107 +3,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus Full AI Platform (Auth + PDF + TFLite + Report)</title>
+  <title>AgriNexus Netlify + Logs + 이미지 진단</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
   <style>
-    body { font-family: Arial; background: #f0f5f9; padding: 2rem; text-align: center; }
-    input, button, select { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; margin: 1rem auto; max-width: 700px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); }
+    body { font-family: Arial; background: #f5fafd; padding: 2rem; text-align: center; }
+    input, button { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
+    canvas, img { margin-top: 1rem; max-width: 100%; border-radius: 8px; }
+    .log { color: #007c4d; margin-top: 1rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h1>🌱 AgriNexus AI 플랫폼 (PDF + 인증 + 작물 AI + 보고서)</h1>
+  <h1>🚀 AgriNexus Netlify 플랫폼 + 보고서 로그 + 이미지 AI 진단</h1>
 
-  <div class="section">
-    <h3>🔐 관리자 로그인 (Firebase Auth)</h3>
-    <input id="email" placeholder="이메일 입력" />
-    <input id="password" type="password" placeholder="비밀번호 입력" />
-    <button onclick="login()">로그인</button>
-    <div id="authStatus" style="color:#007c4d; margin-top:0.5rem;"></div>
+  <div>
+    <h3>📄 보고서 다운로드 로그 분석</h3>
+    <button onclick="logDownload()">📥 보고서 다운로드</button>
+    <div class="log" id="logResult"></div>
   </div>
 
-  <div class="section">
-    <h3>🌾 작물 모델 예측 (TFLite 기반)</h3>
-    <select id="modelSelect">
-      <option value="corn">🌽 옥수수 모델</option>
-      <option value="rice">🌾 벼 모델</option>
-      <option value="pepper">🌶 고추 모델</option>
-    </select>
-    <button onclick="runPrediction()">AI 예측 실행</button>
-    <div id="tfOut" style="margin-top:1rem;"></div>
-  </div>
-
-  <div class="section">
-    <h3>📄 PDF 생성 및 자동 메일 전송</h3>
-    <input id="recipient" placeholder="수신 이메일 입력" />
-    <input id="notes" placeholder="예측 결과 요약 또는 메모" />
-    <button onclick="createAndSend()">PDF 생성 + 메일 전송</button>
-    <div id="mailStatus" style="color:#007c4d; margin-top:0.5rem;"></div>
+  <div>
+    <h3>🌿 작물 이미지 업로드 기반 진단</h3>
+    <input type="file" id="imageUpload" accept="image/*" />
+    <img id="preview" style="display:none;" />
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <button onclick="detectImage()">🔎 AI 작물 이미지 진단</button>
+    <div class="log" id="aiResult"></div>
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, pw)
-        .then(() => document.getElementById("authStatus").innerText = "✅ 로그인 성공")
-        .catch(err => document.getElementById("authStatus").innerText = "❌ 실패: " + err.message);
-    }
-
-    async function runPrediction() {
-      const type = document.getElementById("modelSelect").value;
-      const url = {
-        corn: "https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json",
-        rice: "https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json",
-        pepper: "https://storage.googleapis.com/tfjs-models/tfjs/mnist/model.json"
-      }[type];
-      const model = await tf.loadGraphModel(url);
-      document.getElementById("tfOut").innerText = "✅ 모델 로드 완료: " + type;
-    }
-
-    async function createAndSend() {
-      const { jsPDF } = window.jspdf;
-      const email = document.getElementById("recipient").value;
-      const notes = document.getElementById("notes").value;
+    function logDownload() {
       const time = new Date().toLocaleString();
+      localStorage.setItem("lastDownload", time);
+      document.getElementById("logResult").innerText = "📌 최근 보고서 다운로드 시각: " + time;
+    }
 
-      // PDF 생성
-      const doc = new jsPDF();
-      doc.text("AgriNexus AI 작물 예측 보고서", 20, 20);
-      doc.text("수신자: " + email, 20, 40);
-      doc.text("메모/요약: " + notes, 20, 50);
-      doc.text("발행 시각: " + time, 20, 60);
-      const blob = doc.output("blob");
+    let model;
 
-      const formData = new FormData();
-      formData.append("pdf", blob, "report.pdf");
-      formData.append("email", email);
+    async function detectImage() {
+      const file = document.getElementById("imageUpload").files[0];
+      const img = document.getElementById("preview");
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
 
-      // 보고서 DB 저장
-      db.ref("reports").push({ email, notes, time });
+      if (!file) return alert("이미지를 업로드해주세요.");
 
-      // 메일 발송
-      await fetch("https://your-server.com/send-report", {
-        method: "POST",
-        body: formData
-      });
+      const reader = new FileReader();
+      reader.onload = async () => {
+        img.src = reader.result;
+        img.onload = async () => {
+          canvas.style.display = "block";
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      document.getElementById("mailStatus").innerText = "📩 리포트가 이메일로 전송되었습니다.";
+          if (!model) model = await cocoSsd.load();
+          const predictions = await model.detect(canvas);
+          predictions.forEach(pred => {
+            ctx.strokeStyle = "#007c4d";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(...pred.bbox);
+            ctx.fillStyle = "#007c4d";
+            ctx.fillText(pred.class + " " + Math.round(pred.score * 100) + "%", pred.bbox[0], pred.bbox[1] - 5);
+          });
+          document.getElementById("aiResult").innerText = `예측된 항목 수: ${predictions.length}`;
+        };
+      };
+      reader.readAsDataURL(file);
+      img.style.display = "block";
     }
   </script>
 
