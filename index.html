@@ -1,31 +1,43 @@
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
-  <title>AgriNexus SmartFarm</title>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/serviceWorker.js').then(() => {
-        console.log("✅ Service Worker registered");
-      });
-    }
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World - MOHET Style</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; }
-    a.btn { display: inline-block; margin: 10px; padding: 12px 24px; background: #28a745; color: white; border-radius: 8px; text-decoration: none; font-weight: bold; }
-    p { color: #444; margin-top: 15px; }
+    body { margin: 0; font-family: 'Arial'; background: #f9f9f9; color: #222; }
+    header { background: #111; color: #fff; padding: 2rem; text-align: center; }
+    section { padding: 2rem; text-align: center; }
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .features { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
+    .card { background: #fff; border-radius: 12px; padding: 1.5rem; width: 280px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .card a { text-decoration: none; color: #007c4d; font-weight: bold; }
+    footer { position: fixed; bottom: 0; width: 100%; background: #222; color: #fff; text-align: center; padding: 1rem; }
+    footer a { margin: 0 10px; color: #fff; text-decoration: none; font-weight: bold; }
   </style>
 </head>
 <body>
-  <h1>🌿 AgriNexus SmartFarm</h1>
-  <p>계약서, 보고서, 제출 관리까지 한 번에!</p>
-  <a class="btn" href="contract.html">📄 계약서 작성</a>
-  <a class="btn" href="report.html">📊 보고서 제출</a>
-  <a class="btn" href="admin.html">🛠 관리자 대시보드</a>
-  <p>📬 <strong>제출 후 자동 이메일 알림</strong> 기능도 곧 연동됩니다.<br>관리자는 이메일로 PDF를 바로 받을 수 있어요!</p>
-  <p>📱 <strong>앱처럼 설치하려면</strong><br>브라우저 메뉴에서 <em>“홈 화면에 추가”</em>를 눌러주세요.</p>
+  <header>
+    <h1>AgriNexus World</h1>
+    <p>MOHET 스타일 기반 글로벌 스마트 플랫폼</p>
+  </header>
+
+  <section>
+    <h2>주요 기능 바로가기</h2>
+    <div class="features">
+      <div class="card"><a href="contract.html">계약서 자동화</a></div>
+      <div class="card"><a href="report.html">보고서 생성</a></div>
+      <div class="card"><a href="funding.html">글로벌 펀드 매칭</a></div>
+      <div class="card"><a href="satellite.html">위성 시각화</a></div>
+      <div class="card"><a href="ai.html">AI 추천/상담</a></div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="admin.html">관리자 페이지</a>
+    <a href="contact.html">문의하기</a>
+    <a href="about.html">회사소개</a>
+  </footer>
 </body>
 </html>
