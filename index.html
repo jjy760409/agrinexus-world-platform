@@ -3,56 +3,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus NFT + TTS + Firebase Platform</title>
+  <title>AgriNexus NFT + IPFS + TTS + UI</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 2rem; background: #f4f4f4; text-align: center; }
-    textarea, input, button { width: 100%; padding: 1rem; margin: 0.5rem 0; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    body { font-family: Arial; padding: 2rem; background: #eef2f3; text-align: center; }
+    textarea, input, button { width: 100%; padding: 1rem; margin-top: 0.5rem; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    #nftCard { margin-top: 2rem; background: white; padding: 1rem; border-radius: 10px; max-width: 400px; margin: 2rem auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    img { width: 80px; }
   </style>
 </head>
 <body>
 
-  <h1>🌐 AgriNexus 계약 NFT + 음성 안내 + Firebase 배포 플랫폼</h1>
+  <h1>🪙 AgriNexus NFT 계약서 발행 플랫폼</h1>
 
-  <textarea id="contractText" placeholder="계약 내용을 입력하세요..." rows="6"></textarea>
-  <input id="recipient" placeholder="NFT 발행 대상 주소 (0x...)" />
-  <button onclick="mintNFT()">🪙 NFT 발행 (Polygon)</button>
-  <button onclick="playVoice()">🔊 AI 음성으로 안내</button>
+  <textarea id="contractText" rows="5" placeholder="계약 내용을 입력하세요..."></textarea>
+  <input id="walletAddress" placeholder="Polygon Testnet 지갑 주소 (0x...)" />
+  <button onclick="mintNFT()">NFT 발행 + IPFS 업로드</button>
+  <button onclick="speak()">🎧 TTS로 계약 안내 듣기</button>
 
-  <div id="result" style="margin-top:2rem;"></div>
+  <div id="nftCard"></div>
 
   <script>
     async function mintNFT() {
-      const recipient = document.getElementById("recipient").value;
       const contractText = document.getElementById("contractText").value;
-      const web3 = new Web3(window.ethereum);
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const accounts = await web3.eth.getAccounts();
-      const from = accounts[0];
+      const wallet = document.getElementById("walletAddress").value;
+      const contractId = "AGX-" + Date.now().toString().slice(-6);
 
-      const contract = new web3.eth.Contract(
-        [{"inputs":[{"internalType":"string","name":"uri","type":"string"},{"internalType":"address","name":"to","type":"address"}],"name":"mintNFT","outputs":[],"stateMutability":"nonpayable","type":"function"}],
-        "YOUR_CONTRACT_ADDRESS"
-      );
+      // 1. 메타데이터 생성
+      const metadata = {
+        name: "AgriNexus Contract " + contractId,
+        description: contractText,
+        image: "https://gateway.pinata.cloud/ipfs/QmExampleCID",  // 실제 CID로 대체
+      };
 
-      try {
-        const uri = "https://your-nft-storage.com/meta/" + Date.now();
-        await contract.methods.mintNFT(uri, recipient).send({ from });
-        document.getElementById("result").innerText = "✅ NFT 발행 완료!";
-      } catch (err) {
-        console.error(err);
-        document.getElementById("result").innerText = "❌ NFT 발행 실패!";
+      // 2. IPFS 업로드 (시뮬레이션)
+      const ipfsUrl = "https://gateway.pinata.cloud/ipfs/QmFakeMetaCID"; // 대체 가능
+
+      // 3. NFT 카드 시각화
+      document.getElementById("nftCard").innerHTML = `
+        <div>
+          <img src="ai_character.png" />
+          <h3>📜 NFT 계약카드</h3>
+          <p><strong>${metadata.name}</strong></p>
+          <p>지갑: ${wallet}</p>
+          <p><small>IPFS: ${ipfsUrl}</small></p>
+        </div>
+      `;
+
+      // 4. Polygon Testnet NFT 발행 (시뮬레이션)
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        await ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await web3.eth.getAccounts();
+        const from = accounts[0];
+
+        const contract = new web3.eth.Contract(
+          [{"inputs":[{"internalType":"string","name":"uri","type":"string"},{"internalType":"address","name":"to","type":"address"}],"name":"mintNFT","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+          "YOUR_POLYGON_TESTNET_CONTRACT_ADDRESS"
+        );
+
+        try {
+          await contract.methods.mintNFT(ipfsUrl, wallet).send({ from });
+          alert("✅ NFT 발행 성공 (Polygon Testnet)");
+        } catch (e) {
+          console.error(e);
+          alert("❌ NFT 발행 실패");
+        }
+      } else {
+        alert("MetaMask가 필요합니다!");
       }
     }
 
-    function playVoice() {
+    function speak() {
       const contract = document.getElementById("contractText").value;
       const voice = new SpeechSynthesisUtterance(contract);
       voice.lang = "ko-KR";
-      voice.pitch = 1;
       voice.rate = 1;
-      voice.voice = speechSynthesis.getVoices().find(v => v.lang.includes('ko'));
+      voice.pitch = 1;
       speechSynthesis.speak(voice);
     }
   </script>
