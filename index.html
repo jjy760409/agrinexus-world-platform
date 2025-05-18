@@ -4,115 +4,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgriNexus | AI 스마트농업 인터랙티브 플랫폼</title>
+  <title>AgriNexus World | AI 스마트농업 자동화 플랫폼</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f3f9f6; color: #1e3a34; }
-    header { background: #007c4d; color: white; padding: 1rem 2rem; text-align: center; }
-    nav { background: #1e3a34; padding: 0.5rem; text-align: center; }
-    nav a { margin: 0 0.7rem; color: white; text-decoration: none; font-weight: bold; }
-    .container { max-width: 1100px; margin: auto; padding: 2rem; }
-    .card { background: white; margin: 1rem 0; padding: 1.5rem; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.04); }
+    body { font-family: Arial; margin: 0; background: #f3f9f6; color: #1e3a34; }
+    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
+    .container { max-width: 900px; margin: auto; padding: 2rem; }
+    .card { background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
     h2 { margin-top: 0; }
-    button { padding: 0.7rem 1.2rem; font-size: 1rem; border: none; border-radius: 6px; background: #007c4d; color: white; cursor: pointer; }
-    .hidden { display: none; margin-top: 1rem; }
-    input, textarea, select {
-      display: block; width: 90%; margin: 0.5rem auto; padding: 0.8rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;
+    input, textarea, button, select {
+      display: block; width: 100%; max-width: 600px; margin: 0.5rem auto;
+      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
     }
-    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    .response { background: #eafaf1; padding: 1rem; border-radius: 6px; min-height: 100px; margin-top: 1rem; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>AgriNexus World</h1>
-  <p>AI 스마트농업 자동화 플랫폼</p>
+  <p>AI 기반 글로벌 스마트농업 자동화 포털</p>
+  <div>🌐 지금 9,284명이 함께하고 있습니다</div>
 </header>
-
-<nav>
-  <a href="#gpt">GPT</a>
-  <a href="#policy">정책 실행</a>
-  <a href="#iot">IoT</a>
-  <a href="#feedback">피드백</a>
-  <a href="#report">보고서</a>
-  <a href="#workflow">워크플로우</a>
-</nav>
 
 <div class="container">
 
-  <div class="card" id="gpt">
+  <div class="card" id="auth">
+    <h2>🔐 회원가입 / 로그인</h2>
+    <input id="email" placeholder="이메일 입력" />
+    <input id="password" type="password" placeholder="비밀번호 입력" />
+    <button onclick="signup()">가입하기</button>
+    <button onclick="login()">로그인</button>
+    <div id="authStatus"></div>
+  </div>
+
+  <div class="card">
     <h2>🤖 GPT 스마트팜 상담</h2>
-    <button onclick="toggle('gptPanel')">GPT 실행</button>
-    <div class="hidden" id="gptPanel">
-      <input placeholder="API Key 입력" />
-      <textarea placeholder="질문 입력">스마트팜 설계</textarea>
-      <button>질문 보내기</button>
-      <div>GPT 응답 영역</div>
-    </div>
+    <textarea id="prompt">스마트팜 설계</textarea>
+    <button onclick="askGPT()">GPT 실행</button>
+    <div class="response" id="gptResponse">GPT 응답 영역</div>
   </div>
 
-  <div class="card" id="policy">
-    <h2>📊 정책 실행 대시보드</h2>
-    <button onclick="toggle('policyPanel')">실행 보기</button>
-    <div class="hidden" id="policyPanel">
-      <textarea placeholder="실행할 정책 입력"></textarea>
-      <select><option>1순위</option><option>2순위</option></select>
-      <button>정책 큐 추가</button>
-      <button>정책 큐 실행</button>
-      <div>정책 실행 로그</div>
-    </div>
+  <div class="card">
+    <h2>📡 IoT 제어</h2>
+    <button onclick="runIoT('vent')">온실 환기</button>
+    <button onclick="runIoT('water')">관수 시작</button>
+    <div class="response" id="iotLog">IoT 응답 로그</div>
   </div>
 
-  <div class="card" id="iot">
-    <h2>📡 IoT 제어 센터</h2>
-    <button onclick="toggle('iotPanel')">제어 열기</button>
-    <div class="hidden" id="iotPanel">
-      <button>환기 시작</button>
-      <button>관수 시작</button>
-      <div>IoT 응답 로그</div>
-    </div>
-  </div>
-
-  <div class="card" id="feedback">
-    <h2>📈 모델 피드백 분석</h2>
-    <button onclick="toggle('feedbackPanel')">정확도 평가</button>
-    <div class="hidden" id="feedbackPanel">
-      <select><option>정확</option><option>부정확</option></select>
-      <input placeholder="모델 태그 (예: corn-v1)" />
-      <button>제출</button>
-      <div>정확도 분석 차트</div>
-    </div>
-  </div>
-
-  <div class="card" id="report">
-    <h2>📄 PDF 보고서 + 메일 전송</h2>
-    <button onclick="toggle('reportPanel')">보고서 보기</button>
-    <div class="hidden" id="reportPanel">
-      <textarea placeholder="보고서 내용"></textarea>
-      <input placeholder="이메일 입력" />
-      <button>PDF 생성 및 전송</button>
-      <div>메일 전송 로그</div>
-    </div>
-  </div>
-
-  <div class="card" id="workflow">
-    <h2>🧠 전체 자동화 워크플로우 시각화</h2>
-    <button onclick="toggle('workflowPanel')">워크플로우 펼치기</button>
-    <div class="hidden" id="workflowPanel">
-      <p>알림 ➝ 예측 ➝ 승인 ➝ IoT 제어 ➝ 실행 기록 ➝ 보고서 생성 ➝ 메일 전송</p>
-    </div>
+  <div class="card">
+    <h2>📄 관리자 보고서 생성</h2>
+    <textarea id="reportContent">최근 정책 실행 보고서 내용</textarea>
+    <input id="adminEmail" placeholder="관리자 이메일" />
+    <button onclick="sendReport()">PDF 생성 및 전송</button>
+    <div class="response" id="reportStatus">PDF 생성 상태</div>
   </div>
 
 </div>
 
-<footer>
-  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
-</footer>
-
 <script>
-function toggle(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle("hidden");
-}
+  // Firebase 인증 구조
+  async function signup() {
+    const email = document.getElementById("email").value;
+    const pw = document.getElementById("password").value;
+    document.getElementById("authStatus").innerText = "✅ 가입되었습니다 (모의)";
+  }
+
+  async function login() {
+    const email = document.getElementById("email").value;
+    const pw = document.getElementById("password").value;
+    document.getElementById("authStatus").innerText = "✅ 로그인 완료 (모의)";
+  }
+
+  async function askGPT() {
+    const prompt = document.getElementById("prompt").value;
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer sk-YourSharedKeyHere",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content || "❌ GPT 응답 실패";
+    document.getElementById("gptResponse").innerText = reply;
+  }
+
+  function runIoT(cmd) {
+    document.getElementById("iotLog").innerText = "📡 " + cmd + " 명령 전송됨!";
+  }
+
+  async function sendReport() {
+    const email = document.getElementById("adminEmail").value;
+    const summary = document.getElementById("reportContent").value;
+    document.getElementById("reportStatus").innerText = `📄 PDF 생성 및 메일 전송 (모의) → ${email}`;
+  }
 </script>
 
 </body>
