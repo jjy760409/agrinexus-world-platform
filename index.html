@@ -3,39 +3,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 정책→IoT 연동 + 자동 예측 + 승인 대시보드</title>
+  <title>AgriNexus 정책 우선순위 + 알림/SMS + 사용자 보고서 대시보드</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f5f9fc; padding: 2rem; text-align: center; }
-    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-    input, button, textarea { padding: 0.8rem; width: 90%; max-width: 500px; margin: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #f7fafc; padding: 2rem; text-align: center; }
+    input, button, textarea, select { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
+    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
     canvas { margin-top: 2rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>🤖 AgriNexus 정책→IoT + 예측 알림 + 관리자 승인 대시보드</h1>
+  <h1>📊 AgriNexus 정책 스케줄링 + SMS 알림 + 사용자 보고서</h1>
 
   <div class="section">
-    <h3>📡 정책에 따른 IoT 자동 명령 전송</h3>
-    <textarea id="policyInput" placeholder="정책 내용 입력 (예: 토양 수분 부족 시 관수)"></textarea>
-    <button onclick="policyToIoT()">IoT 명령 자동 실행</button>
-    <div id="iotStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>✅ 정책별 우선순위 스케줄러</h3>
+    <textarea id="policyInput" placeholder="정책 설명 입력"></textarea>
+    <select id="priority">
+      <option value="1">1 - 긴급</option>
+      <option value="2">2 - 중요</option>
+      <option value="3">3 - 일반</option>
+    </select>
+    <button onclick="schedulePolicy()">스케줄 저장</button>
+    <div id="policyStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>📈 최적 경로 기반 자동 예측/알림 생성</h3>
-    <button onclick="predictAndNotify()">자동 예측 + 알림 생성</button>
-    <div id="predictionStatus" style="margin-top:1rem; font-weight:bold;"></div>
+    <h3>📣 관리자 승인 후 알림 + SMS 실시간 발송</h3>
+    <textarea id="alertMessage" placeholder="승인 메시지 입력"></textarea>
+    <button onclick="sendNotification()">알림/SMS 전송</button>
+    <div id="notifyStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🧾 관리자 승인 UI + 승인 상태 대시보드</h3>
-    <textarea id="approvalNote" placeholder="관리자 승인 코멘트 입력"></textarea>
-    <button onclick="saveApproval()">승인 저장</button>
-    <canvas id="approvalChart" width="700" height="300"></canvas>
+    <h3>📄 사용자 보고서 자동 생성 + 대시보드</h3>
+    <button onclick="generateUserReport()">보고서 PDF 생성</button>
+    <canvas id="userChart" width="700" height="300"></canvas>
   </div>
 
   <script>
@@ -48,55 +54,58 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function policyToIoT() {
-      const policy = document.getElementById("policyInput").value;
-      const command = policy.includes("관수") ? "water-start" : "vent-open";
+    function schedulePolicy() {
+      const content = document.getElementById("policyInput").value;
+      const level = document.getElementById("priority").value;
+      db.ref("scheduledPolicies").push({ content, priority: parseInt(level), time: new Date().toISOString() });
+      document.getElementById("policyStatus").innerText = "📆 정책 우선순위 스케줄 저장 완료";
+    }
 
-      db.ref("iotCommands").push({ policy, command, time: new Date().toISOString() });
+    async function sendNotification() {
+      const message = document.getElementById("alertMessage").value;
+      db.ref("alerts").push({ message, sentAt: new Date().toISOString(), approved: true });
 
-      fetch("https://iot-server.example.com/control", {
+      await fetch("https://your-server.com/send-notification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command })
+        body: JSON.stringify({ message })
       });
 
-      document.getElementById("iotStatus").innerText = `🚀 IoT 명령 전송 완료: ${command}`;
+      document.getElementById("notifyStatus").innerText = "📣 알림 및 SMS 전송 완료";
     }
 
-    function predictAndNotify() {
-      const bestPath = "예측 → 승인 → 제어"; // 예시
-      const message = `🔔 자동 예측 경로 활성화됨: ${bestPath}`;
-      db.ref("alerts").push({ message, time: new Date().toISOString(), auto: true });
-      document.getElementById("predictionStatus").innerText = message;
-    }
-
-    function saveApproval() {
-      const note = document.getElementById("approvalNote").value;
-      db.ref("approvals").push({ note, approved: true, time: new Date().toISOString() });
-    }
-
-    db.ref("approvals").on("value", snapshot => {
+    async function generateUserReport() {
+      const { jsPDF } = window.jspdf;
+      const snapshot = await db.ref("userReports").once("value");
       const data = snapshot.val() || {};
-      const labels = [], values = [];
+      const doc = new jsPDF();
+      doc.text("AgriNexus 사용자 보고서", 20, 20);
+      let y = 30;
+      const chartData = {};
+
       for (const key in data) {
-        const label = data[key].note?.slice(0, 10) || "기타";
-        labels.push(label);
-        values.push(1);
+        const item = data[key];
+        doc.text(`- ${item.email}: ${item.result}`, 20, y);
+        y += 10;
+        const crop = item.result?.split(" ")[0];
+        if (crop) chartData[crop] = (chartData[crop] || 0) + 1;
       }
-      const ctx = document.getElementById("approvalChart").getContext("2d");
+
+      doc.save("AgriNexus_User_Report.pdf");
+
+      const ctx = document.getElementById("userChart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
-          labels,
+          labels: Object.keys(chartData),
           datasets: [{
-            label: "관리자 승인 로그",
-            data: values,
+            label: "예측 작물 통계",
+            data: Object.values(chartData),
             backgroundColor: "#007c4d"
           }]
-        },
-        options: { responsive: true }
+        }
       });
-    });
+    }
   </script>
 
 </body>
