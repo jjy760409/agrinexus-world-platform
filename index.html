@@ -3,112 +3,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 실시간 자동화 서비스 구성</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <title>AgriNexus World | AI 스마트농업 자동화 플랫폼</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial; background: #f5f9fc; padding: 2rem; text-align: center; }
-    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-    input, button, select { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
-    canvas { margin-top: 1rem; background: white; border-radius: 10px; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fdfb;
+      color: #1e3a34;
+    }
+    header {
+      background: #007c4d;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: white;
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(to right, #eafaf1, #d2f4e0);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .hero button {
+      background: #007c4d;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 4rem 2rem;
+      background: #fff;
+    }
+    .feature-box {
+      width: 280px;
+      margin: 1rem;
+      background: #f1f9f6;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.03);
+    }
+    .feature-box h3 {
+      color: #007c4d;
+      margin-top: 0;
+    }
+    footer {
+      background: #1e3a34;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
 
-  <h1>⚙️ AgriNexus 실시간 정책 실행 + 피드백 학습 + Functions 자동화</h1>
+<header>
+  <h2>AgriNexus World</h2>
+  <nav>
+    <a href="#features">기능 소개</a>
+    <a href="#dashboard">대시보드</a>
+    <a href="#contact">문의</a>
+  </nav>
+</header>
 
-  <div class="section">
-    <h3>📌 정책 실행 큐 자동 제어 (IoT 포함)</h3>
-    <button onclick="executePolicyQueue()">다음 정책 실행</button>
-    <div id="execStatus" style="margin-top:1rem; color:#007c4d;"></div>
+<section class="hero">
+  <h1>AI 기반 글로벌 스마트농업 자동화 플랫폼</h1>
+  <p>정책 실행, IoT 연동, 예측 분석, 보고서 자동화를 하나로 연결한 완전 자동화 솔루션</p>
+  <button onclick="window.location.href='dashboard.html'">실시간 대시보드로 이동</button>
+</section>
+
+<section class="features" id="features">
+  <div class="feature-box">
+    <h3>정책 자동 실행</h3>
+    <p>우선순위 기반 정책 실행 큐 시스템</p>
   </div>
-
-  <div class="section">
-    <h3>📊 예측 정확도 피드백 루프</h3>
-    <select id="result"><option value="정확">정확</option><option value="부정확">부정확</option></select>
-    <input id="modelTag" placeholder="모델 태그 (예: corn-v1)" />
-    <button onclick="submitModelFeedback()">피드백 제출</button>
-    <canvas id="feedbackChart" width="700" height="300"></canvas>
+  <div class="feature-box">
+    <h3>IoT 제어 연동</h3>
+    <p>센서 데이터 기반 자동 명령 전송 및 상태 추적</p>
   </div>
-
-  <div class="section">
-    <h3>☁️ Firebase Functions 흐름 자동화 호출</h3>
-    <button onclick="triggerFunctions()">Functions 시뮬레이션 호출</button>
-    <div id="functionStatus" style="margin-top:1rem; color:#007c4d;"></div>
+  <div class="feature-box">
+    <h3>모델 피드백 학습</h3>
+    <p>정확도 피드백 기반 AI 예측 모델 개선 루프</p>
   </div>
+  <div class="feature-box">
+    <h3>PDF & Slack 알림</h3>
+    <p>자동 생성 보고서 + 실시간 메일/슬랙 전송</p>
+  </div>
+</section>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    function executePolicyQueue() {
-      db.ref("scheduledPolicies").once("value").then(snapshot => {
-        const data = Object.entries(snapshot.val() || {}).sort((a, b) => a[1].priority - b[1].priority);
-        if (data.length > 0) {
-          const [key, policy] = data[0];
-          db.ref("executedPolicies").push(policy);
-          db.ref("scheduledPolicies").child(key).remove();
-
-          if (policy.content.includes("관수")) {
-            fetch("https://iot-server.example.com/control", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ command: "water-start" })
-            });
-          }
-
-          db.ref("alerts").push({ message: `[실행됨] ${policy.content}`, time: new Date().toISOString() });
-          document.getElementById("execStatus").innerText = `🚀 실행됨: ${policy.content}`;
-        } else {
-          document.getElementById("execStatus").innerText = "⏳ 실행할 정책이 없습니다.";
-        }
-      });
-    }
-
-    function submitModelFeedback() {
-      const model = document.getElementById("modelTag").value;
-      const result = document.getElementById("result").value;
-      db.ref("modelFeedback").push({ model, result, time: new Date().toISOString() });
-    }
-
-    db.ref("modelFeedback").on("value", snapshot => {
-      const data = snapshot.val() || {};
-      const stats = {};
-      for (const key in data) {
-        const m = data[key].model;
-        stats[m] = stats[m] || { 정확: 0, 부정확: 0 };
-        stats[m][data[key].result]++;
-      }
-      const models = Object.keys(stats);
-      const correct = models.map(m => stats[m].정확);
-      const wrong = models.map(m => stats[m].부정확);
-      const ctx = document.getElementById("feedbackChart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: models,
-          datasets: [
-            { label: "정확", data: correct, backgroundColor: "#007c4d" },
-            { label: "부정확", data: wrong, backgroundColor: "#e63946" }
-          ]
-        }
-      });
-    });
-
-    async function triggerFunctions() {
-      await fetch("https://us-central1-your-project.cloudfunctions.net/runAutoQueue", {
-        method: "POST"
-      });
-      document.getElementById("functionStatus").innerText = "✅ Firebase Function 호출 완료!";
-    }
-  </script>
+<footer id="contact">
+  <p>© 2024 AgriNexus World. All rights reserved.</p>
+  <p>문의: admin@agrinexus.world</p>
+</footer>
 
 </body>
 </html>
