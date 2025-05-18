@@ -3,35 +3,60 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus GPT 플랫폼 (프록시 연동)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus 대화형 GPT | 단계별 실행</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; background: #f5faf7; padding: 2rem; color: #1e3a34; text-align: center; }
-    input, textarea, button {
-      width: 90%; max-width: 600px; padding: 1rem; margin: 0.5rem auto; display: block;
-      font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;
+    body { font-family: Arial; background: #f0f8f5; padding: 2rem; text-align: center; color: #1e3a34; }
+    textarea, input, button {
+      width: 90%; max-width: 700px; padding: 1rem; font-size: 1rem; margin: 0.5rem auto; border-radius: 6px; border: 1px solid #ccc; display: block;
     }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { margin-top: 1rem; padding: 1rem; background: #eaf7f1; border-radius: 6px; min-height: 100px; }
+    .response { margin-top: 1rem; background: #eaf6ef; padding: 1rem; border-radius: 8px; min-height: 80px; }
+    .next { display: none; margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-<h2>🌱 AgriNexus 전용 GPT 상담</h2>
-<textarea id="prompt">스마트팜 설계</textarea>
-<button onclick="askGPT()">GPT 실행</button>
-<div class="response" id="gptResponse">GPT 응답이 여기에 표시됩니다.</div>
+<h2>🌱 AgriNexus 전용 GPT 대화 + 단계별 실행</h2>
+<input id="user" placeholder="사용자 이메일 (예: user@example.com)" />
+<textarea id="prompt" rows="4" placeholder="스마트팜 설계에 대해 질문하세요">스마트팜 설계</textarea>
+<button onclick="sendGPT()">GPT 실행</button>
+<div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
+
+<div class="next" id="nextStep">
+  <button onclick="createPolicy()">이 설계로 정책 생성하기</button>
+  <button onclick="triggerIoT()">IoT 실행</button>
+  <button onclick="generateReport()">보고서 생성 + 메일 전송</button>
+</div>
 
 <script>
-async function askGPT() {
+let history = [];
+
+async function sendGPT() {
   const prompt = document.getElementById("prompt").value;
-  const res = await fetch("/gpt", {
+  const user = document.getElementById("user").value;
+  document.getElementById("output").innerText = "응답 생성 중...";
+  const res = await fetch("/gptChat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
+    body: JSON.stringify({ user, messages: history.concat({ role: "user", content: prompt }) })
   });
   const data = await res.json();
-  document.getElementById("gptResponse").innerText = data.reply || "❌ 오류 발생";
+  const reply = data.reply || "❌ 오류 발생";
+  document.getElementById("output").innerText = reply;
+  history.push({ role: "user", content: prompt });
+  history.push({ role: "assistant", content: reply });
+  document.getElementById("nextStep").style.display = "block";
+}
+
+function createPolicy() {
+  alert("✅ 정책 생성이 시작되었습니다.");
+}
+function triggerIoT() {
+  alert("📡 IoT 명령 전송됨 (예: 환기)");
+}
+function generateReport() {
+  alert("📄 보고서가 생성되어 관리자에게 전송되었습니다.");
 }
 </script>
 
