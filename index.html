@@ -3,41 +3,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 실행 큐 + 정확도 피드백 + 관리자 대시보드</title>
+  <title>AgriNexus 실시간 자동화 서비스 구성</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
     body { font-family: Arial; background: #f5f9fc; padding: 2rem; text-align: center; }
-    input, button, select, textarea { padding: 0.8rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    input, button, select { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
     canvas { margin-top: 1rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>🔁 AgriNexus 자동 실행 큐 + 피드백 + 통합 대시보드</h1>
+  <h1>⚙️ AgriNexus 실시간 정책 실행 + 피드백 학습 + Functions 자동화</h1>
 
   <div class="section">
-    <h3>📌 정책 우선순위 자동 실행 큐</h3>
-    <button onclick="processQueue()">실행 큐 순차 처리</button>
-    <div id="queueStatus" style="color:#007c4d; margin-top:1rem;"></div>
+    <h3>📌 정책 실행 큐 자동 제어 (IoT 포함)</h3>
+    <button onclick="executePolicyQueue()">다음 정책 실행</button>
+    <div id="execStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>📊 예측 정확도 피드백 입력</h3>
-    <input id="cropType" placeholder="예: 고추" />
-    <select id="feedback">
-      <option value="정확">정확</option>
-      <option value="부정확">부정확</option>
-    </select>
-    <button onclick="submitFeedback()">피드백 제출</button>
+    <h3>📊 예측 정확도 피드백 루프</h3>
+    <select id="result"><option value="정확">정확</option><option value="부정확">부정확</option></select>
+    <input id="modelTag" placeholder="모델 태그 (예: corn-v1)" />
+    <button onclick="submitModelFeedback()">피드백 제출</button>
     <canvas id="feedbackChart" width="700" height="300"></canvas>
   </div>
 
   <div class="section">
-    <h3>📊 통합 관리자 대시보드 요약</h3>
-    <canvas id="adminChart" width="700" height="300"></canvas>
+    <h3>☁️ Firebase Functions 흐름 자동화 호출</h3>
+    <button onclick="triggerFunctions()">Functions 시뮬레이션 호출</button>
+    <div id="functionStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <script>
@@ -50,42 +48,52 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function processQueue() {
+    function executePolicyQueue() {
       db.ref("scheduledPolicies").once("value").then(snapshot => {
         const data = Object.entries(snapshot.val() || {}).sort((a, b) => a[1].priority - b[1].priority);
         if (data.length > 0) {
-          const [key, value] = data[0];
-          db.ref("executedPolicies").push(value);
+          const [key, policy] = data[0];
+          db.ref("executedPolicies").push(policy);
           db.ref("scheduledPolicies").child(key).remove();
-          document.getElementById("queueStatus").innerText = `✅ 실행됨: ${value.content}`;
+
+          if (policy.content.includes("관수")) {
+            fetch("https://iot-server.example.com/control", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ command: "water-start" })
+            });
+          }
+
+          db.ref("alerts").push({ message: `[실행됨] ${policy.content}`, time: new Date().toISOString() });
+          document.getElementById("execStatus").innerText = `🚀 실행됨: ${policy.content}`;
         } else {
-          document.getElementById("queueStatus").innerText = "⏳ 큐에 정책이 없습니다.";
+          document.getElementById("execStatus").innerText = "⏳ 실행할 정책이 없습니다.";
         }
       });
     }
 
-    function submitFeedback() {
-      const crop = document.getElementById("cropType").value;
-      const feedback = document.getElementById("feedback").value;
-      db.ref("modelFeedback").push({ crop, feedback, time: new Date().toISOString() });
+    function submitModelFeedback() {
+      const model = document.getElementById("modelTag").value;
+      const result = document.getElementById("result").value;
+      db.ref("modelFeedback").push({ model, result, time: new Date().toISOString() });
     }
 
     db.ref("modelFeedback").on("value", snapshot => {
       const data = snapshot.val() || {};
       const stats = {};
       for (const key in data) {
-        const entry = data[key];
-        stats[entry.crop] = stats[entry.crop] || { 정확: 0, 부정확: 0 };
-        stats[entry.crop][entry.feedback]++;
+        const m = data[key].model;
+        stats[m] = stats[m] || { 정확: 0, 부정확: 0 };
+        stats[m][data[key].result]++;
       }
-      const crops = Object.keys(stats);
-      const correct = crops.map(c => stats[c].정확);
-      const wrong = crops.map(c => stats[c].부정확);
+      const models = Object.keys(stats);
+      const correct = models.map(m => stats[m].정확);
+      const wrong = models.map(m => stats[m].부정확);
       const ctx = document.getElementById("feedbackChart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
-          labels: crops,
+          labels: models,
           datasets: [
             { label: "정확", data: correct, backgroundColor: "#007c4d" },
             { label: "부정확", data: wrong, backgroundColor: "#e63946" }
@@ -94,26 +102,12 @@
       });
     });
 
-    db.ref("executedPolicies").on("value", snapshot => {
-      const data = snapshot.val() || {};
-      const count = {};
-      for (const key in data) {
-        const p = data[key].content.split(" ")[0];
-        count[p] = (count[p] || 0) + 1;
-      }
-      const ctx = document.getElementById("adminChart").getContext("2d");
-      new Chart(ctx, {
-        type: "pie",
-        data: {
-          labels: Object.keys(count),
-          datasets: [{
-            label: "정책 실행 분포",
-            data: Object.values(count),
-            backgroundColor: ["#007c4d", "#1d7874", "#679289"]
-          }]
-        }
+    async function triggerFunctions() {
+      await fetch("https://us-central1-your-project.cloudfunctions.net/runAutoQueue", {
+        method: "POST"
       });
-    });
+      document.getElementById("functionStatus").innerText = "✅ Firebase Function 호출 완료!";
+    }
   </script>
 
 </body>
