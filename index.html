@@ -3,76 +3,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | AI 스마트농업 자동화 플랫폼</title>
+  <title>AgriNexus AI 자동화 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f9fdfb;
-      color: #1e3a34;
-    }
-    header {
-      background: #007c4d;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    nav a {
-      color: white;
-      margin-left: 2rem;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .hero {
-      text-align: center;
-      padding: 4rem 2rem;
-      background: linear-gradient(to right, #eafaf1, #d2f4e0);
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-    }
-    .hero button {
-      background: #007c4d;
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 4rem 2rem;
-      background: #fff;
-    }
-    .feature-box {
-      width: 280px;
-      margin: 1rem;
-      background: #f1f9f6;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.03);
-    }
-    .feature-box h3 {
-      color: #007c4d;
-      margin-top: 0;
-    }
-    footer {
-      background: #1e3a34;
-      color: white;
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background: #f6fbf9; color: #1e3a34; }
+    header, footer { background: #007c4d; color: white; padding: 1rem 2rem; text-align: center; }
+    nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 600; }
+    .container { padding: 2rem; max-width: 900px; margin: auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 1rem; }
+    textarea, input, select, button { width: 100%; font-size: 1rem; margin: 0.5rem 0; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    .response { margin-top: 1rem; background: #e0f7ec; padding: 1rem; border-radius: 6px; min-height: 100px; }
+    .auth, .gpt, .dash, .login, .signup { margin-bottom: 3rem; }
+    .chart { margin-top: 2rem; background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -81,40 +28,46 @@
 <header>
   <h2>AgriNexus World</h2>
   <nav>
-    <a href="#features">기능 소개</a>
-    <a href="#dashboard">대시보드</a>
-    <a href="#contact">문의</a>
+    <a href="#login">로그인</a>
+    <a href="#gpt">GPT 대시보드</a>
+    <a href="#dash">통합 대시보드</a>
   </nav>
 </header>
 
-<section class="hero">
-  <h1>AI 기반 글로벌 스마트농업 자동화 플랫폼</h1>
-  <p>정책 실행, IoT 연동, 예측 분석, 보고서 자동화를 하나로 연결한 완전 자동화 솔루션</p>
-  <button onclick="window.location.href='dashboard.html'">실시간 대시보드로 이동</button>
-</section>
+<div class="container">
 
-<section class="features" id="features">
-  <div class="feature-box">
-    <h3>정책 자동 실행</h3>
-    <p>우선순위 기반 정책 실행 큐 시스템</p>
+  <div class="login" id="login">
+    <h1>회원 로그인</h1>
+    <input type="email" placeholder="이메일 입력" />
+    <input type="password" placeholder="비밀번호 입력" />
+    <button>로그인</button>
   </div>
-  <div class="feature-box">
-    <h3>IoT 제어 연동</h3>
-    <p>센서 데이터 기반 자동 명령 전송 및 상태 추적</p>
-  </div>
-  <div class="feature-box">
-    <h3>모델 피드백 학습</h3>
-    <p>정확도 피드백 기반 AI 예측 모델 개선 루프</p>
-  </div>
-  <div class="feature-box">
-    <h3>PDF & Slack 알림</h3>
-    <p>자동 생성 보고서 + 실시간 메일/슬랙 전송</p>
-  </div>
-</section>
 
-<footer id="contact">
-  <p>© 2024 AgriNexus World. All rights reserved.</p>
-  <p>문의: admin@agrinexus.world</p>
+  <div class="signup">
+    <h1>회원가입</h1>
+    <input type="email" placeholder="이메일 입력" />
+    <input type="password" placeholder="비밀번호 생성" />
+    <button>가입하기</button>
+  </div>
+
+  <div class="gpt" id="gpt">
+    <h1>GPT 대시보드</h1>
+    <textarea placeholder="질문 입력 (예: 스마트팜 설계)">스마트팜 설계</textarea>
+    <button>GPT 실행</button>
+    <div class="response">GPT 응답 영역</div>
+  </div>
+
+  <div class="dash" id="dash">
+    <h1>통합 자동화 대시보드</h1>
+    <select><option>corn-v1</option><option>rice-v1</option></select>
+    <button>모델 실행</button>
+    <div class="chart"><canvas id="modelChart" width="100%" height="300"></canvas></div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2024 AgriNexus World — AI 스마트농업 자동화 플랫폼</p>
 </footer>
 
 </body>
