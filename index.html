@@ -3,45 +3,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 정책 우선순위 + 알림/SMS + 사용자 보고서 대시보드</title>
+  <title>AgriNexus 실행 큐 + 정확도 피드백 + 관리자 대시보드</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f7fafc; padding: 2rem; text-align: center; }
-    input, button, textarea, select { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #f5f9fc; padding: 2rem; text-align: center; }
+    input, button, select, textarea { padding: 0.8rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; font-size: 1rem; border: 1px solid #ccc; }
     .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
-    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    canvas { margin-top: 1rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>📊 AgriNexus 정책 스케줄링 + SMS 알림 + 사용자 보고서</h1>
+  <h1>🔁 AgriNexus 자동 실행 큐 + 피드백 + 통합 대시보드</h1>
 
   <div class="section">
-    <h3>✅ 정책별 우선순위 스케줄러</h3>
-    <textarea id="policyInput" placeholder="정책 설명 입력"></textarea>
-    <select id="priority">
-      <option value="1">1 - 긴급</option>
-      <option value="2">2 - 중요</option>
-      <option value="3">3 - 일반</option>
+    <h3>📌 정책 우선순위 자동 실행 큐</h3>
+    <button onclick="processQueue()">실행 큐 순차 처리</button>
+    <div id="queueStatus" style="color:#007c4d; margin-top:1rem;"></div>
+  </div>
+
+  <div class="section">
+    <h3>📊 예측 정확도 피드백 입력</h3>
+    <input id="cropType" placeholder="예: 고추" />
+    <select id="feedback">
+      <option value="정확">정확</option>
+      <option value="부정확">부정확</option>
     </select>
-    <button onclick="schedulePolicy()">스케줄 저장</button>
-    <div id="policyStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <button onclick="submitFeedback()">피드백 제출</button>
+    <canvas id="feedbackChart" width="700" height="300"></canvas>
   </div>
 
   <div class="section">
-    <h3>📣 관리자 승인 후 알림 + SMS 실시간 발송</h3>
-    <textarea id="alertMessage" placeholder="승인 메시지 입력"></textarea>
-    <button onclick="sendNotification()">알림/SMS 전송</button>
-    <div id="notifyStatus" style="margin-top:1rem; color:#007c4d;"></div>
-  </div>
-
-  <div class="section">
-    <h3>📄 사용자 보고서 자동 생성 + 대시보드</h3>
-    <button onclick="generateUserReport()">보고서 PDF 생성</button>
-    <canvas id="userChart" width="700" height="300"></canvas>
+    <h3>📊 통합 관리자 대시보드 요약</h3>
+    <canvas id="adminChart" width="700" height="300"></canvas>
   </div>
 
   <script>
@@ -54,58 +50,70 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function schedulePolicy() {
-      const content = document.getElementById("policyInput").value;
-      const level = document.getElementById("priority").value;
-      db.ref("scheduledPolicies").push({ content, priority: parseInt(level), time: new Date().toISOString() });
-      document.getElementById("policyStatus").innerText = "📆 정책 우선순위 스케줄 저장 완료";
-    }
-
-    async function sendNotification() {
-      const message = document.getElementById("alertMessage").value;
-      db.ref("alerts").push({ message, sentAt: new Date().toISOString(), approved: true });
-
-      await fetch("https://your-server.com/send-notification", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
-
-      document.getElementById("notifyStatus").innerText = "📣 알림 및 SMS 전송 완료";
-    }
-
-    async function generateUserReport() {
-      const { jsPDF } = window.jspdf;
-      const snapshot = await db.ref("userReports").once("value");
-      const data = snapshot.val() || {};
-      const doc = new jsPDF();
-      doc.text("AgriNexus 사용자 보고서", 20, 20);
-      let y = 30;
-      const chartData = {};
-
-      for (const key in data) {
-        const item = data[key];
-        doc.text(`- ${item.email}: ${item.result}`, 20, y);
-        y += 10;
-        const crop = item.result?.split(" ")[0];
-        if (crop) chartData[crop] = (chartData[crop] || 0) + 1;
-      }
-
-      doc.save("AgriNexus_User_Report.pdf");
-
-      const ctx = document.getElementById("userChart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: Object.keys(chartData),
-          datasets: [{
-            label: "예측 작물 통계",
-            data: Object.values(chartData),
-            backgroundColor: "#007c4d"
-          }]
+    function processQueue() {
+      db.ref("scheduledPolicies").once("value").then(snapshot => {
+        const data = Object.entries(snapshot.val() || {}).sort((a, b) => a[1].priority - b[1].priority);
+        if (data.length > 0) {
+          const [key, value] = data[0];
+          db.ref("executedPolicies").push(value);
+          db.ref("scheduledPolicies").child(key).remove();
+          document.getElementById("queueStatus").innerText = `✅ 실행됨: ${value.content}`;
+        } else {
+          document.getElementById("queueStatus").innerText = "⏳ 큐에 정책이 없습니다.";
         }
       });
     }
+
+    function submitFeedback() {
+      const crop = document.getElementById("cropType").value;
+      const feedback = document.getElementById("feedback").value;
+      db.ref("modelFeedback").push({ crop, feedback, time: new Date().toISOString() });
+    }
+
+    db.ref("modelFeedback").on("value", snapshot => {
+      const data = snapshot.val() || {};
+      const stats = {};
+      for (const key in data) {
+        const entry = data[key];
+        stats[entry.crop] = stats[entry.crop] || { 정확: 0, 부정확: 0 };
+        stats[entry.crop][entry.feedback]++;
+      }
+      const crops = Object.keys(stats);
+      const correct = crops.map(c => stats[c].정확);
+      const wrong = crops.map(c => stats[c].부정확);
+      const ctx = document.getElementById("feedbackChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: crops,
+          datasets: [
+            { label: "정확", data: correct, backgroundColor: "#007c4d" },
+            { label: "부정확", data: wrong, backgroundColor: "#e63946" }
+          ]
+        }
+      });
+    });
+
+    db.ref("executedPolicies").on("value", snapshot => {
+      const data = snapshot.val() || {};
+      const count = {};
+      for (const key in data) {
+        const p = data[key].content.split(" ")[0];
+        count[p] = (count[p] || 0) + 1;
+      }
+      const ctx = document.getElementById("adminChart").getContext("2d");
+      new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: Object.keys(count),
+          datasets: [{
+            label: "정책 실행 분포",
+            data: Object.values(count),
+            backgroundColor: ["#007c4d", "#1d7874", "#679289"]
+          }]
+        }
+      });
+    });
   </script>
 
 </body>
