@@ -2,48 +2,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus IoT 상태 리포트 + 알림 루프 + 워크플로우 클릭</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <title>AgriNexus IoT 응답 + 승인 로그 + GPT 요약 자동화</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f9fbfc; padding: 2rem; text-align: center; }
-    input, button { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; margin: 2rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 10px rgba(0,0,0,0.06); }
-    canvas { margin-top: 1rem; background: white; border-radius: 10px; }
-    .log { margin-top: 1rem; font-weight: bold; }
+    body { font-family: Arial; background: #f7fbfd; padding: 2rem; text-align: center; }
+    input, button, textarea { padding: 0.8rem; margin: 0.4rem; font-size: 1rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
+    .section { background: white; margin: 1.5rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
     #workflow { background: white; padding: 1rem; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>📡 AgriNexus IoT 상태 리포트 + 알림 루프 + 워크플로우 클릭</h1>
+  <h1>🌐 AgriNexus IoT 응답 처리 + 관리자 승인 + GPT 요약 자동화</h1>
 
   <div class="section">
-    <h3>📥 IoT 상태 보고서 반영</h3>
-    <button onclick="loadIoTStatus()">IoT 장비 상태 확인</button>
-    <div id="iotStatus" class="log"></div>
+    <h3>📡 IoT 제어 요청 + 응답 결과 반영</h3>
+    <button onclick="sendIoT('vent')">🌬️ 환기 명령</button>
+    <button onclick="sendIoT('water')">💧 물주기 명령</button>
+    <div id="iotResult" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🔄 예측 결과 → 자동 알림 발송</h3>
-    <input id="prediction" placeholder="예측 결과 (예: 수분 부족)" />
-    <button onclick="triggerAlert()">알림 자동 발송</button>
-    <div id="alertLog" class="log"></div>
+    <h3>🧾 관리자 승인 기록 및 상태</h3>
+    <textarea id="approvalNote" placeholder="승인 코멘트 입력"></textarea>
+    <button onclick="saveApproval()">승인 저장</button>
+    <div id="approvalLog" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>📈 워크플로우 클릭 기록 + 세부 로그 열람</h3>
-    <div id="workflow" class="mermaid" onclick="logNodeClick(event)">
+    <h3>🧠 GPT 요약 메시지 자동 생성 (시뮬레이션)</h3>
+    <textarea id="context" placeholder="상황 또는 센서 상태 요약 입력"></textarea>
+    <button onclick="generateSummary()">요약 생성</button>
+    <div id="gptSummary" style="margin-top:1rem; font-weight:bold;"></div>
+  </div>
+
+  <div class="section">
+    <h3>📈 전체 워크플로우</h3>
+    <div id="workflow" class="mermaid">
       graph TD
-        Alert[알림] --> Predict[예측]
-        Predict --> Approve[승인]
-        Approve --> IoT[IoT 제어]
-        IoT --> Report[리포트 저장]
+        Sensor[센서 감지]
+        Alert[알림 생성]
+        Admin[관리자 승인]
+        IoT[IoT 명령 요청]
+        Response[응답 기록]
+        Summary[GPT 요약]
+        Sensor --> Alert --> Admin --> IoT --> Response --> Summary
     </div>
-    <div id="clickHistory" class="log"></div>
   </div>
 
   <script>
@@ -56,33 +63,31 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function loadIoTStatus() {
-      fetch("https://iot-server.example.com/status")
-        .then(res => res.json())
+    function sendIoT(type) {
+      const actionMap = { vent: "환기", water: "물주기" };
+      fetch("https://iot-server.example.com/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command: type })
+      }).then(res => res.json())
         .then(data => {
-          db.ref("iotStatusLogs").push(data);
-          document.getElementById("iotStatus").innerText = `온도: ${data.temp}°C, 수분: ${data.moisture}%`;
+          db.ref("iotResponses").push({ type, result: data.status, time: new Date().toISOString() });
+          document.getElementById("iotResult").innerText = `✅ ${actionMap[type]} 명령 결과: ${data.status}`;
         }).catch(() => {
-          document.getElementById("iotStatus").innerText = "❌ IoT 상태 불러오기 실패";
+          document.getElementById("iotResult").innerText = `❌ ${actionMap[type]} 명령 실패`;
         });
     }
 
-    function triggerAlert() {
-      const text = document.getElementById("prediction").value;
-      db.ref("alerts").push({
-        message: text,
-        sentAt: new Date().toISOString(),
-        auto: true
-      });
-      document.getElementById("alertLog").innerText = `📨 자동 알림 발송됨: ${text}`;
+    function saveApproval() {
+      const note = document.getElementById("approvalNote").value;
+      db.ref("approvals").push({ note, approved: true, time: new Date().toISOString() });
+      document.getElementById("approvalLog").innerText = "✅ 승인 저장 완료";
     }
 
-    function logNodeClick(event) {
-      const target = event.target.textContent;
-      if (target) {
-        db.ref("workflowClicks").push({ node: target, time: new Date().toISOString() });
-        document.getElementById("clickHistory").innerText = `📝 클릭 기록 저장됨: ${target}`;
-      }
+    function generateSummary() {
+      const context = document.getElementById("context").value;
+      const summary = `📢 상태 요약: "${context}"에 따른 자동 대응 및 알림이 생성되었습니다.`;
+      document.getElementById("gptSummary").innerText = summary;
     }
 
     mermaid.initialize({ startOnLoad: true });
