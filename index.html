@@ -1,74 +1,49 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus AI 자동화 플랫폼</title>
+  <title>AgriNexus GPT 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background: #f6fbf9; color: #1e3a34; }
-    header, footer { background: #007c4d; color: white; padding: 1rem 2rem; text-align: center; }
-    nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 600; }
-    .container { padding: 2rem; max-width: 900px; margin: auto; }
-    h1 { font-size: 1.8rem; margin-bottom: 1rem; }
-    textarea, input, select, button { width: 100%; font-size: 1rem; margin: 0.5rem 0; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #f5f9f6; padding: 2rem; text-align: center; }
+    textarea, input, button { width: 90%; max-width: 600px; margin: 0.5rem auto; display: block; font-size: 1rem; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { margin-top: 1rem; background: #e0f7ec; padding: 1rem; border-radius: 6px; min-height: 100px; }
-    .auth, .gpt, .dash, .login, .signup { margin-bottom: 3rem; }
-    .chart { margin-top: 2rem; background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
-    @media (max-width: 600px) {
-      h1 { font-size: 1.4rem; }
-    }
+    .response { background: #e8f6ef; padding: 1rem; border-radius: 6px; margin-top: 1rem; min-height: 120px; }
   </style>
 </head>
 <body>
 
-<header>
-  <h2>AgriNexus World</h2>
-  <nav>
-    <a href="#login">로그인</a>
-    <a href="#gpt">GPT 대시보드</a>
-    <a href="#dash">통합 대시보드</a>
-  </nav>
-</header>
+  <h1>🧠 GPT 스마트팜 설계 도우미</h1>
+  <input id="apikey" placeholder="🔑 OpenAI API 키 입력 (sk-...)" />
+  <textarea id="prompt" rows="4" placeholder="스마트팜 설계에 대한 질문을 입력하세요">스마트팜 설계</textarea>
+  <button onclick="callGPT()">GPT 실행</button>
 
-<div class="container">
+  <div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
 
-  <div class="login" id="login">
-    <h1>회원 로그인</h1>
-    <input type="email" placeholder="이메일 입력" />
-    <input type="password" placeholder="비밀번호 입력" />
-    <button>로그인</button>
-  </div>
+  <script>
+    async function callGPT() {
+      const key = document.getElementById("apikey").value.trim();
+      const prompt = document.getElementById("prompt").value;
+      const output = document.getElementById("output");
+      output.innerText = "GPT 응답 생성 중...";
 
-  <div class="signup">
-    <h1>회원가입</h1>
-    <input type="email" placeholder="이메일 입력" />
-    <input type="password" placeholder="비밀번호 생성" />
-    <button>가입하기</button>
-  </div>
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + key
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
 
-  <div class="gpt" id="gpt">
-    <h1>GPT 대시보드</h1>
-    <textarea placeholder="질문 입력 (예: 스마트팜 설계)">스마트팜 설계</textarea>
-    <button>GPT 실행</button>
-    <div class="response">GPT 응답 영역</div>
-  </div>
-
-  <div class="dash" id="dash">
-    <h1>통합 자동화 대시보드</h1>
-    <select><option>corn-v1</option><option>rice-v1</option></select>
-    <button>모델 실행</button>
-    <div class="chart"><canvas id="modelChart" width="100%" height="300"></canvas></div>
-  </div>
-
-</div>
-
-<footer>
-  <p>© 2024 AgriNexus World — AI 스마트농업 자동화 플랫폼</p>
-</footer>
+      const data = await res.json();
+      output.innerText = data.choices?.[0]?.message?.content || "❌ 응답 실패 또는 오류 발생";
+    }
+  </script>
 
 </body>
 </html>
