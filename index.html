@@ -3,92 +3,89 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | 사용자 중심 AI 스마트팜 플랫폼</title>
+  <title>AgriNexus Global | AI 스마트농업 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; font-family: 'Inter', sans-serif; background: #f3faf7; color: #1e3a34; }
-    header { background: #007c4d; padding: 1rem 2rem; color: white; display: flex; justify-content: space-between; align-items: center; }
-    nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 600; }
-    .hero { text-align: center; padding: 4rem 2rem; background: linear-gradient(to right, #e9fdf0, #d2f9e3); }
-    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-    .hero p { font-size: 1.1rem; margin-bottom: 2rem; }
-    .hero button { background: #007c4d; color: white; border: none; padding: 1rem 2rem; border-radius: 6px; font-size: 1rem; }
-    .features { display: flex; flex-wrap: wrap; justify-content: center; padding: 2rem; background: #fff; }
-    .feature { width: 300px; margin: 1rem; background: #f0f9f4; padding: 1.5rem; border-radius: 10px; text-align: left; }
-    .feature h3 { margin-top: 0; color: #007c4d; }
-    .feature button { margin-top: 1rem; background: #007c4d; color: white; border: none; padding: 0.8rem 1rem; border-radius: 6px; }
-    .workflow { background: #eefaf2; padding: 2rem; text-align: center; }
-    footer { background: #1e3a34; color: white; padding: 2rem; font-size: 0.9rem; text-align: center; }
-    @media (max-width: 600px) {
-      .features { flex-direction: column; align-items: center; }
+    body { font-family: Arial; margin: 0; background: #f6fbf8; color: #1e3a34; }
+    header { background: #007c4d; color: white; padding: 1rem 2rem; text-align: center; }
+    nav { background: #1e3a34; color: white; text-align: center; padding: 0.5rem; }
+    nav button { margin: 0 0.5rem; padding: 0.5rem 1rem; background: white; color: #007c4d; border: none; border-radius: 6px; cursor: pointer; }
+    section { max-width: 1000px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    h1, h2 { text-align: center; }
+    button, input, textarea, select {
+      width: 90%; max-width: 500px; padding: 0.8rem; font-size: 1rem;
+      margin: 0.5rem auto; display: block; border-radius: 6px; border: 1px solid #ccc;
     }
+    .lang { margin: 0.5rem auto; text-align: center; }
+    .lang select { padding: 0.5rem; }
+    .dashboard { display: none; }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 3rem; font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
 <header>
-  <h2>AgriNexus World</h2>
-  <nav>
-    <a href="#features">기능 소개</a>
-    <a href="#workflow">워크플로우</a>
-    <a href="#contact">문의</a>
-  </nav>
+  <h1>🌎 AgriNexus Global Platform</h1>
+  <div class="lang">
+    <label>🌐 Language:
+      <select onchange="setLang(this.value)">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文</option>
+      </select>
+    </label>
+  </div>
 </header>
 
-<section class="hero">
-  <h1>사용자 중심의 AI 스마트농업 자동화 플랫폼</h1>
-  <p>이제 누구나 클릭 한 번으로 정책 실행, IoT 제어, AI 분석, 보고서 생성까지 모두 자동화하세요</p>
-  <button onclick="scrollToSection()">서비스 시작하기</button>
+<nav>
+  <button onclick="toggleDash('user')">👤 사용자 대시보드</button>
+  <button onclick="toggleDash('admin')">🔒 관리자 전용</button>
+</nav>
+
+<section class="dashboard" id="user">
+  <h2>👤 사용자 대시보드</h2>
+  <textarea placeholder="GPT에게 농업 질문 입력">AI로 스마트팜 설계를 도와줘</textarea>
+  <button>GPT 응답 받기</button>
+  <select><option>corn-v1</option><option>rice-v1</option></select>
+  <button>AI 예측 실행</button>
 </section>
 
-<section class="features" id="features">
-  <div class="feature">
-    <h3>🤖 GPT 스마트 상담</h3>
-    <p>스마트팜, 자동화, 투자 전략 등 질문하세요. GPT가 바로 응답합니다.</p>
-    <button>GPT 실행</button>
-  </div>
-  <div class="feature">
-    <h3>📊 정책 실행 대시보드</h3>
-    <p>자동화 정책 큐 처리, 실행 우선순위에 따라 IoT 명령 자동 전송</p>
-    <button>실행 큐 보기</button>
-  </div>
-  <div class="feature">
-    <h3>📡 IoT 실시간 제어</h3>
-    <p>온실 환기, 관수 시작, 상태 모니터링을 실시간으로 확인하고 제어합니다.</p>
-    <button>IoT 연결</button>
-  </div>
-  <div class="feature">
-    <h3>📈 모델 피드백 + 분석</h3>
-    <p>AI 예측 정확도 피드백을 수집하여 모델 성능을 자동 개선합니다.</p>
-    <button>정확도 분석</button>
-  </div>
-  <div class="feature">
-    <h3>📄 PDF 보고서 + 메일</h3>
-    <p>자동 생성된 요약 보고서를 PDF로 만들고 관리자에게 자동 발송합니다.</p>
-    <button>보고서 보기</button>
-  </div>
-  <div class="feature">
-    <h3>📩 Slack/Twilio 알림</h3>
-    <p>실행 결과를 Slack 메시지, SMS로 실시간 전송</p>
-    <button>알림 확인</button>
-  </div>
+<section class="dashboard" id="admin">
+  <h2>🔒 관리자 전용 대시보드</h2>
+  <button>정책 큐 처리</button>
+  <textarea placeholder="실행 정책 내용 입력"></textarea>
+  <button>IoT 명령 전송</button>
+  <button>PDF 보고서 메일 발송</button>
+  <select><option>정확</option><option>부정확</option></select>
+  <input placeholder="모델 태그 입력 (예: corn-v1)" />
+  <button>모델 피드백 제출</button>
 </section>
 
-<section class="workflow" id="workflow">
-  <h2>💡 전체 스마트 워크플로우</h2>
-  <p>알림 ➜ 예측 ➜ 승인 ➜ IoT 실행 ➜ 응답 기록 ➜ PDF 생성 ➜ 메일 발송</p>
-  <p>모든 단계가 자동으로 연결되어 작동합니다.</p>
+<section>
+  <h2>🛰️ 세계 유일 AgriNexus 자동화 기능</h2>
+  <ul>
+    <li>🌍 국가별 기후 기반 작물 예측</li>
+    <li>📍 GPS/위성 기반 IoT 위치 지도</li>
+    <li>📡 실시간 IoT 응답 로그 시각화</li>
+    <li>📘 정책 실행 워크플로우 트리 시각화</li>
+    <li>🧠 GPT 정책 요약 자동 생성 및 Slack/SMS 전송</li>
+  </ul>
 </section>
 
-<footer id="contact">
-  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
-  <p>문의: admin@agrinexus.world</p>
+<footer>
+  <p>© 2024 AgriNexus World | GPT 기반 스마트농업 자동화 플랫폼</p>
+  <p>Contact: admin@agrinexus.world</p>
 </footer>
 
 <script>
-function scrollToSection() {
-  document.getElementById("features").scrollIntoView({ behavior: "smooth" });
+function toggleDash(role) {
+  document.querySelectorAll(".dashboard").forEach(div => div.style.display = "none");
+  document.getElementById(role).style.display = "block";
+}
+
+function setLang(lang) {
+  alert("🌐 언어가 변경됩니다: " + lang + " (실제 번역 연동은 추가 구현 필요)");
 }
 </script>
 
