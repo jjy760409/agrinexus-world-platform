@@ -3,28 +3,71 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus GPT 대시보드</title>
+  <title>AgriNexus GPT 대시보드 + 로그인 + 로그 + 다국어</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
     body { font-family: Arial; background: #f5f9f6; padding: 2rem; text-align: center; }
-    textarea, input, button { width: 90%; max-width: 600px; margin: 0.5rem auto; display: block; font-size: 1rem; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
+    input, button, textarea, select { width: 90%; max-width: 600px; margin: 0.5rem auto; font-size: 1rem; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { background: #e8f6ef; padding: 1rem; border-radius: 6px; margin-top: 1rem; min-height: 120px; }
+    .response { background: #e8f6ef; padding: 1rem; border-radius: 6px; margin-top: 1rem; min-height: 100px; }
   </style>
 </head>
 <body>
 
-  <h1>🧠 GPT 스마트팜 설계 도우미</h1>
-  <input id="apikey" placeholder="🔑 OpenAI API 키 입력 (sk-...)" />
-  <textarea id="prompt" rows="4" placeholder="스마트팜 설계에 대한 질문을 입력하세요">스마트팜 설계</textarea>
-  <button onclick="callGPT()">GPT 실행</button>
+  <h2>🔐 AgriNexus GPT 통합 대시보드</h2>
 
-  <div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
+  <div>
+    <input id="email" placeholder="이메일" />
+    <input id="password" type="password" placeholder="비밀번호" />
+    <button onclick="login()">로그인</button>
+    <div id="loginStatus"></div>
+  </div>
+
+  <div style="margin-top:2rem;">
+    <input id="apikey" placeholder="🔑 OpenAI API 키 입력 (sk-...)" />
+    <textarea id="prompt" rows="4" placeholder="질문 입력 (예: 스마트팜 설계)">스마트팜 설계</textarea>
+    <select id="lang">
+      <option value="ko">한국어</option>
+      <option value="en">영어</option>
+      <option value="ja">일본어</option>
+    </select>
+    <button onclick="callGPT()">GPT 실행</button>
+    <div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
+  </div>
 
   <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project.firebaseapp.com",
+      databaseURL: "https://your-project.firebaseio.com",
+      projectId: "your-project"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    let currentUser = null;
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const pw = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, pw)
+        .then(user => {
+          currentUser = user.user;
+          document.getElementById("loginStatus").innerText = "✅ 로그인 성공";
+        })
+        .catch(err => {
+          document.getElementById("loginStatus").innerText = "❌ 로그인 실패: " + err.message;
+        });
+    }
+
     async function callGPT() {
       const key = document.getElementById("apikey").value.trim();
       const prompt = document.getElementById("prompt").value;
+      const lang = document.getElementById("lang").value;
       const output = document.getElementById("output");
       output.innerText = "GPT 응답 생성 중...";
 
@@ -36,12 +79,23 @@
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }]
+          messages: [{ role: "user", content: `${prompt} 결과를 ${lang}로 요약해줘.` }]
         })
       });
 
       const data = await res.json();
-      output.innerText = data.choices?.[0]?.message?.content || "❌ 응답 실패 또는 오류 발생";
+      const reply = data.choices?.[0]?.message?.content || "❌ 응답 실패 또는 오류 발생";
+      output.innerText = reply;
+
+      if (currentUser) {
+        db.ref("gptLogs").push({
+          user: currentUser.email,
+          prompt,
+          reply,
+          lang,
+          time: new Date().toISOString()
+        });
+      }
     }
   </script>
 
