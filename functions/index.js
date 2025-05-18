@@ -4,28 +4,34 @@ const admin = require("firebase-admin");
 const fetch = require("node-fetch");
 admin.initializeApp();
 
-exports.gptChat = functions.https.onRequest(async (req, res) => {
-  const { user, messages } = req.body;
-  const countRef = admin.database().ref("callCount/" + user);
-  const snap = await countRef.once("value");
-  const count = snap.val() || 0;
-  if (count >= 5) return res.json({ reply: "⚠️ 하루 요청 횟수를 초과했습니다." });
-
+exports.gptPolicy = functions.https.onRequest(async (req, res) => {
+  const prompt = req.body.prompt;
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
-      "Authorization": "Bearer sk-Your-OpenAI-Key",
+      "Authorization": "Bearer sk-Your-API-Key",
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages
+      messages: [{ role: "user", content: prompt }]
     })
   });
   const data = await response.json();
-  const reply = data.choices?.[0]?.message?.content || "❌ GPT 응답 실패";
-
-  await admin.database().ref("gptLogs").push({ user, prompt: messages[messages.length-2]?.content, reply, time: Date.now() });
-  await countRef.set(count + 1);
+  const reply = data.choices?.[0]?.message?.content;
   res.json({ reply });
+});
+
+exports.sendSlack = functions.https.onRequest(async (req, res) => {
+  const msg = req.body.message;
+  await fetch("https://hooks.slack.com/services/your/slack/webhook", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: msg })
+  });
+  res.send("Slack 메시지 전송 완료");
+});
+
+exports.login = functions.https.onRequest(async (req, res) => {
+  res.send("Firebase 로그인 성공 (시뮬레이션)");
 });

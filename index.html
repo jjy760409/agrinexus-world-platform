@@ -3,117 +3,93 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | 통합 자동화 플랫폼</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <title>AgriNexus World | All-in-One Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    body { font-family: Arial; margin: 0; background: #f3f9f6; color: #1e3a34; }
-    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
-    .section { max-width: 1100px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
-    h1, h2 { text-align: center; }
+    body { font-family: Arial; background: #f4f9f6; margin: 0; color: #1e3a34; text-align: center; }
+    header { background: #007c4d; color: white; padding: 1.5rem; }
+    .section { max-width: 900px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
     input, textarea, button {
-      width: 90%; max-width: 700px; margin: 0.5rem auto;
-      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; display: block;
+      width: 90%; max-width: 600px; margin: 1rem auto; padding: 1rem;
+      font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; display: block;
     }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .result { margin-top: 1rem; background: #e8f6ef; padding: 1rem; border-radius: 6px; min-height: 60px; }
+    .result { margin-top: 1rem; background: #e8f7ef; padding: 1rem; border-radius: 6px; min-height: 60px; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>AgriNexus World</h1>
-  <p>AI 스마트농업 + 물류 + 정책 + 알림 통합 플랫폼</p>
+  <p>스마트농업 + 정책 + 물류 + AI + 알림 통합 플랫폼</p>
 </header>
 
 <div class="section">
-  <h2>📍 실시간 물류 추적 (지도 시뮬레이션)</h2>
-  <input placeholder="송장번호 또는 위치 ID 입력" />
-  <button onclick="trackMap()">실시간 추적</button>
-  <div class="result" id="mapResult">🗺️ 여기에 Google Maps 또는 위성 지도 연동</div>
+  <h2>📍 실시간 배송 위치 추적</h2>
+  <input id="trackId" placeholder="송장번호 또는 물류 ID 입력" />
+  <button onclick="trackLogistics()">실시간 추적</button>
+  <div class="result" id="mapOutput">위치 추적 결과 출력</div>
 </div>
 
 <div class="section">
-  <h2>📩 Slack 알림 전송</h2>
-  <textarea id="slackMsg">스마트팜 정책 실행 완료 알림</textarea>
-  <button onclick="sendSlack()">Slack 메시지 전송</button>
-  <div class="result" id="slackStatus">Slack 전송 로그</div>
+  <h2>📩 Slack 알림</h2>
+  <textarea id="slackMsg">정책 실행 완료</textarea>
+  <button onclick="sendSlack()">Slack 전송</button>
+  <div class="result" id="slackLog">Slack 결과</div>
 </div>
 
 <div class="section">
-  <h2>🔐 Firebase 로그인 / 사용자 기록</h2>
+  <h2>🔐 Firebase 사용자 로그인</h2>
   <input id="email" placeholder="이메일" />
-  <input id="pw" placeholder="비밀번호" type="password" />
+  <input id="password" type="password" placeholder="비밀번호" />
   <button onclick="login()">로그인</button>
-  <div class="result" id="authLog">로그인 상태</div>
+  <div class="result" id="authStatus">상태 표시</div>
 </div>
 
 <div class="section">
-  <h2>🧠 GPT 기반 정책 설계</h2>
-  <textarea id="policyPrompt">여름철 온실 스마트팜 설계 요청</textarea>
-  <button onclick="runPolicyGPT()">GPT 설계 실행</button>
-  <div class="result" id="gptResult">GPT 응답 영역</div>
+  <h2>🧠 GPT 정책 설계 실행</h2>
+  <textarea id="prompt">스마트팜 AI 설계 요청</textarea>
+  <button onclick="askGPT()">GPT 실행</button>
+  <div class="result" id="gptResult">GPT 응답 결과</div>
 </div>
-
-<footer>
-  <p>© 2024 AgriNexus World | 글로벌 자동화 스마트 플랫폼</p>
-</footer>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project.firebaseio.com",
-    projectId: "your-project"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  function login() {
-    const email = document.getElementById("email").value;
-    const pw = document.getElementById("pw").value;
-    auth.signInWithEmailAndPassword(email, pw)
-      .then(user => {
-        db.ref("loginLogs").push({ email, time: Date.now() });
-        document.getElementById("authLog").innerText = "✅ 로그인 성공";
-      }).catch(err => {
-        document.getElementById("authLog").innerText = "❌ 로그인 실패: " + err.message;
-      });
+  async function trackLogistics() {
+    const id = document.getElementById("trackId").value;
+    document.getElementById("mapOutput").innerText = `🛰️ ${id} 위치 추적 중 (지도 연동 예정)`;
   }
 
   async function sendSlack() {
     const msg = document.getElementById("slackMsg").value;
-    await fetch("https://your-server.com/slack", {
+    await fetch("/sendSlack", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: msg })
     });
-    document.getElementById("slackStatus").innerText = "✅ Slack 메시지 전송 완료";
+    document.getElementById("slackLog").innerText = "✅ Slack 메시지 전송 완료";
   }
 
-  async function runPolicyGPT() {
-    const prompt = document.getElementById("policyPrompt").value;
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  async function login() {
+    const email = document.getElementById("email").value;
+    const pw = document.getElementById("password").value;
+    const res = await fetch("/login", {
       method: "POST",
-      headers: {
-        "Authorization": "Bearer sk-Your-GPT-API-Key",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: prompt }]
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, pw })
+    });
+    const msg = await res.text();
+    document.getElementById("authStatus").innerText = msg;
+  }
+
+  async function askGPT() {
+    const prompt = document.getElementById("prompt").value;
+    const res = await fetch("/gptPolicy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
     });
     const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || "❌ GPT 실패";
-    document.getElementById("gptResult").innerText = reply;
-  }
-
-  function trackMap() {
-    document.getElementById("mapResult").innerText = "🛰️ 물류 위치 추적 중... (위성 지도 연동 예정)";
+    document.getElementById("gptResult").innerText = data.reply || "GPT 실패";
   }
 </script>
 
