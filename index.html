@@ -3,15 +3,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | AI 스마트농업 자동화 포털</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriNexus World | 스마트농업 통합 포털</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; background: #f3f9f6; margin: 0; color: #1e3a34; }
-    header {
-      background: #007c4d; color: white; padding: 1rem; text-align: center;
-      display: flex; align-items: center; justify-content: center; flex-direction: column;
-    }
-    .logo { max-width: 120px; margin-bottom: 0.5rem; }
+    body { font-family: Arial; margin: 0; background: #f3f9f6; color: #1e3a34; }
+    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
+    .logo { max-width: 120px; }
     .chatbot-btn {
       position: fixed;
       bottom: 20px; right: 20px;
@@ -25,7 +22,9 @@
       cursor: pointer;
     }
     .chatbot-btn img { height: 24px; vertical-align: middle; margin-right: 0.5rem; }
-    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; font-size: 0.9rem; margin-top: 3rem; }
+    .cardbox { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 2rem; }
+    .card { background: #f1f9f4; width: 300px; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 0 5px rgba(0,0,0,0.05); }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -33,19 +32,39 @@
 <header>
   <img src="agrinexus_logo.png" class="logo" />
   <h1>AgriNexus World</h1>
-  <p>AI 기반 글로벌 스마트농업 자동화 + 물류 통합 포털</p>
+  <p>AI 스마트농업 + 정책 + 물류 + 알림 + 보고서 통합 포털</p>
 </header>
 
-<!-- 주요 콘텐츠는 그대로 유지 -->
+<div class="cardbox">
+  <div class="card">
+    <h3>📈 실시간 정책 통계</h3>
+    <p>실행 내역, 피드백 통계, 예측 정확도 자동 표시</p>
+    <button onclick="alert('정책 통계 실행')">통계 보기</button>
+  </div>
+  <div class="card">
+    <h3>🛠 관리자 도구</h3>
+    <p>승인 내역, 정책 설정, Slack 로그 등 통합 관리</p>
+    <button onclick="alert('관리자 페이지 이동')">관리자 열기</button>
+  </div>
+  <div class="card">
+    <h3>📢 Slack 통합</h3>
+    <p>정책 실행 → Slack 알림 → PDF 보고서 자동 전송</p>
+    <button onclick="alert('Slack 연결 테스트')">슬랙 확인</button>
+  </div>
+  <div class="card">
+    <h3>👥 사용자 통계</h3>
+    <p>가입자 수, 사용량 추적, 행동 분석</p>
+    <button onclick="alert('사용자 통계 보기')">통계 보기</button>
+  </div>
+</div>
 
-<!-- ChatGPT 기능 버튼 바 -->
-<button class="chatbot-btn" onclick="alert('GPT 챗봇 실행 창 연결 예정')">
-  <img src="ai_icon.png" /> AgriNexus GPT 상담
+<!-- GPT 버튼 → chat.html 팝업으로 연결 -->
+<button class="chatbot-btn" onclick="window.open('chat.html', '_blank', 'width=500,height=600')">
+  🤖 AgriNexus GPT 상담
 </button>
 
 <footer>
   <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
-  <p>문의: admin@agrinexus.world</p>
 </footer>
 
 </body>

@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriNexus GPT 상담</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial; background: #f5fbf7; padding: 1rem; color: #1e3a34; }
+    textarea, button {
+      width: 100%; padding: 1rem; margin: 0.5rem 0;
+      font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
+    }
+    .chat { background: #eafaf0; padding: 1rem; min-height: 200px; border-radius: 6px; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+<h2>🤖 AgriNexus GPT 상담</h2>
+<textarea id="prompt">스마트팜 설계</textarea>
+<button onclick="runGPT()">GPT 실행</button>
+<div class="chat" id="chatlog">응답 영역</div>
+
+<script>
+async function runGPT() {
+  const prompt = document.getElementById("prompt").value;
+  document.getElementById("chatlog").innerText = "GPT 응답 생성 중...";
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer sk-YourAPIKeyHere",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  const reply = data.choices?.[0]?.message?.content;
+  document.getElementById("chatlog").innerText = reply;
+}
+</script>
+
+</body>
+</html>
