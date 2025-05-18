@@ -3,73 +3,45 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus GPT 대시보드 + 로그인 + 로그 + 다국어</title>
+  <title>AgriNexus 대화형 GPT 챗봇</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f5f9f6; padding: 2rem; text-align: center; }
-    input, button, textarea, select { width: 90%; max-width: 600px; margin: 0.5rem auto; font-size: 1rem; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
+    body { font-family: Arial; background: #eef6f3; margin: 0; padding: 2rem; text-align: center; }
+    .chatbox { max-width: 700px; margin: auto; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1); }
+    textarea, input, button { width: 100%; font-size: 1rem; margin-top: 1rem; padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { background: #e8f6ef; padding: 1rem; border-radius: 6px; margin-top: 1rem; min-height: 100px; }
+    .messages { text-align: left; margin-top: 2rem; max-height: 400px; overflow-y: auto; padding: 1rem; background: #f9fefc; border-radius: 8px; }
+    .msg { margin: 1rem 0; }
+    .user { font-weight: bold; color: #1e3a34; }
+    .assistant { color: #007c4d; }
   </style>
 </head>
 <body>
 
-  <h2>🔐 AgriNexus GPT 통합 대시보드</h2>
-
-  <div>
-    <input id="email" placeholder="이메일" />
-    <input id="password" type="password" placeholder="비밀번호" />
-    <button onclick="login()">로그인</button>
-    <div id="loginStatus"></div>
-  </div>
-
-  <div style="margin-top:2rem;">
-    <input id="apikey" placeholder="🔑 OpenAI API 키 입력 (sk-...)" />
-    <textarea id="prompt" rows="4" placeholder="질문 입력 (예: 스마트팜 설계)">스마트팜 설계</textarea>
-    <select id="lang">
-      <option value="ko">한국어</option>
-      <option value="en">영어</option>
-      <option value="ja">일본어</option>
-    </select>
-    <button onclick="callGPT()">GPT 실행</button>
-    <div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
+  <div class="chatbox">
+    <h2>🌿 AgriNexus GPT 대화형 챗봇</h2>
+    <input id="apikey" placeholder="🔑 OpenAI API Key 입력" />
+    <div class="messages" id="chatlog"></div>
+    <textarea id="userInput" placeholder="메시지를 입력하세요..."></textarea>
+    <button onclick="sendMessage()">전송</button>
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+    const messages = [
+      { role: "system", content: "당신은 스마트팜 운영 전문가입니다. 질문에 친절하고 간결하게 한국어로 답해주세요." }
+    ];
 
-    let currentUser = null;
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, pw)
-        .then(user => {
-          currentUser = user.user;
-          document.getElementById("loginStatus").innerText = "✅ 로그인 성공";
-        })
-        .catch(err => {
-          document.getElementById("loginStatus").innerText = "❌ 로그인 실패: " + err.message;
-        });
-    }
-
-    async function callGPT() {
+    async function sendMessage() {
       const key = document.getElementById("apikey").value.trim();
-      const prompt = document.getElementById("prompt").value;
-      const lang = document.getElementById("lang").value;
-      const output = document.getElementById("output");
-      output.innerText = "GPT 응답 생성 중...";
+      const userText = document.getElementById("userInput").value;
+      if (!userText || !key) return;
+
+      messages.push({ role: "user", content: userText });
+      document.getElementById("userInput").value = "";
+
+      const log = document.getElementById("chatlog");
+      log.innerHTML += `<div class='msg user'>🙋‍♂️ 사용자: ${userText}</div>`;
+      log.innerHTML += `<div class='msg assistant'>🤖 GPT 응답 중...</div>`;
 
       const res = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -79,23 +51,16 @@
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: `${prompt} 결과를 ${lang}로 요약해줘.` }]
+          messages: messages
         })
       });
 
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || "❌ 응답 실패 또는 오류 발생";
-      output.innerText = reply;
+      const reply = data.choices?.[0]?.message?.content || "❌ 응답 실패";
+      messages.push({ role: "assistant", content: reply });
 
-      if (currentUser) {
-        db.ref("gptLogs").push({
-          user: currentUser.email,
-          prompt,
-          reply,
-          lang,
-          time: new Date().toISOString()
-        });
-      }
+      log.innerHTML = log.innerHTML.replace("🤖 GPT 응답 중...", `🤖 GPT: ${reply}`);
+      log.scrollTop = log.scrollHeight;
     }
   </script>
 
