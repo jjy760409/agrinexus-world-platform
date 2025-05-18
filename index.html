@@ -3,20 +3,20 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | AI 기반 글로벌 스마트팜 자동화 플랫폼</title>
+  <title>AgriNexus World | 스마트농업 자동화 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; margin: 0; background: #f0f9f6; color: #1e3a34; }
+    body { font-family: Arial; background: #f3f9f6; margin: 0; color: #1e3a34; }
     header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
     .section { max-width: 1100px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
-    h1, h2 { text-align: center; }
-    button, input, textarea, select {
-      display: block; width: 90%; max-width: 700px; margin: 1rem auto;
-      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
-    }
-    button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    h1, h2, h3 { text-align: center; }
     .cardbox { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
     .card { background: #f4fbf6; padding: 1rem; width: 300px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.05); }
+    button, input, textarea, select {
+      width: 100%; margin: 0.5rem auto; padding: 1rem; font-size: 1rem;
+      border-radius: 6px; border: 1px solid #ccc; display: block;
+    }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
     footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; font-size: 0.9rem; margin-top: 3rem; }
   </style>
 </head>
@@ -24,22 +24,35 @@
 
 <header>
   <h1>AgriNexus World</h1>
-  <p>AI 기반 글로벌 스마트팜 자동화 + 물류 통합 플랫폼</p>
+  <p>AI 기반 글로벌 스마트농업 자동화 + 물류 통합 플랫폼</p>
+  <div>✅ 지금 9,284명이 함께하고 있습니다</div>
 </header>
 
 <div class="section">
   <h2>🌱 핵심 기능 바로가기</h2>
   <div class="cardbox">
-    <div class="card"><h3>GPT 스마트팜 상담</h3><button onclick="alert('GPT 실행')">실행</button></div>
-    <div class="card"><h3>정책 자동 실행</h3><button onclick="alert('정책 실행')">큐 보기</button></div>
-    <div class="card"><h3>IoT 제어</h3><button onclick="alert('IoT 제어')">센서 제어</button></div>
-    <div class="card"><h3>모델 피드백 분석</h3><button onclick="alert('모델 분석')">정확도 보기</button></div>
-    <div class="card"><h3>PDF 보고서 + 메일</h3><button onclick="alert('PDF 메일 발송')">보고서 전송</button></div>
-    <div class="card"><h3>Slack / SMS 알림</h3><button onclick="alert('슬랙 알림')">알림 전송</button></div>
-    <div class="card"><h3>물류 / 배송 추적</h3><button onclick="alert('물류 추적 시스템')">위치 추적</button></div>
-    <div class="card"><h3>글로벌 작물 추천 AI</h3><button onclick="alert('작물 추천')">추천 보기</button></div>
-    <div class="card"><h3>정책 워크플로우 시각화</h3><button onclick="alert('워크플로우 보기')">자동화 흐름</button></div>
+    <div class="card"><h3>GPT 스마트팜 상담</h3><button>실행</button></div>
+    <div class="card"><h3>정책 자동 실행</h3><button>큐 보기</button></div>
+    <div class="card"><h3>IoT 제어</h3><button>센서 제어</button></div>
+    <div class="card"><h3>모델 피드백 분석</h3><button>정확도 보기</button></div>
+    <div class="card"><h3>PDF 보고서 + 메일</h3><button>보고서 전송</button></div>
+    <div class="card"><h3>Slack / SMS 알림</h3><button>알림 전송</button></div>
+    <div class="card"><h3>물류 / 배송 추적</h3><button>위치 추적</button></div>
+    <div class="card"><h3>글로벌 작물 추천 AI</h3><button>추천 보기</button></div>
+    <div class="card"><h3>정책 워크플로우 시각화</h3><button>자동화 흐름</button></div>
+    <div class="card"><h3>📦 물류 최적화 AI</h3><button>최적 경로 분석</button></div>
   </div>
+</div>
+
+<div class="section">
+  <h2>🧠 예측 모델 버전 선택</h2>
+  <select>
+    <option>AgriPredict v1.0</option>
+    <option>AgriPredict v1.1</option>
+    <option>AgriYieldMax v2.0 (고정밀)</option>
+    <option>AgriLite v1.0 (저전력용)</option>
+  </select>
+  <button>모델 실행</button>
 </div>
 
 <div class="section">
@@ -56,13 +69,15 @@
 </div>
 
 <div class="section">
-  <h2>📦 전세계 유일 AgriNexus 고급 기능</h2>
+  <h2>🧬 전세계 유일 AgriNexus 고급 기능</h2>
   <ul style="text-align:left; max-width:700px; margin:auto;">
     <li>🌍 글로벌 작물 AI 예측 추천</li>
     <li>🛰️ 위성 기반 IoT 센서 추적</li>
-    <li>📡 스마트팜 → 물류 → 수출까지 연결된 자동화</li>
-    <li>📄 자동 보고서 생성 + Slack / 메일 전송</li>
-    <li>💬 사용자 질문 → 정책 → 실행까지 원스탑</li>
+    <li>🚚 스마트팜 → 물류 → 수출까지 자동 연동</li>
+    <li>📄 PDF 보고서 + Slack + 메일 연동</li>
+    <li>💬 사용자 질문 → 정책 생성 → 실행 자동화</li>
+    <li>📦 물류 경로 최적화 AI 포함</li>
+    <li>🔄 예측 모델 다중 버전 선택 구조</li>
   </ul>
 </div>
 
