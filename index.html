@@ -3,44 +3,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 정책 PDF + 최적 경로 + UI 시각화</title>
+  <title>AgriNexus 정책→IoT 연동 + 자동 예측 + 승인 대시보드</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f4f9fc; padding: 2rem; text-align: center; }
-    input, button, textarea { padding: 0.8rem; font-size: 1rem; width: 90%; max-width: 500px; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.06); }
-    canvas { margin-top: 1rem; border-radius: 10px; background: white; }
-    #workflow { margin-top: 2rem; padding: 1rem; background: #fff; border-radius: 10px; }
+    body { font-family: Arial; background: #f5f9fc; padding: 2rem; text-align: center; }
+    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    input, button, textarea { padding: 0.8rem; width: 90%; max-width: 500px; margin: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; }
+    canvas { margin-top: 2rem; background: white; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-  <h1>📋 AgriNexus 정책 PDF + 추천 경로 + UI 애니메이션</h1>
+  <h1>🤖 AgriNexus 정책→IoT + 예측 알림 + 관리자 승인 대시보드</h1>
 
   <div class="section">
-    <h3>📄 정책 자동 생성 결과 → PDF 변환 + 관리자 전송</h3>
-    <textarea id="policyText" placeholder="생성된 정책 내용 입력"></textarea>
-    <input id="adminEmail" placeholder="관리자 이메일" />
-    <button onclick="createPolicyPDF()">PDF 생성 및 전송</button>
-    <div id="pdfStatus" style="color:#007c4d;"></div>
+    <h3>📡 정책에 따른 IoT 자동 명령 전송</h3>
+    <textarea id="policyInput" placeholder="정책 내용 입력 (예: 토양 수분 부족 시 관수)"></textarea>
+    <button onclick="policyToIoT()">IoT 명령 자동 실행</button>
+    <div id="iotStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🧠 사용자 클릭 기반 최적 경로 추천</h3>
-    <button onclick="recommendPath()">최적 경로 분석</button>
-    <div id="pathSuggestion" style="margin-top:1rem; font-weight:bold;"></div>
+    <h3>📈 최적 경로 기반 자동 예측/알림 생성</h3>
+    <button onclick="predictAndNotify()">자동 예측 + 알림 생성</button>
+    <div id="predictionStatus" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <div class="section">
-    <h3>🎞️ 실시간 워크플로우 UI 애니메이션</h3>
-    <div id="workflow" class="mermaid">
-      graph LR
-        알림 --> 예측 --> 승인 --> 제어 --> 저장
-    </div>
+    <h3>🧾 관리자 승인 UI + 승인 상태 대시보드</h3>
+    <textarea id="approvalNote" placeholder="관리자 승인 코멘트 입력"></textarea>
+    <button onclick="saveApproval()">승인 저장</button>
+    <canvas id="approvalChart" width="700" height="300"></canvas>
   </div>
 
   <script>
@@ -53,42 +48,55 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    async function createPolicyPDF() {
-      const { jsPDF } = window.jspdf;
-      const policy = document.getElementById("policyText").value;
-      const email = document.getElementById("adminEmail").value;
+    function policyToIoT() {
+      const policy = document.getElementById("policyInput").value;
+      const command = policy.includes("관수") ? "water-start" : "vent-open";
 
-      const doc = new jsPDF();
-      doc.text("AgriNexus 자동 정책 리포트", 20, 20);
-      doc.text("정책 내용: " + policy, 20, 40);
-      doc.text("생성 시각: " + new Date().toLocaleString(), 20, 60);
+      db.ref("iotCommands").push({ policy, command, time: new Date().toISOString() });
 
-      const blob = doc.output("blob");
-      const formData = new FormData();
-      formData.append("pdf", blob, "policy_report.pdf");
-      formData.append("email", email);
-
-      await fetch("https://your-server.com/send-policy-report", {
+      fetch("https://iot-server.example.com/control", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command })
       });
 
-      document.getElementById("pdfStatus").innerText = "📎 관리자에게 PDF 전송 완료!";
+      document.getElementById("iotStatus").innerText = `🚀 IoT 명령 전송 완료: ${command}`;
     }
 
-    async function recommendPath() {
-      const snapshot = await db.ref("workflowClicks").once("value");
+    function predictAndNotify() {
+      const bestPath = "예측 → 승인 → 제어"; // 예시
+      const message = `🔔 자동 예측 경로 활성화됨: ${bestPath}`;
+      db.ref("alerts").push({ message, time: new Date().toISOString(), auto: true });
+      document.getElementById("predictionStatus").innerText = message;
+    }
+
+    function saveApproval() {
+      const note = document.getElementById("approvalNote").value;
+      db.ref("approvals").push({ note, approved: true, time: new Date().toISOString() });
+    }
+
+    db.ref("approvals").on("value", snapshot => {
       const data = snapshot.val() || {};
-      const stepCount = {};
+      const labels = [], values = [];
       for (const key in data) {
-        const step = data[key].node;
-        stepCount[step] = (stepCount[step] || 0) + 1;
+        const label = data[key].note?.slice(0, 10) || "기타";
+        labels.push(label);
+        values.push(1);
       }
-      const sorted = Object.entries(stepCount).sort((a, b) => b[1] - a[1]);
-      document.getElementById("pathSuggestion").innerText = `🔥 추천 흐름 최빈값 단계: ${sorted[0][0]}`;
-    }
-
-    mermaid.initialize({ startOnLoad: true });
+      const ctx = document.getElementById("approvalChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "관리자 승인 로그",
+            data: values,
+            backgroundColor: "#007c4d"
+          }]
+        },
+        options: { responsive: true }
+      });
+    });
   </script>
 
 </body>
