@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World | 스마트팜 전체 기능 통합</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>AgriNexus 001~100 정식 기능 구조 통합</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial; background: #f3f9f6; margin: 0; color: #1e3a34; }
+    body { font-family: Arial; background: #f3f9f6; color: #1e3a34; margin: 0; }
     header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
-    .container { max-width: 1200px; margin: auto; padding: 2rem; }
-    .tab-btns { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
-    .tab-btns button {
+    .container { max-width: 1100px; margin: auto; padding: 2rem; }
+    .tab-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1rem; }
+    .tab-bar button {
       padding: 0.6rem 1.2rem;
       border: none;
       background: #007c4d;
@@ -26,118 +26,144 @@
       box-shadow: 0 0 6px rgba(0,0,0,0.05);
       margin-bottom: 2rem;
     }
-    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    .tab-content.active { display: block; }
     ul { padding-left: 1.2rem; line-height: 1.6; }
     footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; font-size: 0.9rem; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>AgriNexus World</h1>
-  <p>AI 스마트농업 자동화 플랫폼 — 001~100 기능 완전 통합</p>
+  <p>001~100단계 정식 기능 구조 탭 통합본</p>
 </header>
 
 <div class="container">
-  <div class="tab-btns">
-    <button onclick="showTab('g1')">001~010</button>
-    <button onclick="showTab('g2')">011~020</button>
-    <button onclick="showTab('g3')">021~030</button>
-    <button onclick="showTab('g4')">031~040</button>
-    <button onclick="showTab('g5')">041~050</button>
-    <button onclick="showTab('g6')">051~060</button>
-    <button onclick="showTab('g7')">061~070</button>
-    <button onclick="showTab('g8')">071~080</button>
-    <button onclick="showTab('g9')">081~090</button>
-    <button onclick="showTab('g10')">091~100</button>
+  <div class="tab-bar">
+    <button onclick="showTab('tab0')">001~010</button>
+<button onclick="showTab('tab1')">011~020</button>
+<button onclick="showTab('tab2')">021~030</button>
+<button onclick="showTab('tab3')">031~040</button>
+<button onclick="showTab('tab4')">041~050</button>
+<button onclick="showTab('tab5')">051~060</button>
+<button onclick="showTab('tab6')">061~070</button>
+<button onclick="showTab('tab7')">071~080</button>
+<button onclick="showTab('tab8')">081~090</button>
+<button onclick="showTab('tab9')">091~100</button>
   </div>
-<div class='tab-content' id='g6'>
-<ul>
-<li>051. 스마트팜 확장 기능 항목 51</li>
-<li>052. 스마트팜 확장 기능 항목 52</li>
-<li>053. 스마트팜 확장 기능 항목 53</li>
-<li>054. 스마트팜 확장 기능 항목 54</li>
-<li>055. 스마트팜 확장 기능 항목 55</li>
-<li>056. 스마트팜 확장 기능 항목 56</li>
-<li>057. 스마트팜 확장 기능 항목 57</li>
-<li>058. 스마트팜 확장 기능 항목 58</li>
-<li>059. 스마트팜 확장 기능 항목 59</li>
-<li>060. 스마트팜 확장 기능 항목 60</li>
-</ul>
-</div>
-<div class='tab-content' id='g7'>
-<ul>
-<li>061. 스마트팜 확장 기능 항목 61</li>
-<li>062. 스마트팜 확장 기능 항목 62</li>
-<li>063. 스마트팜 확장 기능 항목 63</li>
-<li>064. 스마트팜 확장 기능 항목 64</li>
-<li>065. 스마트팜 확장 기능 항목 65</li>
-<li>066. 스마트팜 확장 기능 항목 66</li>
-<li>067. 스마트팜 확장 기능 항목 67</li>
-<li>068. 스마트팜 확장 기능 항목 68</li>
-<li>069. 스마트팜 확장 기능 항목 69</li>
-<li>070. 스마트팜 확장 기능 항목 70</li>
-</ul>
-</div>
-<div class='tab-content' id='g8'>
-<ul>
-<li>071. 스마트팜 확장 기능 항목 71</li>
-<li>072. 스마트팜 확장 기능 항목 72</li>
-<li>073. 스마트팜 확장 기능 항목 73</li>
-<li>074. 스마트팜 확장 기능 항목 74</li>
-<li>075. 스마트팜 확장 기능 항목 75</li>
-<li>076. 스마트팜 확장 기능 항목 76</li>
-<li>077. 스마트팜 확장 기능 항목 77</li>
-<li>078. 스마트팜 확장 기능 항목 78</li>
-<li>079. 스마트팜 확장 기능 항목 79</li>
-<li>080. 스마트팜 확장 기능 항목 80</li>
-</ul>
-</div>
-<div class='tab-content' id='g9'>
-<ul>
-<li>081. 스마트팜 확장 기능 항목 81</li>
-<li>082. 스마트팜 확장 기능 항목 82</li>
-<li>083. 스마트팜 확장 기능 항목 83</li>
-<li>084. 스마트팜 확장 기능 항목 84</li>
-<li>085. 스마트팜 확장 기능 항목 85</li>
-<li>086. 스마트팜 확장 기능 항목 86</li>
-<li>087. 스마트팜 확장 기능 항목 87</li>
-<li>088. 스마트팜 확장 기능 항목 88</li>
-<li>089. 스마트팜 확장 기능 항목 89</li>
-<li>090. 스마트팜 확장 기능 항목 90</li>
-</ul>
-</div>
-<div class='tab-content' id='g10'>
-<ul>
-<li>091. 스마트팜 확장 기능 항목 91</li>
-<li>092. 스마트팜 확장 기능 항목 92</li>
-<li>093. 스마트팜 확장 기능 항목 93</li>
-<li>094. 스마트팜 확장 기능 항목 94</li>
-<li>095. 스마트팜 확장 기능 항목 95</li>
-<li>096. 스마트팜 확장 기능 항목 96</li>
-<li>097. 스마트팜 확장 기능 항목 97</li>
-<li>098. 스마트팜 확장 기능 항목 98</li>
-<li>099. 스마트팜 확장 기능 항목 99</li>
-<li>100. 스마트팜 확장 기능 항목 100</li>
-</ul>
-</div>
+  <div class="tab-content" id="tab0"><ul><li>001. 스마트팜 AI 작물 추천 시스템</li>
+<li>002. 실시간 IoT 센서 제어 및 모니터링 대시보드</li>
+<li>003. 자동 재배 일정 생성 및 경고 시스템</li>
+<li>004. 수확량 예측 AI 모델</li>
+<li>005. 국가별 최적 작물 추천 알고리즘</li>
+<li>006. 위성 기반 기후/토양 분석 시스템</li>
+<li>007. 스마트팜 설계 자동화 도면 생성기</li>
+<li>008. AI 기반 스마트팜 3D 시뮬레이션 영상 생성</li>
+<li>009. 음성 내레이션 포함 IR 프레젠테이션 자동 생성</li>
+<li>010. 스마트팜 기자재/자재/설비 자동 선택 최적화</li></ul></div>
+<div class="tab-content" id="tab1"><ul><li>011. 글로벌 종자 비교 분석 시스템</li>
+<li>012. AI 기반 병해충 진단 및 대응 시스템</li>
+<li>013. 자동 급수/환기/조명 제어 시스템</li>
+<li>014. 모바일 연동 푸시 알림 기능 (센서/수익/이상 감지)</li>
+<li>015. 관리자용 통합 제어판 + 자동 보고서 생성</li>
+<li>016. 수출입 절차 문서 자동 생성 시스템</li>
+<li>017. 국내외 식량안보/정책 분석 기반 설계 최적화</li>
+<li>018. 스마트팜 수익성 분석 및 투자 유치 예측 시스템</li>
+<li>019. 글로벌 맞춤형 설계~수출 전자동화 시스템</li>
+<li>020. 유저 도면 기반 AI 자동설계 + 장비 구성 시스템</li></ul></div>
+<div class="tab-content" id="tab2"><ul><li>021. IR 제안서 자동화 + 계약서 PDF 생성 시스템</li>
+<li>022. 계약서 조항별 요약 및 자동 설명 생성기</li>
+<li>023. 다국어 변환 + 글로벌 계약 번역 시스템</li>
+<li>024. 수확 후 판매/물류/수출 자동화 시스템</li>
+<li>025. 글로벌 스마트팜 매칭 및 투자자 자동 연결 시스템</li>
+<li>026. AI 기반 유통/배송 최적 경로 자동 제안 시스템</li>
+<li>027. 스마트팜 운영 영상 자동 기록 + 대시보드 시각화</li>
+<li>028. 전세계 스마트팜 데이터 기반 ESG/위험 분석 시스템</li>
+<li>029. 농산물 가격 예측 + 국가별 수요분석 시스템</li>
+<li>030. 스마트팜 One-Stop After-Service 통합 시스템</li></ul></div>
+<div class="tab-content" id="tab3"><ul><li>031. 실시간 스마트팜 상태 분석 + 자동 조치 시스템</li>
+<li>032. 자가 학습형 기능 자동 업그레이드 시스템</li>
+<li>033. 실시간 PDF 보고서 + Slack 연동 + 승인 자동화</li>
+<li>034. 스마트폰 설치형 앱(PWA) 변환 + 알림 시스템</li>
+<li>035. 구매자-판매자 자동 매칭 + 가격 협상 기능</li>
+<li>036. 글로벌 스마트팜 홍보용 AI 기사 자동 생성기</li>
+<li>037. 계약·제안·보고서 메일 전송 자동화</li>
+<li>038. 실시간 배송비 비교 시스템 + Forwarder 매칭</li>
+<li>039. 스마트팜 설치 브랜드/부품/나사까지 자동 최적화</li>
+<li>040. 통합 관리자 /admin 대시보드 및 통계 시스템</li></ul></div>
+<div class="tab-content" id="tab4"><ul><li>041. 스마트팜 NFT 기반 계약서 생성 시스템</li>
+<li>042. 실시간 ESG 리포트 자동 작성</li>
+<li>043. 기후위기 대응형 설계 시뮬레이터</li>
+<li>044. 농산물 재고 기반 유통 흐름 최적화</li>
+<li>045. 자동 계약 + 영상 IR 통합 프레임워크</li>
+<li>046. AI 기반 시장 수요 예측 알고리즘</li>
+<li>047. 글로벌 유통업체 매칭 및 자동 계약 생성</li>
+<li>048. 대시보드 커스터마이징 저장 기능</li>
+<li>049. 정부 보조금 신청 자동화 시스템</li>
+<li>050. 스마트팜 현장 안전 모니터링 시스템</li></ul></div>
+<div class="tab-content" id="tab5"><ul><li>051. AI 시뮬레이션 기반 스마트팜 설계 자동 실행</li>
+<li>052. 자동 제어형 시뮬레이션 기반 온실 운영 전환</li>
+<li>053. 실시간 가상 스마트팜 배치 도식 생성기</li>
+<li>054. 예측 기반 시뮬레이션 운영 스케줄링</li>
+<li>055. 자동화 시뮬레이션 결과 → 도면 연동</li>
+<li>056. 3D 시뮬레이터 상태 데이터 자동 보고서화</li>
+<li>057. AI 시뮬레이션 기반 수익률 검증 시스템</li>
+<li>058. 실시간 설계 시뮬레이터 + 작물 성장 반응 모델</li>
+<li>059. 운영 시뮬레이션 자동 리포트 + Slack 통합</li>
+<li>060. 시뮬레이션 → 관리자 승인 → 실행 자동 전환</li></ul></div>
+<div class="tab-content" id="tab6"><ul><li>061. AI 제어형 농업 로봇 연동 시스템</li>
+<li>062. 드론 기반 생육 상태 진단 및 급수 실행</li>
+<li>063. 자동 수확 로봇과 작물 판단 알고리즘 연계</li>
+<li>064. 이동형 물 공급 장치 AI 연동 운영</li>
+<li>065. AI 작물 높이 감지 → 장비 자동 높이 조절</li>
+<li>066. 농업용 운반/포장 로봇 통합 제어 센터</li>
+<li>067. 로봇 이상/위험 감지 + 자동 중지 알림</li>
+<li>068. 자율 이동형 비료 분사 장치 연동</li>
+<li>069. 로봇 운행 영상 자동 기록 + 대시보드 저장</li>
+<li>070. 실시간 원격 로봇 명령 실행 시스템</li></ul></div>
+<div class="tab-content" id="tab7"><ul><li>071. 수확 보증 보험 연동 + 손실 평가 자동화</li>
+<li>072. 정책 보조금 매칭 시스템 (국가/지역 기반)</li>
+<li>073. AI 기반 농업 신용평가 점수 산정기</li>
+<li>074. 자동 대출 한도 예측 + 금융기관 추천기</li>
+<li>075. 스마트팜 금융 투자 시뮬레이터</li>
+<li>076. 보험 가입 → 조건 → 작황 연계 자동화</li>
+<li>077. 정책+금융 패키지 비교 분석 시스템</li>
+<li>078. 투자 수익률 계산기 + 기간별 목표 리포트</li>
+<li>079. 국가별 농업금융 정책 요약 리포트 생성기</li>
+<li>080. 보증/보험/대출 통합 추천 엔진</li></ul></div>
+<div class="tab-content" id="tab8"><ul><li>081. 생산지 → 물류 → 도매시장 자동 연동</li>
+<li>082. 지역 유통센터 자동 입고 예측 시스템</li>
+<li>083. B2B 주문 수량 예측 + 가격 자동 조율</li>
+<li>084. 유통사별 조건 기반 자동 거래 연결</li>
+<li>085. 실시간 재고 기준 B2B 제안 자동화</li>
+<li>086. IoT 기반 재고 출고 → 주문 연결 알고리즘</li>
+<li>087. 지역별 소매시장 대응 유통 전략 AI</li>
+<li>088. AI 기반 유통/출하/반품 비용 분석기</li>
+<li>089. 거래 완료 → 자동 송장/계약 문서 생성기</li>
+<li>090. 지역 유통 보고서 자동 생성 + Slack 연동</li></ul></div>
+<div class="tab-content" id="tab9"><ul><li>091. AgriChain 기반 NFT 계약서 발행 시스템</li>
+<li>092. 온체인 계약 상태 추적 뷰어 + 로그 분석</li>
+<li>093. 블록체인 기반 생산이력 등록 자동화</li>
+<li>094. 글로벌 스마트팜 DAO 시스템 연계</li>
+<li>095. 글로벌 통합 이력 + 수익 보고서 블록화</li>
+<li>096. AgriToken 기반 거래 기록 시뮬레이터</li>
+<li>097. DAO 운영자 리포트 자동 생성기</li>
+<li>098. NFT 기반 물류 추적 → 계약 자동화 연결</li>
+<li>099. 다국어 온체인 계약 생성기</li>
+<li>100. 글로벌 스마트팜 통합 AgriChain 생태계 완성</li></ul></div>
+
 </div>
 
 <footer>
-  <p>© 2024 AgriNexus World | 스마트팜 자동화 플랫폼</p>
+  <p>© 2024 AgriNexus World | 스마트농업 자동화 플랫폼</p>
 </footer>
 
 <script>
 function showTab(id) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-document.getElementById('g6').classList.add('active');  // 기본 열림
+document.getElementById("tab0").classList.add("active");
 </script>
 
 </body>
