@@ -3,99 +3,96 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | AI 기반 스마트농업 통합 플랫폼</title>
+  <title>AgriNexus World | 통합 자동화 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; margin: 0; background: #f4f9f6; color: #1e3a34; }
-    header, footer { background: #007c4d; color: white; padding: 1rem 2rem; text-align: center; }
-    nav a { margin: 0 1rem; color: white; text-decoration: none; font-weight: bold; }
-    .section { max-width: 1000px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.06); }
-    h1, h2 { text-align: center; }
-    button, input, textarea, select {
-      width: 100%; max-width: 600px; margin: 0.5rem auto; display: block;
-      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
+    body { font-family: Arial; background: #f0f6f4; margin: 0; padding: 2rem; text-align: center; }
+    h2 { margin-bottom: 0.5rem; }
+    .section { max-width: 800px; margin: 1.5rem auto; background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    .toggle { background: #007c4d; color: white; padding: 0.8rem 1.2rem; border: none; border-radius: 6px; cursor: pointer; margin: 1rem 0; }
+    .content { display: none; margin-top: 1rem; animation: fadeIn 0.5s ease-in-out; }
+    input, button, textarea, select {
+      width: 90%; max-width: 500px; margin: 0.5rem auto; font-size: 1rem;
+      padding: 0.8rem; border-radius: 6px; border: 1px solid #ccc; display: block;
     }
-    button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .chart, .response, .workflow { margin-top: 1rem; background: #eef7f0; padding: 1rem; border-radius: 8px; }
+    .result { margin-top: 1rem; background: #e8f6ef; padding: 1rem; border-radius: 6px; min-height: 50px; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>AgriNexus World</h1>
-  <nav>
-    <a href="#login">로그인</a>
-    <a href="#gpt">GPT 상담</a>
-    <a href="#dashboard">대시보드</a>
-    <a href="#iot">IoT 제어</a>
-    <a href="#feedback">모델 피드백</a>
-  </nav>
-</header>
+  <h1>🌍 AgriNexus World | AI 기반 스마트농업 자동화 플랫폼</h1>
 
-<div class="section" id="login">
-  <h2>🔐 로그인 / 회원가입</h2>
-  <input placeholder="이메일" />
-  <input placeholder="비밀번호" type="password" />
-  <button>로그인</button>
-  <button>회원가입</button>
-</div>
-
-<div class="section" id="gpt">
-  <h2>🤖 GPT 스마트팜 상담</h2>
-  <input id="apikey" placeholder="🔑 OpenAI API Key 입력" />
-  <textarea id="gptInput" placeholder="GPT에게 물어보세요">스마트팜 설계</textarea>
-  <button onclick="simulateGPT()">GPT 실행</button>
-  <div class="response" id="gptOutput">GPT 응답이 여기에 표시됩니다.</div>
-</div>
-
-<div class="section" id="dashboard">
-  <h2>📊 통합 자동화 대시보드</h2>
-  <button onclick="simulateChart()">정책 실행 통계 보기</button>
-  <div class="chart" id="chartResult">Chart.js 시각화 데이터</div>
-</div>
-
-<div class="section" id="iot">
-  <h2>📡 IoT 명령 실행</h2>
-  <button onclick="simulateIoT('vent-open')">온실 환기</button>
-  <button onclick="simulateIoT('water-start')">관수 시작</button>
-  <div id="iotResult" class="response">IoT 상태 로그 출력</div>
-</div>
-
-<div class="section" id="feedback">
-  <h2>📈 모델 피드백 분석</h2>
-  <select><option>정확</option><option>부정확</option></select>
-  <input placeholder="모델 태그 입력 (예: corn-v1)" />
-  <button>피드백 제출</button>
-  <div class="chart">정확도 피드백 차트 표시 영역</div>
-</div>
-
-<div class="section" id="workflow">
-  <h2>🧠 전체 워크플로우 시각화</h2>
-  <div class="workflow">
-    알림 → 예측 → 승인 → IoT 제어 → 응답 → 보고서 → 메일 발송
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('login')">🔐 로그인 / 회원가입</button>
+    <div id="login" class="content">
+      <input placeholder="이메일" />
+      <input placeholder="비밀번호" type="password" />
+      <button>로그인</button>
+      <button>회원가입</button>
+    </div>
   </div>
-</div>
 
-<footer>
-  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
-</footer>
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('gpt')">🤖 GPT 스마트팜 상담</button>
+    <div id="gpt" class="content">
+      <input placeholder="OpenAI API Key (sk-...)" />
+      <textarea placeholder="예: 스마트팜 설계">스마트팜 설계</textarea>
+      <button>GPT 실행</button>
+      <div class="result">GPT 응답이 표시됩니다.</div>
+    </div>
+  </div>
 
-<script>
-function simulateGPT() {
-  const input = document.getElementById("gptInput").value;
-  document.getElementById("gptOutput").innerText = "🤖 GPT 응답 예시: '" + input + "' 에 대한 스마트팜 설계 가이드입니다.";
-}
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('dashboard')">📊 통합 대시보드</button>
+    <div id="dashboard" class="content">
+      <button>정책 통계 보기</button>
+      <div class="result">정책 실행 통계 출력</div>
+    </div>
+  </div>
 
-function simulateChart() {
-  document.getElementById("chartResult").innerText = "정책 실행: 관수(3회), 환기(2회), 비료(1회)";
-}
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('iot')">📡 IoT 명령 실행</button>
+    <div id="iot" class="content">
+      <button>온실 환기</button>
+      <button>관수 시작</button>
+      <div class="result">IoT 응답 로그</div>
+    </div>
+  </div>
 
-function simulateIoT(command) {
-  document.getElementById("iotResult").innerText = `📡 IoT 명령 전송됨: ${command}`;
-}
-</script>
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('feedback')">📈 모델 피드백 분석</button>
+    <div id="feedback" class="content">
+      <select><option>정확</option><option>부정확</option></select>
+      <input placeholder="모델 태그 (예: corn-v1)" />
+      <button>피드백 제출</button>
+      <div class="result">정확도 통계 차트 표시</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('report')">📄 관리자 보고서 + PDF 발송</button>
+    <div id="report" class="content">
+      <textarea placeholder="승인 요약 내용"></textarea>
+      <input placeholder="📧 관리자 이메일" />
+      <button>PDF 생성 및 메일 전송</button>
+      <div class="result">메일 발송 완료</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <button class="toggle" onclick="toggleContent('workflow')">🧠 전체 자동화 워크플로우</button>
+    <div id="workflow" class="content">
+      <div class="result">알림 → 예측 → 승인 → IoT → 보고서 → 메일 발송</div>
+    </div>
+  </div>
+
+  <script>
+    function toggleContent(id) {
+      const target = document.getElementById(id);
+      target.style.display = target.style.display === "block" ? "none" : "block";
+    }
+  </script>
 
 </body>
 </html>
