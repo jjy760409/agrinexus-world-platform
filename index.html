@@ -1,48 +1,138 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>AgriNexus World - 기능 자동 확장 포털</title>
-    <style>
-        body { font-family: sans-serif; background: #f8fdf9; margin: 0; padding: 20px; }
-        .tab-group { margin: 20px 0; }
-        .tab { background: #fff; padding: 10px 15px; margin: 5px 0; border-radius: 8px; box-shadow: 0 0 4px rgba(0,0,0,0.1); cursor: pointer; }
-        .panel { display: none; padding: 10px 20px; background: #e8f9f0; margin-top: 5px; border-radius: 6px; }
-        .tab.active + .panel { display: block; }
-        button { padding: 6px 12px; margin: 5px; border: none; background: #2c8f55; color: white; border-radius: 4px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>AgriNexus World | 기능 자동 확장 유지형 포털</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial; background: #f3f9f6; color: #1e3a34; margin: 0; }
+    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
+    .container { max-width: 1100px; margin: auto; padding: 2rem; }
+    .card { background: #f1f9f4; margin-bottom: 2rem; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    .card h2 { margin-top: 0; }
+    .card ul { padding-left: 1.2rem; line-height: 1.6; }
+    .tab-btns { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
+    .tab-btns button {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: #007c4d;
+      color: white;
+      cursor: pointer;
+    }
+    .tab-content { display: none; background: #fff; border-radius: 10px; padding: 1rem; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; font-size: 0.9rem; margin-top: 3rem; }
+  </style>
 </head>
 <body>
 
-<h1>AgriNexus 기능 확장 포털</h1>
+<header>
+  <h1>AgriNexus World</h1>
+  <p>스마트농업 자동화 플랫폼 - 기존 디자인 고정 + 기능 자동 확장</p>
+</header>
 
-<div class="tab-group">
-    <div class="tab" onclick="toggleTab(this)">041~050 기능 보기</div>
-    <div class="panel">
-        <ul>
-            <li>041. 스마트팜 NFT 기반 계약서 생성 시스템 <button onclick="runAPI(41)">실행</button></li>
-            <li>042. 실시간 ESG 리포트 자동 작성 <button onclick="runAPI(42)">실행</button></li>
-            <li>043. 기후위기 대응형 설계 시뮬레이터 <button onclick="runAPI(43)">실행</button></li>
-            <li>044. 농산물 재고 기반 유통 흐름 최적화 <button onclick="runAPI(44)">실행</button></li>
-            <li>045. 자동 계약 + 영상 IR 통합 프레임워크 <button onclick="runAPI(45)">실행</button></li>
-        </ul>
+<div class="container">
+  <div class="card">
+    <h2>🌿 스마트팜 주요 기능</h2>
+    <div class="tab-btns">
+      <button onclick="switchTab('group1')">001~010</button>
+      <button onclick="switchTab('group2')">011~020</button>
+      <button onclick="switchTab('group3')">021~030</button>
+      <button onclick="switchTab('group4')">031~040</button>
+      <button onclick="switchTab('group5')">041~050</button>
     </div>
+
+    <div id="group1" class="tab-content active">
+      <ul>
+        <li>001. 스마트팜 AI 작물 추천 시스템</li>
+        <li>002. 실시간 IoT 센서 제어 및 모니터링 대시보드</li>
+        <li>003. 자동 재배 일정 생성 및 경고 시스템</li>
+        <li>004. 수확량 예측 AI 모델</li>
+        <li>005. 국가별 최적 작물 추천 알고리즘</li>
+        <li>006. 위성 기반 기후/토양 분석 시스템</li>
+        <li>007. 스마트팜 설계 자동화 도면 생성기</li>
+        <li>008. AI 기반 스마트팜 3D 시뮬레이션 영상 생성</li>
+        <li>009. 음성 내레이션 포함 IR 프레젠테이션 자동 생성</li>
+        <li>010. 스마트팜 기자재/자재/설비 자동 선택 최적화</li>
+      </ul>
+    </div>
+
+    <div id="group2" class="tab-content">
+      <ul>
+        <li>011. 글로벌 종자 비교 분석 시스템</li>
+        <li>012. AI 기반 병해충 진단 및 대응 시스템</li>
+        <li>013. 자동 급수/환기/조명 제어 시스템</li>
+        <li>014. 모바일 연동 푸시 알림 기능</li>
+        <li>015. 관리자용 통합 제어판 + 자동 보고서 생성</li>
+        <li>016. 수출입 절차 문서 자동 생성 시스템</li>
+        <li>017. 정책 분석 기반 설계 최적화</li>
+        <li>018. 수익성 분석 및 투자 예측</li>
+        <li>019. 설계~수출 전자동화 시스템</li>
+        <li>020. AI 도면 설계 + 장비 구성 시스템</li>
+      </ul>
+    </div>
+
+    <div id="group3" class="tab-content">
+      <ul>
+        <li>021. IR 제안서 + 계약서 PDF 생성 시스템</li>
+        <li>022. 계약서 요약 자동 생성기</li>
+        <li>023. 다국어 계약 변환 시스템</li>
+        <li>024. 수확 후 물류/수출 자동화 시스템</li>
+        <li>025. 투자자 자동 매칭 시스템</li>
+        <li>026. 배송 최적 경로 자동 제안 AI</li>
+        <li>027. 영상 기록 + 대시보드 시각화</li>
+        <li>028. ESG/위험 분석 시스템</li>
+        <li>029. 농산물 가격 예측 + 수요 분석</li>
+        <li>030. 스마트팜 A/S 통합 시스템</li>
+      </ul>
+    </div>
+
+    <div id="group4" class="tab-content">
+      <ul>
+        <li>031. 스마트팜 상태 분석 + 자동 조치</li>
+        <li>032. 자가 학습형 자동 업그레이드</li>
+        <li>033. PDF 보고서 + Slack 연동 자동화</li>
+        <li>034. PWA 설치형 앱 + 알림 시스템</li>
+        <li>035. 가격 협상 포함 자동 매칭 시스템</li>
+        <li>036. 홍보용 AI 기사 생성 시스템</li>
+        <li>037. 메일 자동 전송 시스템</li>
+        <li>038. 배송비 비교 + 포워더 자동 매칭</li>
+        <li>039. 기자재/브랜드/나사까지 최적화 시스템</li>
+        <li>040. 관리자 /admin 대시보드 통합</li>
+      </ul>
+    </div>
+
+    <div id="group5" class="tab-content">
+      <ul>
+        <li>041. 스마트팜 NFT 기반 계약서 생성 시스템</li>
+        <li>042. 실시간 ESG 리포트 자동 작성</li>
+        <li>043. 기후위기 대응형 설계 시뮬레이터</li>
+        <li>044. 농산물 재고 기반 유통 흐름 최적화</li>
+        <li>045. 자동 계약 + 영상 IR 통합 프레임워크</li>
+        <li>046. AI 기반 시장 수요 예측 알고리즘</li>
+        <li>047. 글로벌 유통업체 매칭 및 자동 계약 생성</li>
+        <li>048. 대시보드 커스터마이징 저장 기능</li>
+        <li>049. 정부 보조금 신청 자동화 시스템</li>
+        <li>050. 스마트팜 현장 안전 모니터링 시스템</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
-<script>
-function toggleTab(el) {
-    el.classList.toggle('active');
-    const panel = el.nextElementSibling;
-    if (panel.style.display === "block") {
-        panel.style.display = "none";
-    } else {
-        panel.style.display = "block";
-    }
-}
+<footer>
+  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
+</footer>
 
-function runAPI(code) {
-    alert("기능 실행 중: " + code + "번 API 호출 시뮬레이션");
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 </script>
 
