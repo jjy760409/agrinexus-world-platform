@@ -3,62 +3,73 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus 대화형 GPT | 단계별 실행</title>
+  <title>AgriNexus World | AI 기반 글로벌 스마트팜 자동화 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; background: #f0f8f5; padding: 2rem; text-align: center; color: #1e3a34; }
-    textarea, input, button {
-      width: 90%; max-width: 700px; padding: 1rem; font-size: 1rem; margin: 0.5rem auto; border-radius: 6px; border: 1px solid #ccc; display: block;
+    body { font-family: Arial; margin: 0; background: #f0f9f6; color: #1e3a34; }
+    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
+    .section { max-width: 1100px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    h1, h2 { text-align: center; }
+    button, input, textarea, select {
+      display: block; width: 90%; max-width: 700px; margin: 1rem auto;
+      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
     }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { margin-top: 1rem; background: #eaf6ef; padding: 1rem; border-radius: 8px; min-height: 80px; }
-    .next { display: none; margin-top: 1rem; }
+    .cardbox { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .card { background: #f4fbf6; padding: 1rem; width: 300px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.05); }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; font-size: 0.9rem; margin-top: 3rem; }
   </style>
 </head>
 <body>
 
-<h2>🌱 AgriNexus 전용 GPT 대화 + 단계별 실행</h2>
-<input id="user" placeholder="사용자 이메일 (예: user@example.com)" />
-<textarea id="prompt" rows="4" placeholder="스마트팜 설계에 대해 질문하세요">스마트팜 설계</textarea>
-<button onclick="sendGPT()">GPT 실행</button>
-<div class="response" id="output">GPT 응답이 여기에 표시됩니다.</div>
+<header>
+  <h1>AgriNexus World</h1>
+  <p>AI 기반 글로벌 스마트팜 자동화 + 물류 통합 플랫폼</p>
+</header>
 
-<div class="next" id="nextStep">
-  <button onclick="createPolicy()">이 설계로 정책 생성하기</button>
-  <button onclick="triggerIoT()">IoT 실행</button>
-  <button onclick="generateReport()">보고서 생성 + 메일 전송</button>
+<div class="section">
+  <h2>🌱 핵심 기능 바로가기</h2>
+  <div class="cardbox">
+    <div class="card"><h3>GPT 스마트팜 상담</h3><button onclick="alert('GPT 실행')">실행</button></div>
+    <div class="card"><h3>정책 자동 실행</h3><button onclick="alert('정책 실행')">큐 보기</button></div>
+    <div class="card"><h3>IoT 제어</h3><button onclick="alert('IoT 제어')">센서 제어</button></div>
+    <div class="card"><h3>모델 피드백 분석</h3><button onclick="alert('모델 분석')">정확도 보기</button></div>
+    <div class="card"><h3>PDF 보고서 + 메일</h3><button onclick="alert('PDF 메일 발송')">보고서 전송</button></div>
+    <div class="card"><h3>Slack / SMS 알림</h3><button onclick="alert('슬랙 알림')">알림 전송</button></div>
+    <div class="card"><h3>물류 / 배송 추적</h3><button onclick="alert('물류 추적 시스템')">위치 추적</button></div>
+    <div class="card"><h3>글로벌 작물 추천 AI</h3><button onclick="alert('작물 추천')">추천 보기</button></div>
+    <div class="card"><h3>정책 워크플로우 시각화</h3><button onclick="alert('워크플로우 보기')">자동화 흐름</button></div>
+  </div>
 </div>
 
-<script>
-let history = [];
+<div class="section">
+  <h2>🧠 스마트팜 정책 설계 요청</h2>
+  <textarea placeholder="예: 여름철 고온 대응 스마트팜 설계"></textarea>
+  <button>GPT 기반 설계 실행</button>
+</div>
 
-async function sendGPT() {
-  const prompt = document.getElementById("prompt").value;
-  const user = document.getElementById("user").value;
-  document.getElementById("output").innerText = "응답 생성 중...";
-  const res = await fetch("/gptChat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user, messages: history.concat({ role: "user", content: prompt }) })
-  });
-  const data = await res.json();
-  const reply = data.reply || "❌ 오류 발생";
-  document.getElementById("output").innerText = reply;
-  history.push({ role: "user", content: prompt });
-  history.push({ role: "assistant", content: reply });
-  document.getElementById("nextStep").style.display = "block";
-}
+<div class="section">
+  <h2>🚚 물류/배송 통합 기능</h2>
+  <textarea placeholder="송장번호 또는 배송 ID 입력"></textarea>
+  <button>실시간 배송 추적</button>
+  <div>위성 기반 위치 지도 출력 (예정)</div>
+</div>
 
-function createPolicy() {
-  alert("✅ 정책 생성이 시작되었습니다.");
-}
-function triggerIoT() {
-  alert("📡 IoT 명령 전송됨 (예: 환기)");
-}
-function generateReport() {
-  alert("📄 보고서가 생성되어 관리자에게 전송되었습니다.");
-}
-</script>
+<div class="section">
+  <h2>📦 전세계 유일 AgriNexus 고급 기능</h2>
+  <ul style="text-align:left; max-width:700px; margin:auto;">
+    <li>🌍 글로벌 작물 AI 예측 추천</li>
+    <li>🛰️ 위성 기반 IoT 센서 추적</li>
+    <li>📡 스마트팜 → 물류 → 수출까지 연결된 자동화</li>
+    <li>📄 자동 보고서 생성 + Slack / 메일 전송</li>
+    <li>💬 사용자 질문 → 정책 → 실행까지 원스탑</li>
+  </ul>
+</div>
+
+<footer>
+  <p>© 2024 AgriNexus World | GPT 기반 글로벌 스마트팜 자동화 플랫폼</p>
+  <p>문의: admin@agrinexus.world</p>
+</footer>
 
 </body>
 </html>
