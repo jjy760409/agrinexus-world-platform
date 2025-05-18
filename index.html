@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus World | All-in-One Smart Agriculture Portal</title>
+  <title>AgriNexus World | 스마트농업 통합 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body { font-family: Arial; background: #f3f9f6; color: #1e3a34; margin: 0; }
@@ -11,82 +11,78 @@
     .container { max-width: 1200px; margin: auto; padding: 2rem; }
     .card { background: #f1f9f4; margin-bottom: 2rem; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
     .card h2 { margin-top: 0; }
-    .card button, .card input, .card textarea, .card select {
+    .card button, .card input, .card textarea {
       width: 100%; max-width: 700px; margin: 0.5rem auto;
       padding: 0.8rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; display: block;
     }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+    #map { height: 300px; width: 100%; max-width: 700px; margin: 1rem auto; border-radius: 8px; }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 3rem; font-size: 0.9rem; }
   </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
 </head>
 <body>
 
 <header>
   <h1>AgriNexus World</h1>
-  <p>AI 스마트농업 + 물류 + 정책 + 투자 + 정보 + 판매 통합 플랫폼</p>
+  <p>AI 스마트농업 + 물류 + 정책 자동화 플랫폼</p>
 </header>
 
 <div class="container">
 
-  <!-- 스마트팜 -->
+  <!-- GPT 설계 실행 -->
   <div class="card">
-    <h2>🌿 스마트팜 기능</h2>
-    <button onclick="alert('GPT 설계 실행')">GPT 기반 스마트팜 설계</button>
-    <button onclick="alert('작물 추천 실행')">작물 재배 추천 시스템</button>
-    <button onclick="alert('수확량 예측 실행')">AI 수확량 예측</button>
-    <button onclick="alert('환경 제어 연결')">자동 환경 제어</button>
-    <button onclick="alert('센서 모니터링 연결')">센서 실시간 모니터링</button>
+    <h2>🧠 GPT 기반 정책 설계</h2>
+    <textarea id="prompt">여름철 고온 대응 스마트팜 설계 요청</textarea>
+    <button onclick="askGPT()">GPT 설계 실행</button>
+    <div id="gptResult" style="margin-top:1rem; background:#eaf6ef; padding:1rem; border-radius:6px;">GPT 응답 출력</div>
   </div>
 
-  <!-- 물류/배송 -->
+  <!-- 지도 API -->
   <div class="card">
-    <h2>🚚 물류 / 배송 기능</h2>
-    <input placeholder="송장번호 또는 위치 ID 입력">
-    <button onclick="alert('배송 추적 실행')">배송 상태 실시간 추적</button>
-    <button onclick="alert('지도 연결')">위성 지도 경로 보기</button>
-    <button onclick="alert('문서 생성')">수출 문서 자동 생성</button>
-    <button onclick="alert('물류 최적화 분석')">물류 경로 최적화 분석</button>
-  </div>
-
-  <!-- 통계 정보 -->
-  <div class="card">
-    <h2>📊 통계 / 정보 분석</h2>
-    <button onclick="alert('센서 데이터 수집')">센서 데이터 수집 보기</button>
-    <button onclick="alert('시장 가격 시각화')">시장 가격 변동 차트</button>
-    <button onclick="alert('생산성 분석')">작물 생산성 그래프</button>
-    <button onclick="alert('기후 변화 정보')">지역별 농업 + 기후 정보</button>
-    <button onclick="alert('예측 피드백 통계')">예측 정확도 피드백</button>
-  </div>
-
-  <!-- 정책/투자 -->
-  <div class="card">
-    <h2>🏛️ 정책 / 투자 연결</h2>
-    <input placeholder="국가 또는 도시명 입력">
-    <button onclick="alert('국가 정책 분석')">국가별 농업 정책 요약</button>
-    <button onclick="alert('도시 재배 정책')">도시별 재배 지원 정책</button>
-    <button onclick="alert('보조금 정보')">농업 보조금 / 창업 자금</button>
-    <button onclick="alert('투자자 정보')">국내외 투자자 연결</button>
-    <button onclick="alert('GPT 정책 요약')">GPT로 정책 자동 분석</button>
-  </div>
-
-  <!-- 판매자 기능 -->
-  <div class="card">
-    <h2>🛍️ 판매자 전용 기능</h2>
-    <input placeholder="상품명 / 작물명">
-    <input placeholder="가격 입력">
-    <input placeholder="재고 수량">
-    <button onclick="alert('상품 등록 실행')">상품 등록</button>
-    <button onclick="alert('가격 자동 추천')">가격 추천</button>
-    <button onclick="alert('유통 연동')">유통 → 고객 자동 연결</button>
-    <button onclick="alert('판매 예측 실행')">판매 예측 및 보고서</button>
+    <h2>🗺️ 실시간 물류 위치 지도</h2>
+    <input id="location" placeholder="위도,경도 (예: 37.5665,126.9780)">
+    <button onclick="showMap()">지도 표시</button>
+    <div id="map"></div>
   </div>
 
 </div>
 
 <footer>
   <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
-  <p>문의: admin@agrinexus.world</p>
 </footer>
+
+<script>
+  async function askGPT() {
+    const prompt = document.getElementById("prompt").value;
+    document.getElementById("gptResult").innerText = "GPT 응답 생성 중...";
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer sk-Your-OpenAI-Key",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content;
+    document.getElementById("gptResult").innerText = reply || "❌ GPT 실패";
+  }
+
+  function showMap() {
+    const coords = document.getElementById("location").value.split(",");
+    const lat = parseFloat(coords[0]);
+    const lng = parseFloat(coords[1]);
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: { lat, lng }
+    });
+    new google.maps.Marker({ position: { lat, lng }, map });
+  }
+</script>
 
 </body>
 </html>
