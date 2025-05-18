@@ -2,29 +2,22 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus World | 스마트농업 통합 플랫폼</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>AgriNexus World | All-in-One Smart Agriculture Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial; margin: 0; background: #f3f9f6; color: #1e3a34; }
+    body { font-family: Arial; background: #f3f9f6; color: #1e3a34; margin: 0; }
     header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
-    .cardbox { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 2rem; }
-    .card {
-      width: 320px; background: #f1f9f4; padding: 1rem;
-      border-radius: 10px; text-align: center;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    .container { max-width: 1200px; margin: auto; padding: 2rem; }
+    .card { background: #f1f9f4; margin-bottom: 2rem; padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    .card h2 { margin-top: 0; }
+    .card button, .card input, .card textarea, .card select {
+      width: 100%; max-width: 700px; margin: 0.5rem auto;
+      padding: 0.8rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; display: block;
     }
-    .card button { margin-top: 1rem; background: #007c4d; color: white; border: none;
-      padding: 0.8rem 1rem; border-radius: 6px; cursor: pointer; font-size: 1rem; width: 100%; }
-    .section { display: none; margin-top: 1rem; text-align: left; background: #fff; padding: 1rem; border-radius: 8px; }
-    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; }
+    button { background: #007c4d; color: white; border: none; cursor: pointer; }
+    footer { background: #1e3a34; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
   </style>
-  <script>
-    function toggle(id) {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-  </script>
 </head>
 <body>
 
@@ -33,102 +26,65 @@
   <p>AI 스마트농업 + 물류 + 정책 + 투자 + 정보 + 판매 통합 플랫폼</p>
 </header>
 
-<div class="cardbox">
+<div class="container">
 
+  <!-- 스마트팜 -->
   <div class="card">
-    <h3>🌿 스마트팜</h3>
-    <button onclick="toggle('smartfarm')">세부 기능 열기</button>
+    <h2>🌿 스마트팜 기능</h2>
+    <button onclick="alert('GPT 설계 실행')">GPT 기반 스마트팜 설계</button>
+    <button onclick="alert('작물 추천 실행')">작물 재배 추천 시스템</button>
+    <button onclick="alert('수확량 예측 실행')">AI 수확량 예측</button>
+    <button onclick="alert('환경 제어 연결')">자동 환경 제어</button>
+    <button onclick="alert('센서 모니터링 연결')">센서 실시간 모니터링</button>
   </div>
 
+  <!-- 물류/배송 -->
   <div class="card">
-    <h3>🚛 물류 / 배송</h3>
-    <button onclick="toggle('logistics')">세부 기능 열기</button>
+    <h2>🚚 물류 / 배송 기능</h2>
+    <input placeholder="송장번호 또는 위치 ID 입력">
+    <button onclick="alert('배송 추적 실행')">배송 상태 실시간 추적</button>
+    <button onclick="alert('지도 연결')">위성 지도 경로 보기</button>
+    <button onclick="alert('문서 생성')">수출 문서 자동 생성</button>
+    <button onclick="alert('물류 최적화 분석')">물류 경로 최적화 분석</button>
   </div>
 
+  <!-- 통계 정보 -->
   <div class="card">
-    <h3>📊 통계 / 정보</h3>
-    <button onclick="toggle('statistics')">세부 기능 열기</button>
+    <h2>📊 통계 / 정보 분석</h2>
+    <button onclick="alert('센서 데이터 수집')">센서 데이터 수집 보기</button>
+    <button onclick="alert('시장 가격 시각화')">시장 가격 변동 차트</button>
+    <button onclick="alert('생산성 분석')">작물 생산성 그래프</button>
+    <button onclick="alert('기후 변화 정보')">지역별 농업 + 기후 정보</button>
+    <button onclick="alert('예측 피드백 통계')">예측 정확도 피드백</button>
   </div>
 
+  <!-- 정책/투자 -->
   <div class="card">
-    <h3>🏛️ 정책 / 투자</h3>
-    <button onclick="toggle('policy')">세부 기능 열기</button>
+    <h2>🏛️ 정책 / 투자 연결</h2>
+    <input placeholder="국가 또는 도시명 입력">
+    <button onclick="alert('국가 정책 분석')">국가별 농업 정책 요약</button>
+    <button onclick="alert('도시 재배 정책')">도시별 재배 지원 정책</button>
+    <button onclick="alert('보조금 정보')">농업 보조금 / 창업 자금</button>
+    <button onclick="alert('투자자 정보')">국내외 투자자 연결</button>
+    <button onclick="alert('GPT 정책 요약')">GPT로 정책 자동 분석</button>
   </div>
 
+  <!-- 판매자 기능 -->
   <div class="card">
-    <h3>🛍️ 판매자 기능</h3>
-    <button onclick="toggle('seller')">세부 기능 열기</button>
+    <h2>🛍️ 판매자 전용 기능</h2>
+    <input placeholder="상품명 / 작물명">
+    <input placeholder="가격 입력">
+    <input placeholder="재고 수량">
+    <button onclick="alert('상품 등록 실행')">상품 등록</button>
+    <button onclick="alert('가격 자동 추천')">가격 추천</button>
+    <button onclick="alert('유통 연동')">유통 → 고객 자동 연결</button>
+    <button onclick="alert('판매 예측 실행')">판매 예측 및 보고서</button>
   </div>
 
 </div>
-
-<!-- 세부 카드 내용 -->
-<div class="cardbox">
-
-  <div class="section" id="smartfarm">
-    <h4>🌿 스마트팜 기능</h4>
-    <ul>
-      <li>GPT 기반 스마트팜 설계</li>
-      <li>작물 재배 추천 시스템</li>
-      <li>AI 기반 수확량 예측</li>
-      <li>자동 환경 제어 (온도, 습도, 조도 등)</li>
-      <li>스마트 센서 연결 및 실시간 모니터링</li>
-    </ul>
-  </div>
-
-  <div class="section" id="logistics">
-    <h4>🚚 물류 / 배송 기능</h4>
-    <ul>
-      <li>배송 상태 실시간 추적</li>
-      <li>위성 기반 배송 경로 지도 연동</li>
-      <li>수출 문서 자동 생성 (B/L, 인보이스, 패킹리스트)</li>
-      <li>배송사 연동 API</li>
-      <li>물류 최적 경로 분석 AI</li>
-    </ul>
-  </div>
-
-  <div class="section" id="statistics">
-    <h4>📈 통계 / 정보 분석</h4>
-    <ul>
-      <li>스마트팜 센서 데이터 수집</li>
-      <li>시장 가격 변동 시각화</li>
-      <li>작물별 생산성 그래프</li>
-      <li>지역별 농업 통계 + 기후 변화 정보</li>
-      <li>예측 정확도 피드백 통계</li>
-    </ul>
-  </div>
-
-  <div class="section" id="policy">
-    <h4>🏛️ 정책 / 투자 연결</h4>
-    <ul>
-      <li>국가별 농업 정책 요약</li>
-      <li>도시별 재배 지원 정책</li>
-      <li>농업 보조금 / 창업 자금 안내</li>
-      <li>투자자 연계 시스템 (국내외)</li>
-      <li>GPT로 정책 자동 분석</li>
-    </ul>
-  </div>
-
-  <div class="section" id="seller">
-    <h4>🛍️ 판매자 전용 기능</h4>
-    <ul>
-      <li>작물 상품 등록</li>
-      <li>가격 자동 추천 시스템</li>
-      <li>유통 → 물류 → 고객까지 자동 연동</li>
-      <li>상품별 재고 관리</li>
-      <li>보고서 자동 생성 및 판매 예측</li>
-    </ul>
-  </div>
-
-</div>
-
-<!-- 고정 GPT 버튼 -->
-<button class="chatbot-btn" style="position:fixed;right:20px;bottom:20px;background:#007c4d;color:#fff;padding:1rem 2rem;border:none;border-radius:30px;box-shadow:0 2px 10px rgba(0,0,0,0.2);cursor:pointer;" onclick="window.open('chat.html','_blank','width=500,height=600')">
-🤖 AgriNexus GPT 상담
-</button>
 
 <footer>
-  <p>© 2024 AgriNexus World | 스마트농업 자동화 플랫폼</p>
+  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
   <p>문의: admin@agrinexus.world</p>
 </footer>
 
