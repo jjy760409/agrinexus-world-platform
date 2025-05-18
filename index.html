@@ -3,38 +3,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus Slack 카드 + 자동 요약 보고서 + 대시보드</title>
+  <title>AgriNexus 승인 기반 자동 시각화 + 행동 분석 + GPT 정책 알림</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
-    body { font-family: Arial; background: #f2f9fc; padding: 2rem; text-align: center; }
+    body { font-family: Arial; padding: 2rem; background: #f4f9fc; text-align: center; }
     .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
     input, button, textarea { padding: 0.8rem; width: 90%; max-width: 500px; font-size: 1rem; margin: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
     canvas { margin-top: 2rem; background: white; border-radius: 10px; }
+    #workflow { background: white; padding: 1rem; border-radius: 10px; transition: all 0.3s ease-in-out; }
   </style>
 </head>
 <body>
 
-  <h1>📄 AgriNexus Slack 카드 + 승인 요약 보고서 + 종합 대시보드</h1>
+  <h1>🚀 AgriNexus 승인 → 자동화 시각화 + GPT 정책 생성</h1>
 
   <div class="section">
-    <h3>📎 Slack PDF 카드 포함 메시지 전송</h3>
-    <textarea id="cardSummary" placeholder="Slack 카드 요약 입력"></textarea>
-    <button onclick="sendSlackCard()">Slack 카드 전송</button>
-    <div id="slackCardStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>✅ 승인 → 자동 워크플로우 시각화 애니메이션</h3>
+    <button onclick="triggerWorkflow()">승인 시각화 애니메이션 시작</button>
+    <div id="workflow" class="mermaid">
+      graph TD
+        Start[승인됨] --> Command[IoT 명령]
+        Command --> Policy[정책 자동 생성]
+        Policy --> Notify[알림 발송]
+    </div>
   </div>
 
   <div class="section">
-    <h3>🧾 승인 로그 → 자동 요약 보고서 PDF</h3>
-    <button onclick="generateApprovalReport()">승인 요약 리포트 생성</button>
-    <div id="pdfStatus" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>📊 사용자 클릭 행동 분석</h3>
+    <canvas id="behaviorChart" width="700" height="300"></canvas>
   </div>
 
   <div class="section">
-    <h3>📊 전체 자동화 흐름 종합 대시보드</h3>
-    <canvas id="dashboardChart" width="700" height="300"></canvas>
+    <h3>🧠 GPT 기반 정책 알림 생성 (시뮬레이션)</h3>
+    <textarea id="policyContext" placeholder="정책 상황 요약 입력 (예: 수분 부족 시 자동 관수)"></textarea>
+    <button onclick="generatePolicy()">정책 메시지 생성</button>
+    <div id="gptPolicy" style="margin-top:1rem; font-weight:bold;"></div>
   </div>
 
   <script>
@@ -47,56 +53,39 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    async function sendSlackCard() {
-      const summary = document.getElementById("cardSummary").value;
-      const res = await fetch("https://your-server.com/send-slack-card", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "📎 AgriNexus 관리자 알림",
-          summary: summary,
-          pdf_url: "https://your-server.com/reports/admin_report.pdf"
-        })
-      });
-      document.getElementById("slackCardStatus").innerText = "✅ Slack 카드 메시지 전송 완료";
-    }
-
-    async function generateApprovalReport() {
-      const { jsPDF } = window.jspdf;
-      const snapshot = await db.ref("approvals").once("value");
-      const data = snapshot.val() || {};
-      const doc = new jsPDF();
-      doc.text("AgriNexus 관리자 승인 요약", 20, 20);
-      let y = 30;
-      for (const key in data) {
-        const entry = data[key];
-        doc.text(`- ${entry.note || entry.action} (${entry.time})`, 20, y);
-        y += 10;
-      }
-      doc.save("AgriNexus_Approval_Summary.pdf");
-      document.getElementById("pdfStatus").innerText = "📄 승인 요약 PDF 생성 완료!";
+    function triggerWorkflow() {
+      document.getElementById("workflow").classList.add("highlight");
+      setTimeout(() => mermaid.init(undefined, "#workflow"), 300);
     }
 
     db.ref("workflowClicks").on("value", snapshot => {
       const data = snapshot.val() || {};
-      const steps = {};
+      const stats = {};
       for (const key in data) {
-        const step = data[key].node;
-        steps[step] = (steps[step] || 0) + 1;
+        const node = data[key].node;
+        stats[node] = (stats[node] || 0) + 1;
       }
-      const ctx = document.getElementById("dashboardChart").getContext("2d");
+      const ctx = document.getElementById("behaviorChart").getContext("2d");
       new Chart(ctx, {
-        type: "pie",
+        type: "bar",
         data: {
-          labels: Object.keys(steps),
+          labels: Object.keys(stats),
           datasets: [{
-            label: "워크플로우 클릭 분포",
-            data: Object.values(steps),
-            backgroundColor: ["#007c4d", "#1d7874", "#679289", "#ee6c4d", "#3d405b"]
+            label: "사용자 워크플로우 클릭 분석",
+            data: Object.values(stats),
+            backgroundColor: "#007c4d"
           }]
         }
       });
     });
+
+    function generatePolicy() {
+      const context = document.getElementById("policyContext").value;
+      const policyText = `📌 정책 생성: "${context}" 상황에서 자동 대응 정책이 적용됩니다.`;
+      document.getElementById("gptPolicy").innerText = policyText;
+    }
+
+    mermaid.initialize({ startOnLoad: true });
   </script>
 
 </body>
