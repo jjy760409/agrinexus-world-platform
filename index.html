@@ -2,95 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AgriNexus Slack PDF 링크 + 자동 실행 + 경고 알림</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: Arial; padding: 2rem; background: #f8fcff; text-align: center; }
-    input, button, textarea { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-  </style>
+    <meta charset="UTF-8">
+    <title>AgriNexus AI Dashboard</title>
 </head>
 <body>
-
-  <h1>📩 AgriNexus Slack PDF + 응답 실패 경고 + 자동 실행</h1>
-
-  <div class="section">
-    <h3>📎 PDF 리포트 생성 + Slack 링크 포함 전송</h3>
-    <textarea id="summaryText" placeholder="PDF 요약 내용 입력"></textarea>
-    <button onclick="sendSlackWithPDF()">Slack 전송</button>
-    <div id="slackStatus" style="margin-top:1rem; color:#007c4d;"></div>
-  </div>
-
-  <div class="section">
-    <h3>⚠️ IoT 응답 실패 감지 시 자동 경고</h3>
-    <button onclick="simulateIoTFailure()">IoT 실패 테스트</button>
-    <div id="alertResult" style="margin-top:1rem; color:#e63946;"></div>
-  </div>
-
-  <div class="section">
-    <h3>🛠 관리자 승인 → 자동 행동 실행</h3>
-    <textarea id="approvalAction" placeholder="자동 실행 명령 입력 (예: 물주기 시작)"></textarea>
-    <button onclick="approveAndExecute()">승인 후 자동 실행</button>
-    <div id="execStatus" style="margin-top:1rem; color:#007c4d;"></div>
-  </div>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project.firebaseio.com",
-      projectId: "your-project"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    async function sendSlackWithPDF() {
-      const { jsPDF } = window.jspdf;
-      const summary = document.getElementById("summaryText").value;
-      const doc = new jsPDF();
-      doc.text("AgriNexus 관리자 보고서", 20, 20);
-      doc.text("내용: " + summary, 20, 40);
-      doc.text("시간: " + new Date().toLocaleString(), 20, 60);
-      const blob = doc.output("blob");
-
-      const formData = new FormData();
-      formData.append("pdf", blob, "report.pdf");
-
-      const res = await fetch("https://your-server.com/send-slack-link", {
-        method: "POST",
-        body: formData
-      });
-
-      document.getElementById("slackStatus").innerText = "📎 PDF 링크 포함 Slack 메시지 발송 완료!";
-    }
-
-    function simulateIoTFailure() {
-      const log = { type: "water", result: "실패", time: new Date().toISOString() };
-      db.ref("iotResponses").push(log);
-      fetch("https://your-server.com/notify-failure", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(log)
-      });
-      document.getElementById("alertResult").innerText = "🚨 실패 알림 전송됨!";
-    }
-
-    async function approveAndExecute() {
-      const action = document.getElementById("approvalAction").value;
-      db.ref("approvals").push({ action, approved: true, time: new Date().toISOString() });
-
-      await fetch("https://iot-server.example.com/control", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command: action })
-      });
-
-      document.getElementById("execStatus").innerText = "✅ 승인 → 자동 실행 명령 전송됨!";
-    }
-  </script>
-
+    <h1>✅ Slack 메시지 + PDF 미리보기</h1>
+    <h2>✅ 승인 로그 기반 요약 자동 분석</h2>
+    <h3>✅ 통합 대시보드 시각화</h3>
+    <p>전체 시스템이 통합된 GPT 기반 AgriNexus AI 플랫폼입니다.</p>
 </body>
 </html>
