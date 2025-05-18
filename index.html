@@ -3,95 +3,107 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus World | All-in-One Platform</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriNexus World | AI 스마트농업 자동화 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; background: #f4f9f6; margin: 0; color: #1e3a34; text-align: center; }
-    header { background: #007c4d; color: white; padding: 1.5rem; }
-    .section { max-width: 900px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
-    input, textarea, button {
-      width: 90%; max-width: 600px; margin: 1rem auto; padding: 1rem;
-      font-size: 1rem; border-radius: 6px; border: 1px solid #ccc; display: block;
+    body { font-family: Arial; background: #f3f9f6; margin: 0; color: #1e3a34; }
+    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
+    .logo { max-width: 120px; }
+    .section { max-width: 1100px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
+    h1, h2 { text-align: center; }
+    .cardbox { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; }
+    .card {
+      width: 300px;
+      background: #f1f9f4;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(0,0,0,0.04);
     }
-    button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .result { margin-top: 1rem; background: #e8f7ef; padding: 1rem; border-radius: 6px; min-height: 60px; }
+    .card img { max-height: 50px; margin-bottom: 0.5rem; }
+    button {
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      border: none;
+      background: #007c4d;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    footer {
+      background: #1e3a34;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
   </style>
 </head>
 <body>
 
 <header>
+  <img src="agrinexus_logo.png" class="logo" />
   <h1>AgriNexus World</h1>
-  <p>스마트농업 + 정책 + 물류 + AI + 알림 통합 플랫폼</p>
+  <p>AI 기반 스마트농업 + 물류 + 정책 자동화 통합 플랫폼</p>
 </header>
 
 <div class="section">
-  <h2>📍 실시간 배송 위치 추적</h2>
-  <input id="trackId" placeholder="송장번호 또는 물류 ID 입력" />
-  <button onclick="trackLogistics()">실시간 추적</button>
-  <div class="result" id="mapOutput">위치 추적 결과 출력</div>
+  <h2>🌟 주요 서비스</h2>
+  <div class="cardbox">
+    <div class="card">
+      <img src="ai_gpt_icon.png" />
+      <h3>GPT 스마트팜 상담</h3>
+      <button onclick="alert('GPT 실행 연결')">실행</button>
+    </div>
+    <div class="card">
+      <img src="dashboard_icon.png" />
+      <h3>정책 자동 실행</h3>
+      <button onclick="alert('정책 실행 연결')">큐 보기</button>
+    </div>
+    <div class="card">
+      <img src="iot_icon.png" />
+      <h3>IoT 제어 센터</h3>
+      <button onclick="alert('IoT 센서 연결')">센서 제어</button>
+    </div>
+    <div class="card">
+      <img src="feedback_icon.png" />
+      <h3>AI 모델 피드백</h3>
+      <button onclick="alert('모델 정확도 제출')">정확도 보기</button>
+    </div>
+    <div class="card">
+      <img src="pdf_icon.png" />
+      <h3>보고서 + PDF 전송</h3>
+      <button onclick="alert('PDF 메일 전송 연결')">전송</button>
+    </div>
+    <div class="card">
+      <img src="slack_icon.png" />
+      <h3>Slack / SMS 알림</h3>
+      <button onclick="alert('Slack API 전송')">알림 전송</button>
+    </div>
+    <div class="card">
+      <img src="logistics_icon.png" />
+      <h3>물류 최적화 AI</h3>
+      <button onclick="alert('물류 분석 연결')">경로 분석</button>
+    </div>
+    <div class="card">
+      <img src="prediction_icon.png" />
+      <h3>예측 모델 선택</h3>
+      <button onclick="alert('예측 모델 트리거')">모델 선택</button>
+    </div>
+    <div class="card">
+      <img src="workflow_icon.png" />
+      <h3>정책 자동화 흐름</h3>
+      <button onclick="alert('워크플로우 시각화')">자동화 흐름</button>
+    </div>
+  </div>
 </div>
 
-<div class="section">
-  <h2>📩 Slack 알림</h2>
-  <textarea id="slackMsg">정책 실행 완료</textarea>
-  <button onclick="sendSlack()">Slack 전송</button>
-  <div class="result" id="slackLog">Slack 결과</div>
-</div>
-
-<div class="section">
-  <h2>🔐 Firebase 사용자 로그인</h2>
-  <input id="email" placeholder="이메일" />
-  <input id="password" type="password" placeholder="비밀번호" />
-  <button onclick="login()">로그인</button>
-  <div class="result" id="authStatus">상태 표시</div>
-</div>
-
-<div class="section">
-  <h2>🧠 GPT 정책 설계 실행</h2>
-  <textarea id="prompt">스마트팜 AI 설계 요청</textarea>
-  <button onclick="askGPT()">GPT 실행</button>
-  <div class="result" id="gptResult">GPT 응답 결과</div>
-</div>
-
-<script>
-  async function trackLogistics() {
-    const id = document.getElementById("trackId").value;
-    document.getElementById("mapOutput").innerText = `🛰️ ${id} 위치 추적 중 (지도 연동 예정)`;
-  }
-
-  async function sendSlack() {
-    const msg = document.getElementById("slackMsg").value;
-    await fetch("/sendSlack", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: msg })
-    });
-    document.getElementById("slackLog").innerText = "✅ Slack 메시지 전송 완료";
-  }
-
-  async function login() {
-    const email = document.getElementById("email").value;
-    const pw = document.getElementById("password").value;
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, pw })
-    });
-    const msg = await res.text();
-    document.getElementById("authStatus").innerText = msg;
-  }
-
-  async function askGPT() {
-    const prompt = document.getElementById("prompt").value;
-    const res = await fetch("/gptPolicy", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-    const data = await res.json();
-    document.getElementById("gptResult").innerText = data.reply || "GPT 실패";
-  }
-</script>
+<footer>
+  <p>© 2024 AgriNexus World | AI 스마트농업 자동화 플랫폼</p>
+  <p>문의: admin@agrinexus.world</p>
+</footer>
 
 </body>
 </html>
