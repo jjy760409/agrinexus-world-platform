@@ -3,85 +3,53 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgriNexus World | AI 스마트농업 자동화 플랫폼</title>
+  <title>AgriNexus World | 실시간 AI 스마트농업 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; margin: 0; background: #f3f9f6; color: #1e3a34; }
-    header { background: #007c4d; color: white; padding: 1.5rem; text-align: center; }
-    .container { max-width: 900px; margin: auto; padding: 2rem; }
-    .card { background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; box-shadow: 0 0 6px rgba(0,0,0,0.05); }
-    h2 { margin-top: 0; }
-    input, textarea, button, select {
-      display: block; width: 100%; max-width: 600px; margin: 0.5rem auto;
-      padding: 1rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;
-    }
+    body { font-family: Arial; background: #f0f8f5; margin: 0; padding: 2rem; color: #1e3a34; text-align: center; }
+    h1 { color: #007c4d; }
+    .section { max-width: 800px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+    input, textarea, button { width: 90%; max-width: 600px; margin: 0.5rem auto; padding: 1rem; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; display: block; }
     button { background: #007c4d; color: white; border: none; cursor: pointer; }
-    .response { background: #eafaf1; padding: 1rem; border-radius: 6px; min-height: 100px; margin-top: 1rem; }
+    .result { margin-top: 1rem; background: #e8f6ef; padding: 1rem; border-radius: 6px; min-height: 60px; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>AgriNexus World</h1>
-  <p>AI 기반 글로벌 스마트농업 자동화 포털</p>
-  <div>🌐 지금 9,284명이 함께하고 있습니다</div>
-</header>
+<h1>AgriNexus World</h1>
+<p>실시간 작동형 AI 스마트농업 자동화 플랫폼</p>
 
-<div class="container">
+<div class="section">
+  <h2>🤖 GPT 스마트팜 상담</h2>
+  <textarea id="gptPrompt">스마트팜 설계</textarea>
+  <button onclick="callGPT()">GPT 실행</button>
+  <div class="result" id="gptResponse">GPT 응답 출력</div>
+</div>
 
-  <div class="card" id="auth">
-    <h2>🔐 회원가입 / 로그인</h2>
-    <input id="email" placeholder="이메일 입력" />
-    <input id="password" type="password" placeholder="비밀번호 입력" />
-    <button onclick="signup()">가입하기</button>
-    <button onclick="login()">로그인</button>
-    <div id="authStatus"></div>
-  </div>
+<div class="section">
+  <h2>📡 IoT 명령 제어</h2>
+  <button onclick="sendIoT('vent')">온실 환기</button>
+  <button onclick="sendIoT('water')">관수 시작</button>
+  <div class="result" id="iotResult">IoT 실행 로그</div>
+</div>
 
-  <div class="card">
-    <h2>🤖 GPT 스마트팜 상담</h2>
-    <textarea id="prompt">스마트팜 설계</textarea>
-    <button onclick="askGPT()">GPT 실행</button>
-    <div class="response" id="gptResponse">GPT 응답 영역</div>
-  </div>
-
-  <div class="card">
-    <h2>📡 IoT 제어</h2>
-    <button onclick="runIoT('vent')">온실 환기</button>
-    <button onclick="runIoT('water')">관수 시작</button>
-    <div class="response" id="iotLog">IoT 응답 로그</div>
-  </div>
-
-  <div class="card">
-    <h2>📄 관리자 보고서 생성</h2>
-    <textarea id="reportContent">최근 정책 실행 보고서 내용</textarea>
-    <input id="adminEmail" placeholder="관리자 이메일" />
-    <button onclick="sendReport()">PDF 생성 및 전송</button>
-    <div class="response" id="reportStatus">PDF 생성 상태</div>
-  </div>
-
+<div class="section">
+  <h2>📄 PDF 보고서 생성 + 관리자 이메일 전송</h2>
+  <textarea id="reportText">정책 실행 보고서 요약 내용</textarea>
+  <input id="adminEmail" placeholder="관리자 이메일 입력" />
+  <button onclick="sendPDF()">PDF 생성 및 전송</button>
+  <div class="result" id="reportStatus">PDF 상태</div>
 </div>
 
 <script>
-  // Firebase 인증 구조
-  async function signup() {
-    const email = document.getElementById("email").value;
-    const pw = document.getElementById("password").value;
-    document.getElementById("authStatus").innerText = "✅ 가입되었습니다 (모의)";
-  }
-
-  async function login() {
-    const email = document.getElementById("email").value;
-    const pw = document.getElementById("password").value;
-    document.getElementById("authStatus").innerText = "✅ 로그인 완료 (모의)";
-  }
-
-  async function askGPT() {
-    const prompt = document.getElementById("prompt").value;
+  async function callGPT() {
+    const prompt = document.getElementById("gptPrompt").value;
+    document.getElementById("gptResponse").innerText = "GPT 응답 생성 중...";
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": "Bearer sk-YourSharedKeyHere",
+        "Authorization": "Bearer sk-YourSharedAPIKeyHere",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -94,14 +62,35 @@
     document.getElementById("gptResponse").innerText = reply;
   }
 
-  function runIoT(cmd) {
-    document.getElementById("iotLog").innerText = "📡 " + cmd + " 명령 전송됨!";
+  function sendIoT(command) {
+    document.getElementById("iotResult").innerText = `📡 IoT 명령 전송됨: ${command}`;
+    fetch("https://iot-server.example.com/control", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ command })
+    });
   }
 
-  async function sendReport() {
+  async function sendPDF() {
+    const { jsPDF } = window.jspdf;
+    const content = document.getElementById("reportText").value;
     const email = document.getElementById("adminEmail").value;
-    const summary = document.getElementById("reportContent").value;
-    document.getElementById("reportStatus").innerText = `📄 PDF 생성 및 메일 전송 (모의) → ${email}`;
+    const doc = new jsPDF();
+    doc.text("AgriNexus 정책 보고서", 20, 20);
+    doc.text("내용: " + content, 20, 40);
+    doc.text("시간: " + new Date().toLocaleString(), 20, 60);
+    const blob = doc.output("blob");
+
+    const form = new FormData();
+    form.append("pdf", blob, "report.pdf");
+    form.append("email", email);
+
+    await fetch("https://your-server.com/send-summary", {
+      method: "POST",
+      body: form
+    });
+
+    document.getElementById("reportStatus").innerText = "📩 관리자에게 PDF 전송 완료!";
   }
 </script>
 
