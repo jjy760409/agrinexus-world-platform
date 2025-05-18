@@ -3,54 +3,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AgriNexus IoT 응답 + 승인 로그 + GPT 요약 자동화</title>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <title>AgriNexus Slack PDF 링크 + 자동 실행 + 경고 알림</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; background: #f7fbfd; padding: 2rem; text-align: center; }
-    input, button, textarea { padding: 0.8rem; margin: 0.4rem; font-size: 1rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
-    .section { background: white; margin: 1.5rem auto; padding: 1.5rem; border-radius: 12px; max-width: 800px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
-    #workflow { background: white; padding: 1rem; border-radius: 10px; }
+    body { font-family: Arial; padding: 2rem; background: #f8fcff; text-align: center; }
+    input, button, textarea { padding: 0.8rem; font-size: 1rem; margin: 0.5rem; width: 90%; max-width: 500px; border-radius: 6px; border: 1px solid #ccc; }
+    .section { background: white; padding: 1.5rem; margin: 2rem auto; max-width: 800px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
 
-  <h1>🌐 AgriNexus IoT 응답 처리 + 관리자 승인 + GPT 요약 자동화</h1>
+  <h1>📩 AgriNexus Slack PDF + 응답 실패 경고 + 자동 실행</h1>
 
   <div class="section">
-    <h3>📡 IoT 제어 요청 + 응답 결과 반영</h3>
-    <button onclick="sendIoT('vent')">🌬️ 환기 명령</button>
-    <button onclick="sendIoT('water')">💧 물주기 명령</button>
-    <div id="iotResult" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>📎 PDF 리포트 생성 + Slack 링크 포함 전송</h3>
+    <textarea id="summaryText" placeholder="PDF 요약 내용 입력"></textarea>
+    <button onclick="sendSlackWithPDF()">Slack 전송</button>
+    <div id="slackStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <div class="section">
-    <h3>🧾 관리자 승인 기록 및 상태</h3>
-    <textarea id="approvalNote" placeholder="승인 코멘트 입력"></textarea>
-    <button onclick="saveApproval()">승인 저장</button>
-    <div id="approvalLog" style="margin-top:1rem; color:#007c4d;"></div>
+    <h3>⚠️ IoT 응답 실패 감지 시 자동 경고</h3>
+    <button onclick="simulateIoTFailure()">IoT 실패 테스트</button>
+    <div id="alertResult" style="margin-top:1rem; color:#e63946;"></div>
   </div>
 
   <div class="section">
-    <h3>🧠 GPT 요약 메시지 자동 생성 (시뮬레이션)</h3>
-    <textarea id="context" placeholder="상황 또는 센서 상태 요약 입력"></textarea>
-    <button onclick="generateSummary()">요약 생성</button>
-    <div id="gptSummary" style="margin-top:1rem; font-weight:bold;"></div>
-  </div>
-
-  <div class="section">
-    <h3>📈 전체 워크플로우</h3>
-    <div id="workflow" class="mermaid">
-      graph TD
-        Sensor[센서 감지]
-        Alert[알림 생성]
-        Admin[관리자 승인]
-        IoT[IoT 명령 요청]
-        Response[응답 기록]
-        Summary[GPT 요약]
-        Sensor --> Alert --> Admin --> IoT --> Response --> Summary
-    </div>
+    <h3>🛠 관리자 승인 → 자동 행동 실행</h3>
+    <textarea id="approvalAction" placeholder="자동 실행 명령 입력 (예: 물주기 시작)"></textarea>
+    <button onclick="approveAndExecute()">승인 후 자동 실행</button>
+    <div id="execStatus" style="margin-top:1rem; color:#007c4d;"></div>
   </div>
 
   <script>
@@ -63,34 +47,49 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function sendIoT(type) {
-      const actionMap = { vent: "환기", water: "물주기" };
-      fetch("https://iot-server.example.com/control", {
+    async function sendSlackWithPDF() {
+      const { jsPDF } = window.jspdf;
+      const summary = document.getElementById("summaryText").value;
+      const doc = new jsPDF();
+      doc.text("AgriNexus 관리자 보고서", 20, 20);
+      doc.text("내용: " + summary, 20, 40);
+      doc.text("시간: " + new Date().toLocaleString(), 20, 60);
+      const blob = doc.output("blob");
+
+      const formData = new FormData();
+      formData.append("pdf", blob, "report.pdf");
+
+      const res = await fetch("https://your-server.com/send-slack-link", {
+        method: "POST",
+        body: formData
+      });
+
+      document.getElementById("slackStatus").innerText = "📎 PDF 링크 포함 Slack 메시지 발송 완료!";
+    }
+
+    function simulateIoTFailure() {
+      const log = { type: "water", result: "실패", time: new Date().toISOString() };
+      db.ref("iotResponses").push(log);
+      fetch("https://your-server.com/notify-failure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command: type })
-      }).then(res => res.json())
-        .then(data => {
-          db.ref("iotResponses").push({ type, result: data.status, time: new Date().toISOString() });
-          document.getElementById("iotResult").innerText = `✅ ${actionMap[type]} 명령 결과: ${data.status}`;
-        }).catch(() => {
-          document.getElementById("iotResult").innerText = `❌ ${actionMap[type]} 명령 실패`;
-        });
+        body: JSON.stringify(log)
+      });
+      document.getElementById("alertResult").innerText = "🚨 실패 알림 전송됨!";
     }
 
-    function saveApproval() {
-      const note = document.getElementById("approvalNote").value;
-      db.ref("approvals").push({ note, approved: true, time: new Date().toISOString() });
-      document.getElementById("approvalLog").innerText = "✅ 승인 저장 완료";
-    }
+    async function approveAndExecute() {
+      const action = document.getElementById("approvalAction").value;
+      db.ref("approvals").push({ action, approved: true, time: new Date().toISOString() });
 
-    function generateSummary() {
-      const context = document.getElementById("context").value;
-      const summary = `📢 상태 요약: "${context}"에 따른 자동 대응 및 알림이 생성되었습니다.`;
-      document.getElementById("gptSummary").innerText = summary;
-    }
+      await fetch("https://iot-server.example.com/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command: action })
+      });
 
-    mermaid.initialize({ startOnLoad: true });
+      document.getElementById("execStatus").innerText = "✅ 승인 → 자동 실행 명령 전송됨!";
+    }
   </script>
 
 </body>
