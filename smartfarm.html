@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><meta charset="UTF-8"><title>스마트팜 기능</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  body { background: url('earth-bg.jpg') no-repeat center center fixed; background-size: cover; }
-</style></head>
-<body class="bg-black/80 text-white font-sans backdrop-blur">
-  <main class="max-w-3xl mx-auto py-10 px-6">
-    <h2 class="text-3xl font-bold mb-6">🌾 스마트팜 기능 선택</h2>
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Farm</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: url('earth-bg.jpg') no-repeat center center fixed; background-size: cover; }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur px-6 py-8">
+  <main class="max-w-4xl mx-auto py-10">
+    <h2 class="text-3xl font-bold mb-6 text-center">🌾 스마트팜 기능</h2>
     <div class="space-y-6">
-      <div><a href="ai.html" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded inline-block">작물 추천 결과 보기</a></div>
-      <div><a href="schedule.html" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded inline-block">재배 일정 확인</a></div>
+      <div class="bg-gray-900/80 p-6 rounded-xl">
+        <h3 class="text-lg font-semibold text-teal-400 mb-1">AI 작물 추천</h3>
+        <a href="ai.html" class="text-sm text-teal-300 hover:underline">→ 결과 보기</a>
+      </div>
     </div>
   </main>
 </body>

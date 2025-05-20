@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><meta charset="UTF-8"><title>작물 추천 결과</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  body { background: url('earth-bg.jpg') no-repeat center center fixed; background-size: cover; }
-</style></head>
+<head>
+  <meta charset="UTF-8" />
+  <title>AI 작물 추천 결과</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: url('earth-bg.jpg') no-repeat center center fixed; background-size: cover; }
+  </style>
+</head>
 <body class="bg-black/80 text-white font-sans backdrop-blur">
-  <main class="max-w-3xl mx-auto py-10 px-6">
-    <h2 class="text-3xl font-bold mb-4">📋 작물 추천 결과</h2>
-    <ul class="list-disc text-sm text-gray-300 space-y-1">
-      <li>상추 - 유통 안정성 높음</li>
-      <li>청경채 - 빠른 수확 가능</li>
-      <li>완두콩 - 단백질 높고 토양개량 효과</li>
-    </ul>
+  <main class="max-w-4xl mx-auto py-10 px-6">
+    <h2 class="text-3xl font-bold mb-6">🌱 AI 작물 추천 결과</h2>
+    <section class="bg-gray-900/90 p-6 rounded-xl mb-8">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">📋 추천 작물 목록</h3>
+      <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
+        <li>부산 지역 추천 작물: 상추</li>
+        <li>부산 지역 추천 작물: 청경채</li>
+        <li>부산 지역 추천 작물: 완두콩</li>
+      </ul>
+    </section>
+    <section class="bg-gray-900/90 p-6 rounded-xl">
+      <h3 class="text-xl font-semibold text-teal-400 mb-4">📄 상세 설명</h3>
+      <p class="text-sm text-gray-200 mb-2">봄철 부산 지역은 평균기온 10~18℃로, 해양성 기후가 작물 생장에 유리합니다.</p>
+      <ul class="list-disc list-inside text-sm text-gray-300 space-y-1 mt-4">
+        <li><strong class="text-green-300">상추</strong>: 약 35일, 유통 안정성 높음</li>
+        <li><strong class="text-pink-300">청경채</strong>: 20~25일, 도시 시장 연계</li>
+        <li><strong class="text-purple-300">완두콩</strong>: 60일, 단백질 풍부, 토양개량 효과</li>
+      </ul>
+    </section>
   </main>
 </body>
 </html>
