@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AGRINEXUS - AI Agricultural Platform</title>
+  <title>AGRINEXUS Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="manifest" href="manifest.json" />
   <style>
     body {
       background: url('earth-bg.jpg') no-repeat center center fixed;
@@ -16,69 +15,32 @@
 <body class="bg-black/80 text-white font-sans backdrop-blur">
   <header class="flex justify-between items-center px-6 py-4">
     <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
-    <div class="flex items-center space-x-4 text-sm">
-      <select id="langSwitcher" class="bg-black border border-gray-700 px-2 py-1 rounded">
-        <option value="en">English</option>
-        <option value="ko">한국어</option>
-        <option value="es">Español</option>
-      </select>
-      <a href="#" class="hover:text-teal-300">Chat</a>
-      <a href="#" class="hover:text-teal-300">Log in</a>
-      <button class="bg-teal-600 hover:bg-teal-500 px-4 py-1 rounded text-sm">Sign up →</button>
-    </div>
+    <nav class="space-x-4 text-sm">
+      <a href="/smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+      <a href="#" class="hover:text-teal-300">Logistics</a>
+      <a href="#" class="hover:text-teal-300">Contract</a>
+    </nav>
   </header>
 
-  <section class="text-center py-20">
-    <h2 class="text-4xl font-bold">AI-Powered Agricultural Solutions</h2>
-    <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">Harness the power of artificial intelligence to optimize and transform your agricultural operations.</p>
-    <button class="mt-6 bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3 rounded text-lg">Get Started</button>
-  </section>
-
-  <section class="max-w-6xl mx-auto px-4 pb-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <main class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Smart Farm Card -->
     <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Smart Farm</h3>
+      <h2 class="text-lg font-bold mb-1">Smart Farm</h2>
       <p class="text-sm text-gray-300">Monitor and manage your smart farming operations</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
+      <a href="smartfarm.html" class="mt-3 inline-block text-teal-400 text-sm hover:underline">View →</a>
     </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Logistics System</h3>
-      <p class="text-sm text-gray-300">Optimize required export documents for each country</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
-    </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Contract Management</h3>
-      <p class="text-sm text-gray-300">Automate and manage your agricultural contracts</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
-    </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Revenue Prediction</h3>
-      <p class="text-sm text-gray-300">Estimate and analyze crop revenue based on region and market</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
-    </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Export Documentation</h3>
-      <p class="text-sm text-gray-300">Generate required export documents for your crops</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
-    </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Active Users</h3>
-      <p class="text-teal-400 text-2xl">1,234 <span class="text-sm text-gray-300">online</span></p>
-    </div>
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold mb-1">Self-Learning System</h3>
-      <p class="text-sm text-gray-300">Improve AI over time to optimize features</p>
-      <a href="#" class="block mt-2 text-teal-400 text-sm">View →</a>
-    </div>
-  </section>
 
-  <div class="fixed bottom-6 right-6">
-    <button class="bg-blue-700 hover:bg-blue-600 p-4 rounded-full shadow-lg">💬</button>
-  </div>
-
-  <script>
-    document.getElementById("langSwitcher").addEventListener("change", function(e) {
-      alert("Language changed to: " + e.target.value);
-    });
-  </script>
+    <!-- Additional placeholder cards -->
+    <div class="bg-gray-900/80 p-6 rounded-xl">
+      <h2 class="text-lg font-bold mb-1">Logistics System</h2>
+      <p class="text-sm text-gray-300">Optimize your agriculture logistics and shipping costs</p>
+      <a href="#" class="mt-3 inline-block text-teal-400 text-sm hover:underline">View →</a>
+    </div>
+    <div class="bg-gray-900/80 p-6 rounded-xl">
+      <h2 class="text-lg font-bold mb-1">Contract Management</h2>
+      <p class="text-sm text-gray-300">Create and sign AI-powered farming contracts</p>
+      <a href="#" class="mt-3 inline-block text-teal-400 text-sm hover:underline">View →</a>
+    </div>
+  </main>
 </body>
 </html>
