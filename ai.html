@@ -1,1 +1,77 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>ai.html</title></head><body><h2>AI Page</h2><br><a href='index.html'>← Main</a></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>작물 추천 시스템</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="index.html" class="hover:text-teal-300">Home</a>
+      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+      <a href="ai.html" class="text-teal-400">AI 작물 추천</a>
+    </nav>
+  </header>
+
+  <main class="max-w-3xl mx-auto py-10 px-6">
+    <h2 class="text-3xl font-bold mb-6">🌱 AI 기반 작물 추천 시스템</h2>
+    <form id="recommendForm" class="space-y-4 mb-8">
+      <div>
+        <label class="block text-sm mb-1">지역명</label>
+        <input id="regionInput" type="text" placeholder="예: 전남 순천" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white">
+      </div>
+      <div>
+        <label class="block text-sm mb-1">계절 선택</label>
+        <select id="seasonSelect" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white">
+          <option value="봄">봄</option>
+          <option value="여름">여름</option>
+          <option value="가을">가을</option>
+          <option value="겨울">겨울</option>
+        </select>
+      </div>
+      <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded">작물 추천 받기</button>
+    </form>
+
+    <div id="resultSection" class="hidden bg-gray-900/80 p-6 rounded-xl">
+      <h3 class="text-xl font-semibold mb-2 text-teal-400">📋 추천 작물 목록</h3>
+      <ul id="recommendationList" class="list-disc list-inside text-sm text-gray-300">
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("recommendForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const region = document.getElementById("regionInput").value.trim();
+      const season = document.getElementById("seasonSelect").value;
+
+      const crops = {
+        봄: ["상추", "청경채", "완두콩"],
+        여름: ["방울토마토", "가지", "오이"],
+        가을: ["배추", "무", "대파"],
+        겨울: ["딸기", "시금치", "브로콜리"]
+      };
+
+      const recommended = crops[season] || [];
+      const list = document.getElementById("recommendationList");
+      list.innerHTML = "";
+      recommended.forEach(crop => {
+        const li = document.createElement("li");
+        li.textContent = `${region} 지역 추천 작물: ${crop}`;
+        list.appendChild(li);
+      });
+
+      document.getElementById("resultSection").classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>

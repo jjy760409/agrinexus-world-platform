@@ -1,9 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logistics System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="index.html" class="hover:text-teal-300">Home</a>
+      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+      <a href="logistics.html" class="text-teal-400">Logistics</a>
+    </nav>
+  </header>
 
-<!DOCTYPE html><html><body>
-<h1>📦 물류 자동 생성기</h1>
-<form>
-  출발지: <input type="text" name="from"><br>
-  도착지: <input type="text" name="to"><br>
-  <button type="submit">물류 경로 생성</button>
-</form>
-</body></html>
+  <main class="max-w-5xl mx-auto py-10 px-6">
+    <h2 class="text-3xl font-bold mb-6">🚚 물류 시스템 기능 통합</h2>
+
+    <section class="mb-10">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">1. 물류비 자동 계산기</h3>
+      <p class="text-sm text-gray-300 mb-3">무게, 부피, 거리, 온도조건에 따라 자동으로 물류비를 계산합니다.</p>
+      <a href="logistics-calc.html" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded text-white text-sm inline-block">물류비 계산 시작</a>
+    </section>
+
+    <section class="mb-10">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">2. 포워더 자동 매칭 시스템</h3>
+      <p class="text-sm text-gray-300 mb-3">화물 조건에 따라 최적의 국내/국제 포워더를 자동 매칭합니다.</p>
+      <a href="forwarder.html" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded text-white text-sm inline-block">매칭 시작</a>
+    </section>
+
+    <section class="mb-10">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">3. 위성 기반 물류 실시간 추적</h3>
+      <p class="text-sm text-gray-300 mb-3">지구 상 위치를 위성 기반으로 추적하고 실시간 지도와 연결합니다.</p>
+      <a href="tracking.html" class="bg-cyan-600 hover:bg-cyan-500 px-4 py-2 rounded text-white text-sm inline-block">위치 추적 대시보드</a>
+    </section>
+
+    <p class="mt-10 text-xs text-gray-500">※ 위 기능은 API 또는 모듈 연동 시 실서비스로 확장 가능합니다.</p>
+  </main>
+</body>
+</html>

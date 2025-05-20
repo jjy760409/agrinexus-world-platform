@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGRINEXUS Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {{
+      background: url('earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }}
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+      <a href="logistics.html" class="hover:text-teal-300">Logistics</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Smart Farm Card -->
+    <div class="bg-gray-900/80 p-6 rounded-xl">
+      <h2 class="text-lg font-bold mb-1">스마트 팜</h2>
+      <p class="text-sm text-gray-300">스마트 농업 운영 모니터링 및 관리</p>
+      <a href="smartfarm.html" class="mt-3 inline-block text-teal-400 text-sm hover:underline">→ 보기</a>
+    </div>
+
+    <!-- Logistics System Card -->
+    <div class="bg-gray-900/80 p-6 rounded-xl">
+      <h2 class="text-lg font-bold mb-1">물류 시스템</h2>
+      <p class="text-sm text-gray-300">수출입 문서 최적화 및 실시간 추적</p>
+      <a href="logistics.html" class="mt-3 inline-block text-teal-400 text-sm hover:underline">→ 보기</a>
+    </div>
+  </main>
+</body>
+</html>
