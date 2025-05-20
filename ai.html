@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AI 작물 추천</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>작물 추천</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -15,47 +16,19 @@
   <header class="flex justify-between items-center px-6 py-4">
     <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
     <nav class="space-x-4 text-sm">
-      <a href="index.html" class="hover:text-teal-300">홈</a>
-      <a href="smartfarm.html" class="hover:text-teal-300">스마트팜</a>
-      <a href="ai.html" class="text-teal-400">작물 추천</a>
+      <a href="index.html" class="hover:text-teal-300">Home</a>
+      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
     </nav>
   </header>
-
   <main class="max-w-4xl mx-auto py-10 px-6">
-    <h2 class="text-3xl font-bold mb-6">🌱 AI 기반 작물 추천 시스템</h2>
-
-    <form class="bg-gray-900/80 p-6 rounded-xl space-y-4 mb-8">
-      <div>
-        <label class="block text-sm mb-1">지역명</label>
-        <input value="부산" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white" disabled>
-      </div>
-      <div>
-        <label class="block text-sm mb-1">계절 선택</label>
-        <input value="봄" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white" disabled>
-      </div>
-      <button disabled class="bg-emerald-600 text-white px-6 py-2 rounded opacity-60 cursor-not-allowed">작물 추천 받기</button>
-    </form>
-
-    <section class="bg-gray-900/90 p-6 rounded-xl mb-10">
-      <h3 class="text-xl font-semibold text-teal-400 mb-2">📋 추천 작물 목록</h3>
-      <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
-        <li>부산 지역 추천 작물: 상추</li>
-        <li>부산 지역 추천 작물: 청경채</li>
-        <li>부산 지역 추천 작물: 완두콩</li>
-      </ul>
-    </section>
-
-    <section class="bg-gray-900/90 p-6 rounded-xl">
-      <h3 class="text-xl font-semibold text-teal-400 mb-4">📄 AI 기반 추천 작물 상세 설명 (부산, 봄 기준)</h3>
-      <p class="text-sm text-gray-200 leading-relaxed mb-4">봄철 부산 지역은 평균기온은 <strong class="text-yellow-300">10~18℃</strong>, 온난한 해양성 기후가 지속되며, 3월부터 본격적인 재배 환경이 형성됩니다.</p>
-      <p class="text-sm text-gray-300 mb-2">이 시기에는 저온기 피해가 적고 습도 조절이 용이한 작물들이 유리하며, 해풍에 강하고 병해에 저항성이 있는 작물이 권장됩니다.</p>
-      <ul class="text-sm text-gray-300 list-disc list-inside space-y-1 mt-4">
-        <li><strong class="text-green-300">🥬 상추</strong>: 3월 중순~4월 초 파종, 약 35일 소요, 유통 안정성 높음</li>
-        <li><strong class="text-pink-300">🥗 청경채</strong>: 빠른 생육, 20~25일 내 수확 가능, 도시 소비시장 연계</li>
-        <li><strong class="text-purple-300">🌰 완두콩</strong>: 약 60일 소요, 단백질 함량 높고 토양개량 효과</li>
-      </ul>
-      <p class="mt-6 text-sm text-red-300">🔎 요약: 부산 봄 재배 시, <strong>기온 안정성, 병해 저항성, 수확 회전력, 시장성</strong>을 고려해 상추·청경채·완두콩은 지속 가능성과 경제성 측면에서 매우 우수한 선택입니다.</p>
-    </section>
+    
+    <h3 class="text-2xl font-semibold mb-4">📋 추천 작물 (부산/봄)</h3>
+    <ul class="list-disc text-sm text-gray-300 space-y-1">
+      <li>상추</li>
+      <li>청경채</li>
+      <li>완두콩</li>
+    </ul>
+    
   </main>
 </body>
 </html>

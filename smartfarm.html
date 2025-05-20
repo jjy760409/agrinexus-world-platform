@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Farm</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background: url('earth-bg.jpg') no-repeat center center fixed; background-size: cover; }
+    body {
+      background: url('earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
   </style>
 </head>
-<body class="bg-black/80 text-white font-sans backdrop-blur px-6 py-8">
-  <h2 class="text-3xl font-bold mb-8 text-center">🌾 스마트팜 AI 기능</h2>
-  <div class="max-w-4xl mx-auto space-y-6">
-    <div class="bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-lg font-semibold text-teal-400 mb-1">AI 작물 추천</h3>
-      <a href="ai.html" class="text-sm text-teal-300 hover:underline">→ 결과 보기</a>
-    </div>
-  </div>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="index.html" class="hover:text-teal-300">Home</a>
+      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+    </nav>
+  </header>
+  <main class="max-w-4xl mx-auto py-10 px-6">
+    
+    <h2 class="text-3xl font-bold mb-6">🌾 Smart Farm Features</h2>
+    <ul class="space-y-4">
+      <li><a href="ai.html" class="text-teal-300 underline">1. AI 작물 추천</a></li>
+      <li><a href="schedule.html" class="text-teal-300 underline">2. 재배 일정 자동 생성</a></li>
+    </ul>
+    
+  </main>
 </body>
 </html>
