@@ -1,10 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><meta charset="UTF-8"><title>AGRINEXUS</title></head>
-<body style="background:#000; color:#fff; font-family:sans-serif;">
-<h1>AGRINEXUS 메인 페이지</h1>
-<ul>
-  <li><a href="smartfarm.html" style="color:lightgreen;">스마트팜</a></li>
-</ul>
+<head>
+  <meta charset="UTF-8">
+  <title>AGRINEXUS 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {{
+      background: url('earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }}
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-widest">아그리넥서스</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="#" class="hover:text-teal-300">솔루션</a>
+      <a href="#" class="hover:text-teal-300">가격</a>
+      <a href="#" class="hover:text-teal-300">블로그</a>
+      <a href="#" class="hover:text-teal-300">소개</a>
+      <button class="bg-sky-800 px-3 py-1 rounded text-sm text-white">시작</button>
+    </nav>
+  </header>
+
+  <main class="text-center py-16 px-4">
+    <h2 class="text-4xl font-bold mb-2">AI 기반 농업 솔루션</h2>
+    <p class="text-gray-300 mb-6">AI의 힘을 활용하여 농업 운영을 최적화하고 혁신하세요.</p>
+    <a href="smartfarm.html" class="bg-teal-500 text-white px-6 py-2 rounded">시작</a>
+  </main>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto pb-20 px-4">
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">스마트 팜</h3><p class="text-sm text-gray-300">스마트 농업 운영 모니터링 및 관리</p><a href="smartfarm.html" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">물류 시스템</h3><p class="text-sm text-gray-300">각 국가에 필요한 수출 서류 최적화</p><a href="logistics.html" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">계약 관리</h3><p class="text-sm text-gray-300">농업 계약 자동화 및 관리</p><a href="#" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">수익 예측</h3><p class="text-sm text-gray-300">기계 학습 모델을 사용하여 작물 수익 예측</p><a href="report.html" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">수출 서류</h3><p class="text-sm text-gray-300">농작물에 필요한 수출 서류 생성</p><a href="#" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">회계 및 시스템</h3><p class="text-sm text-gray-300">회계를 자동화하고 실시간으로 기능을 개선합니다</p><a href="#" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">활성 사용자</h3><p class="text-sm text-gray-300">1,234 <span class="text-gray-400 text-xs">온라인</span></p></div>
+    <div class="bg-gray-900/80 p-6 rounded-xl"><h3 class="font-bold text-lg mb-1">자가 학습 시스템</h3><p class="text-sm text-gray-300">AI를 개선하고 실시간으로 기능을 발전시킵니다.</p><a href="#" class="text-teal-400 text-sm mt-2 inline-block">→ 보기</a></div>
+  </section>
 </body>
 </html>
