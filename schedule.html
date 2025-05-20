@@ -1,69 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>스마트 재배 일정 생성</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background: url('earth-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-    }
-  </style>
-</head>
-<body class="bg-black/80 text-white font-sans backdrop-blur">
-  <header class="flex justify-between items-center px-6 py-4">
-    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
-    <nav class="space-x-4 text-sm">
-      <a href="index.html" class="hover:text-teal-300">Home</a>
-      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
-      <a href="schedule.html" class="text-teal-400">재배 일정 생성</a>
-    </nav>
-  </header>
-
-  <main class="max-w-3xl mx-auto py-10 px-6">
-    <h2 class="text-3xl font-bold mb-6">📅 스마트 재배 일정 생성기</h2>
-
-    <form id="scheduleForm" class="space-y-4 mb-8">
-      <div>
-        <label class="block text-sm mb-1">작물 이름</label>
-        <input id="cropName" type="text" placeholder="예: 상추, 토마토" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white">
-      </div>
-      <div>
-        <label class="block text-sm mb-1">재배 시작일</label>
-        <input id="startDate" type="date" class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white">
-      </div>
-      <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded">일정 자동 생성</button>
-    </form>
-
-    <div id="scheduleResult" class="hidden bg-gray-900/80 p-6 rounded-xl">
-      <h3 class="text-xl font-semibold text-teal-400 mb-3">📋 자동 생성된 재배 일정</h3>
-      <ul id="scheduleList" class="list-disc list-inside text-sm text-gray-300 space-y-1"></ul>
-    </div>
-  </main>
-
-  <script>
-    document.getElementById("scheduleForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const crop = document.getElementById("cropName").value.trim();
-      const start = new Date(document.getElementById("startDate").value);
-      const days = [0, 10, 25, 45]; // 파종, 관리, 수확, 출하 일수
-
-      const labels = ["파종 시작", "관리 작업", "수확 준비", "출하 예정"];
-      const schedule = document.getElementById("scheduleList");
-      schedule.innerHTML = "";
-
-      days.forEach((d, i) => {
-        const date = new Date(start);
-        date.setDate(date.getDate() + d);
-        const item = document.createElement("li");
-        item.textContent = `${crop} - ${labels[i]}: ${date.toLocaleDateString("ko-KR")}`;
-        schedule.appendChild(item);
-      });
-
-      document.getElementById("scheduleResult").classList.remove("hidden");
-    });
-  </script>
+<head><meta charset="UTF-8"><title>일정 생성</title></head>
+<body style="background:#111; color:#fff; font-family:sans-serif;">
+<h3>📅 재배 일정 예시</h3>
+<ul>
+<li>파종 시작: 2024-04-01</li>
+<li>관리 작업: 2024-04-10</li>
+<li>수확 준비: 2024-04-25</li>
+<li>출하 예정: 2024-05-15</li>
+</ul>
 </body>
 </html>
