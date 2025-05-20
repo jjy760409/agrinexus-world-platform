@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AGRINEXUS - 관리자 대시보드</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('/earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="/index.html" class="hover:text-teal-300">Home</a>
+      <a href="/pages/ai.html" class="hover:text-teal-300">AI</a>
+      <a href="/pages/report.html" class="hover:text-teal-300">Report</a>
+      <a href="/pages/contract.html" class="hover:text-teal-300">Contract</a>
+      <a href="/pages/admin.html" class="hover:text-teal-300">Admin</a>
+      <a href="/pages/chat.html" class="hover:text-teal-300">Chat</a>
+    </nav>
+  </header>
+  <main class="max-w-4xl mx-auto py-10 px-6">
+    
+<h2 class="text-3xl font-bold mb-6">관리자 대시보드</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="bg-gray-900/80 p-4 rounded-xl">
+    <h3 class="text-sm font-medium mb-1">총 사용자 수</h3>
+    <p class="text-2xl text-teal-400 font-bold">3,482명</p>
+  </div>
+  <div class="bg-gray-900/80 p-4 rounded-xl">
+    <h3 class="text-sm font-medium mb-1">금일 계약 생성</h3>
+    <p class="text-2xl text-teal-400 font-bold">17건</p>
+  </div>
+  <div class="bg-gray-900/80 p-4 rounded-xl">
+    <h3 class="text-sm font-medium mb-1">누적 보고서 발행</h3>
+    <p class="text-2xl text-teal-400 font-bold">524건</p>
+  </div>
+</div>
+
+  </main>
+</body>
+</html>

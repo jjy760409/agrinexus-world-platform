@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AGRINEXUS - AI 챗봇 상담</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('/earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="/index.html" class="hover:text-teal-300">Home</a>
+      <a href="/pages/ai.html" class="hover:text-teal-300">AI</a>
+      <a href="/pages/report.html" class="hover:text-teal-300">Report</a>
+      <a href="/pages/contract.html" class="hover:text-teal-300">Contract</a>
+      <a href="/pages/admin.html" class="hover:text-teal-300">Admin</a>
+      <a href="/pages/chat.html" class="hover:text-teal-300">Chat</a>
+    </nav>
+  </header>
+  <main class="max-w-4xl mx-auto py-10 px-6">
+    
+<h2 class="text-3xl font-bold mb-6">AI 챗봇 상담</h2>
+<div class="bg-gray-900/80 p-4 rounded-xl h-96 overflow-y-auto mb-4">
+  <p class="text-sm text-teal-400 mb-2">👤 사용자: 요즘 인기 있는 작물 뭐야?</p>
+  <p class="text-sm text-gray-300">🤖 AI: 2025년 기준, 방울토마토, 샐러드용 상추, 스마트 온실용 파프리카가 인기입니다.</p>
+</div>
+<form class="flex gap-2">
+  <input type="text" placeholder="메시지를 입력하세요..." class="flex-1 px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white">
+  <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded">전송</button>
+</form>
+
+  </main>
+</body>
+</html>

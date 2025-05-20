@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AGRINEXUS - 계약서 자동 생성</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: url('/earth-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="bg-black/80 text-white font-sans backdrop-blur">
+  <header class="flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="/index.html" class="hover:text-teal-300">Home</a>
+      <a href="/pages/ai.html" class="hover:text-teal-300">AI</a>
+      <a href="/pages/report.html" class="hover:text-teal-300">Report</a>
+      <a href="/pages/contract.html" class="hover:text-teal-300">Contract</a>
+      <a href="/pages/admin.html" class="hover:text-teal-300">Admin</a>
+      <a href="/pages/chat.html" class="hover:text-teal-300">Chat</a>
+    </nav>
+  </header>
+  <main class="max-w-4xl mx-auto py-10 px-6">
+    
+<h2 class="text-3xl font-bold mb-6">계약서 자동 생성기</h2>
+<form class="space-y-4">
+  <div>
+    <label class="block mb-1 text-sm">계약 유형:</label>
+    <select class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white">
+      <option>재배 위탁 계약</option>
+      <option>판매 공급 계약</option>
+      <option>수출 유통 계약</option>
+    </select>
+  </div>
+  <div>
+    <label class="block mb-1 text-sm">계약 금액 (₩):</label>
+    <input type="number" class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white" placeholder="예: 30000000">
+  </div>
+  <div>
+    <label class="block mb-1 text-sm">계약 기간:</label>
+    <input type="text" class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white" placeholder="예: 2025.01.01 ~ 2025.12.31">
+  </div>
+  <button type="submit" class="mt-4 bg-teal-600 hover:bg-teal-500 px-6 py-2 rounded">계약서 생성</button>
+</form>
+
+  </main>
+</body>
+</html>
