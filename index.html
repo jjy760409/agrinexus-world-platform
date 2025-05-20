@@ -4,40 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI 기반 작물 추천 시스템</title>
+  <title>AgriNexus Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Arial', sans-serif; background-color: #2d2d2d; color: #fff; }
-  </style>
 </head>
-<body class="p-8">
-  <h1 class="text-3xl font-bold mb-6">🌱 AI 기반 작물 추천 시스템</h1>
-  <div class="mb-4">
-    <label class="block mb-2">지역명</label>
-    <input type="text" value="부산" class="w-full p-2 rounded bg-gray-800 border border-gray-600" disabled>
-  </div>
-  <div class="mb-4">
-    <label class="block mb-2">계절 선택</label>
-    <select class="w-full p-2 rounded bg-gray-800 border border-gray-600" disabled>
-      <option>봄</option>
-    </select>
-  </div>
-  <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mb-6">작물 추천 받기</button>
-
-  <div class="bg-gray-900 p-6 rounded-xl">
-    <h2 class="text-xl font-bold text-green-300 mb-4">📋 추천 작물 상세 설명 (부산, 봄 기준)</h2>
-    <p class="text-sm leading-relaxed text-gray-200">
-      봄철 부산 지역은 평균기온 10~18℃, 온난한 해양성 기후가 지속되며, 3월부터 본격적인 재배 환경이 형성됩니다.
-      이 시기에는 저온기 피해가 적고 습도 조절이 용이한 작물들이 유리하며, 해풍에 강하고 병해에 저항성이 있는 작물이 권장됩니다.<br><br>
-      🥬 <b>상추</b>는 3월 중순~4월 초 사이 파종이 적합하며, 하우스 또는 노지에서 재배 가능합니다. 수확까지 약 35일 소요되며,
-      연하고 두툼한 잎이 선호되는 소비 트렌드에 맞춰 청상추, 적상추, 로메인 등의 품종 선택이 중요합니다. 상추는 김밥용, 쌈용 등 외식·가정 수요가 많아 유통 안정성이 높습니다.<br><br>
-      🥗 <b>청경채</b>는 4월 초 파종 시 생육 속도가 빠르며, 병충해에 강해 초보 농가나 단기 회전 작물로 적합합니다.
-      20~25일 내 수확 가능하고, 연작장해가 적으며, 기온 변화에 민감하지 않아 안정적 재배가 가능합니다. 학교 급식, 대형마트, 도시 소비시장과도 연계가 가능합니다.<br><br>
-      🌰 <b>완두콩</b>은 3월 초 파종 후 약 60일간 재배되며, 부산의 해양성 기후와 궁합이 잘 맞습니다.
-      질소고정능력이 뛰어나 토양개량 효과가 있고, 단백질 함량이 높아 냉동식품, 통조림 가공용으로도 인기가 높습니다.
-      부산 인근 가공업체와 연계하면 계약재배로도 확장 가능합니다.<br><br>
-      📌 <b>요약:</b> 부산 봄 재배 시, 기온 안정성, 병해 저항성, 수확 회전력, 시장성을 고려해 상추·청경채·완두콩은 경제성과 지속 가능성 면에서 매우 우수한 선택입니다.
-    </p>
+<body class="bg-gray-900 text-white p-10">
+  <h1 class="text-4xl font-bold mb-8">AgriNexus Main Dashboard</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-gray-800 p-6 rounded-xl">
+      <h2 class="text-xl font-bold mb-2">스마트 팜</h2>
+      <p class="text-sm text-gray-300">스마트 농업 운영 모니터링 및 관리</p>
+      <a href="smartfarm/index.html" class="text-green-400 hover:underline mt-2 inline-block">→ 보기</a>
+    </div>
+    <!-- 나머지 카드 생략 가능 -->
   </div>
 </body>
 </html>
