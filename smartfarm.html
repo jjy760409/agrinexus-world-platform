@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Farm</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Farm | AGRINEXUS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -14,20 +14,33 @@
 </head>
 <body class="bg-black/80 text-white font-sans backdrop-blur">
   <header class="flex justify-between items-center px-6 py-4">
-    <h1 class="text-xl font-bold tracking-wider">AGRINEXUS</h1>
+    <h1 class="text-xl font-bold">AGRINEXUS</h1>
     <nav class="space-x-4 text-sm">
-      <a href="index.html" class="hover:text-teal-300">Home</a>
-      <a href="smartfarm.html" class="hover:text-teal-300">Smart Farm</a>
+      <a href="index.html" class="hover:text-teal-300">홈</a>
+      <a href="smartfarm.html" class="text-teal-400 font-semibold">스마트팜</a>
     </nav>
   </header>
-  <main class="max-w-4xl mx-auto py-10 px-6">
-    
-    <h2 class="text-3xl font-bold mb-6">🌾 Smart Farm Features</h2>
-    <ul class="space-y-4">
-      <li><a href="ai.html" class="text-teal-300 underline">1. AI 작물 추천</a></li>
-      <li><a href="schedule.html" class="text-teal-300 underline">2. 재배 일정 자동 생성</a></li>
-    </ul>
-    
+
+  <main class="max-w-5xl mx-auto py-10 px-6">
+    <h2 class="text-3xl font-bold mb-6">🌾 스마트팜 기능 선택</h2>
+
+    <section class="bg-gray-900/80 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">1. 작물 추천 시스템</h3>
+      <p class="text-sm text-gray-300 mb-2">AI가 지역과 계절에 맞는 작물을 추천합니다.</p>
+      <a href="ai.html" class="bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2 rounded text-sm inline-block">작물 추천 결과 보기</a>
+    </section>
+
+    <section class="bg-gray-900/80 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">2. 재배 일정 생성기</h3>
+      <p class="text-sm text-gray-300 mb-2">파종부터 수확까지 예상 일정을 자동 계산합니다.</p>
+      <a href="schedule.html" class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded text-sm inline-block">일정 결과 확인</a>
+    </section>
+
+    <section class="bg-gray-900/80 p-6 rounded-xl">
+      <h3 class="text-xl font-semibold text-teal-400 mb-2">3. 결정 및 실행</h3>
+      <p class="text-sm text-gray-300 mb-2">위 결과를 바탕으로 실제 계약을 진행하거나 시스템에 적용하세요.</p>
+      <a href="contract.html" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded text-sm inline-block">실행 결정하기</a>
+    </section>
   </main>
 </body>
 </html>
