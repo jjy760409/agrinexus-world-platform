@@ -1,1 +1,40 @@
-<!-- 루트 메인페이지 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus World 플랫폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <header class="bg-green-700 text-white p-6 text-center text-3xl font-bold">
+    AgriNexus World 플랫폼
+  </header>
+  <main class="p-10 max-w-6xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-6">🌱 주요 기능 바로가기</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+      <a href="./src/smartfarm/index.html" class="bg-white p-6 rounded shadow hover:bg-green-100 transition">
+        🌿 스마트팜 시스템<br><span class="text-sm text-gray-600">작물 추천 및 자동 제어</span>
+      </a>
+      <a href="./src/contract/index.html" class="bg-white p-6 rounded shadow hover:bg-blue-100 transition">
+        📄 계약서 생성기<br><span class="text-sm text-gray-600">자동 계약 PDF 생성</span>
+      </a>
+      <a href="./src/report/index.html" class="bg-white p-6 rounded shadow hover:bg-purple-100 transition">
+        📊 보고서 출력<br><span class="text-sm text-gray-600">수익/작물 예측 보고서</span>
+      </a>
+      <a href="./src/ai/index.html" class="bg-white p-6 rounded shadow hover:bg-teal-100 transition">
+        🤖 AI 작물 분석<br><span class="text-sm text-gray-600">GPT 기반 추천 결과</span>
+      </a>
+      <a href="./src/logistics/index.html" class="bg-white p-6 rounded shadow hover:bg-yellow-100 transition">
+        🚛 물류 최적화<br><span class="text-sm text-gray-600">수출입 경로 + 요금 분석</span>
+      </a>
+      <a href="./src/export/index.html" class="bg-white p-6 rounded shadow hover:bg-pink-100 transition">
+        📦 문서 자동 생성<br><span class="text-sm text-gray-600">국가별 Docs 변환</span>
+      </a>
+    </div>
+  </main>
+  <footer class="bg-gray-800 text-white text-center p-4 mt-10 text-sm">
+    © 2025 AgriNexus World. All rights reserved.
+  </footer>
+</body>
+</html>
