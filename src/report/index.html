@@ -2,50 +2,64 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>보고서 시각화</title>
+  <title>월간 보고서 생성기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function downloadPDF() {
+      const text = document.getElementById("reportSummary").innerText;
+      const blob = new Blob([text], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "monthly_report.pdf";
+      link.click();
+    }
+  </script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-  <header class="bg-purple-800 text-center p-6 text-2xl font-bold">수익 예측 보고서</header>
-  <main class="max-w-3xl mx-auto p-8">
-    <p class="mb-6 text-lg text-gray-300">📊 아래 그래프는 작물별 예상 수익 예측 결과입니다.</p>
-    <canvas id="reportChart" class="bg-white rounded p-4"></canvas>
+  <header class="bg-purple-800 text-center p-6 text-2xl font-bold">📊 월간 리포트 자동 생성기</header>
+  <main class="max-w-4xl mx-auto p-6">
+    <canvas id="reportChart" class="bg-white rounded p-4 mb-8"></canvas>
+    <div class="bg-gray-800 p-4 rounded text-sm text-gray-300 mb-4" id="reportSummary">
+      ✅ 이번 달 분석 결과:
+      - 추천 작물: 42회
+      - 계약 생성: 25건
+      - 총 수익 추정: 184,500,000원
+      - 평균 재배 면적: 1,245㎡
+    </div>
+    <button onclick="downloadPDF()" class="bg-teal-600 hover:bg-teal-500 px-4 py-2 text-white rounded">📄 PDF 보고서 다운로드</button>
   </main>
   <script>
     const ctx = document.getElementById('reportChart').getContext('2d');
-    const reportChart = new Chart(ctx, {
-      type: 'bar',
+    new Chart(ctx, {
+      type: 'line',
       data: {
-        labels: ['상추', '토마토', '시금치', '고추', '딸기'],
-        datasets: [{
-          label: '예상 수익 (만원)',
-          data: [120, 150, 100, 80, 200],
-          backgroundColor: ['#34d399', '#f87171', '#60a5fa', '#facc15', '#a78bfa']
-        }]
+        labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+        datasets: [
+          {
+            label: '추천 작물 수',
+            data: [12, 19, 14, 20, 25, 42],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+            tension: 0.4
+          },
+          {
+            label: '계약 수',
+            data: [4, 6, 8, 10, 15, 25],
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            tension: 0.4
+          }
+        ]
       },
       options: {
-        responsive: true,
         scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              color: '#fff'
-            }
-          },
-          x: {
-            ticks: {
-              color: '#fff'
-            }
-          }
+          y: { ticks: { color: '#fff' } },
+          x: { ticks: { color: '#fff' } }
         },
         plugins: {
-          legend: {
-            labels: {
-              color: '#fff'
-            }
-          }
+          legend: { labels: { color: '#fff' } }
         }
       }
     });
