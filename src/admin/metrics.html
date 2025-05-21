@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>월별 가입자 증가 추이</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-4xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">📈 월별 가입자 증가 추이</h1>
+    <canvas id="monthChart" class="bg-white rounded p-4"></canvas>
+  </main>
+  <script>
+    const logs = JSON.parse(localStorage.getItem("agrinexus_user_log") || "[]");
+    const counts = {};
+    logs.forEach(u => {
+      const m = (new Date(u.date)).getMonth() + 1;
+      counts[m] = (counts[m] || 0) + 1;
+    });
+    const ctx = document.getElementById("monthChart").getContext("2d");
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(counts).map(m => m + "월"),
+        datasets: [{
+          label: '가입자 수',
+          data: Object.values(counts),
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.2)',
+          tension: 0.3
+        }]
+      },
+      options: {
+        scales: {
+          y: { ticks: { color: '#000' } },
+          x: { ticks: { color: '#000' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

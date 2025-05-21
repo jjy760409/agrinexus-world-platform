@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>가입자 국가별 통계</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-4xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">🌍 국가별 가입자 분포</h1>
+    <canvas id="regionChart" class="bg-white rounded p-4"></canvas>
+  </main>
+  <script>
+    const logs = JSON.parse(localStorage.getItem("agrinexus_user_log") || "[]");
+    const counts = {};
+    logs.forEach(u => {
+      const r = u.region || "기타";
+      counts[r] = (counts[r] || 0) + 1;
+    });
+    const ctx = document.getElementById("regionChart").getContext("2d");
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(counts),
+        datasets: [{
+          label: '가입자 수',
+          data: Object.values(counts),
+          backgroundColor: '#3b82f6'
+        }]
+      },
+      options: {
+        scales: {
+          y: { ticks: { color: '#000' } },
+          x: { ticks: { color: '#000' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

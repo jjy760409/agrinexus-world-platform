@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기능 제어 설정</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">⚙️ 관리자 기능 설정</h1>
+    <div class="grid gap-4">
+      <label><input type="checkbox" id="enableContract" onchange="saveSetting()" class="mr-2">계약서 기능 사용</label>
+      <label><input type="checkbox" id="enableReport" onchange="saveSetting()" class="mr-2">보고서 기능 사용</label>
+      <label><input type="checkbox" id="enableGPT" onchange="saveSetting()" class="mr-2">GPT 분석 기능 사용</label>
+    </div>
+  </main>
+  <script>
+    function saveSetting() {
+      const settings = {
+        contract: document.getElementById("enableContract").checked,
+        report: document.getElementById("enableReport").checked,
+        gpt: document.getElementById("enableGPT").checked
+      };
+      localStorage.setItem("agrinexus_settings", JSON.stringify(settings));
+    }
+    function loadSettings() {
+      const s = JSON.parse(localStorage.getItem("agrinexus_settings") || "{}");
+      document.getElementById("enableContract").checked = s.contract ?? true;
+      document.getElementById("enableReport").checked = s.report ?? true;
+      document.getElementById("enableGPT").checked = s.gpt ?? true;
+    }
+    window.onload = loadSettings;
+  </script>
+</body>
+</html>
