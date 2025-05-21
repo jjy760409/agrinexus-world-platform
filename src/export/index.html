@@ -1,1 +1,38 @@
-<!-- 문서 생성 페이지 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>국가별 문서 자동 생성기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function generateByCountry() {
+      const country = document.getElementById("countrySelect").value;
+      const box = document.getElementById("countryResult");
+
+      const messages = {
+        "kr": "🇰🇷 한국 문서: 원화(Won), ㎡ 단위, 계약서 포맷 A",
+        "us": "🇺🇸 미국 문서: 달러(USD), acre 단위, 계약서 포맷 B",
+        "jp": "🇯🇵 일본 문서: 엔(JPY), 평 단위, 계약서 포맷 C",
+        "de": "🇩🇪 독일 문서: 유로(EUR), ha 단위, 계약서 포맷 D"
+      };
+
+      box.innerText = messages[country] || "국가를 선택해주세요.";
+    }
+  </script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="bg-pink-800 text-center p-6 text-2xl font-bold">🌍 국가별 문서 자동 생성기</header>
+  <main class="max-w-xl mx-auto p-8">
+    <label for="countrySelect" class="block mb-4 text-lg font-semibold">국가를 선택하세요:</label>
+    <select id="countrySelect" onchange="generateByCountry()" class="w-full p-2 text-gray-800 rounded">
+      <option value="">-- 국가 선택 --</option>
+      <option value="kr">대한민국 (Korea)</option>
+      <option value="us">미국 (USA)</option>
+      <option value="jp">일본 (Japan)</option>
+      <option value="de">독일 (Germany)</option>
+    </select>
+    <div id="countryResult" class="mt-6 p-4 bg-gray-800 rounded text-pink-300 text-lg font-medium whitespace-pre-wrap"></div>
+  </main>
+</body>
+</html>
