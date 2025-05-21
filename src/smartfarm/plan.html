@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>스마트팜 환경별 자동 설계</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function showPlan() {
+      const env = document.getElementById("env").value;
+      const result = document.getElementById("planResult");
+      const plans = {'indoor': '실내 환경: 자동 제습기, 온도센서, LED 식물등 추천', 'outdoor': '실외 환경: 관개 시스템, 일사량 센서, 토양 분석기 포함', 'warehouse': '창고 환경: 대형 공조기, 자동 제어 시스템 최적', 'building': '건물 옥상: 이동식 컨테이너형 자동화 설비 적합', 'underground': '지하 공간: LED 조명, 환기 시스템, 온습도 자동 제어', 'store': '상가 내부: 소규모 유닛 설치, 냄새 필터, 고객 대면형 구조', 'multipurpose': '다용도 공간: 이동식 베드, 자동 화분 순환 시스템', 'office': '사무실 내 공간: 온습도 센서 + 조명 겸용 키트', 'greenhouse': '비닐하우스/온실: 보온커튼, 스마트 관비 시스템', 'custom': '기타 환경: 전문가 상담 필요 - 맞춤형 설계 안내'};
+      result.innerText = plans[env] || "환경을 선택해주세요.";
+    }
+  </script>
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-2xl mx-auto p-6">
+    <h1 class="text-xl font-bold mb-4">🏗️ 스마트팜 환경 자동 설계</h1>
+    <select id="env" onchange="showPlan()" class="w-full p-2 text-gray-800 rounded">
+      <option value="">-- 설치 환경 선택 --</option>
+      <option value="indoor">실내 환경</option><option value="outdoor">실외 환경</option><option value="warehouse">창고 환경</option><option value="building">건물 옥상</option><option value="underground">지하 공간</option><option value="store">상가 내부</option><option value="multipurpose">다용도 공간</option><option value="office">사무실 내 공간</option><option value="greenhouse">비닐하우스/온실</option><option value="custom">기타 환경</option>
+    </select>
+    <div id="planResult" class="mt-4 bg-gray-800 p-4 rounded text-green-300 text-sm whitespace-pre-wrap"></div>
+  </main>
+</body>
+</html>
