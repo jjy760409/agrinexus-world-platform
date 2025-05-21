@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>계약서 자동 생성기</title>
+  <title>계약서 자동 생성기 + 이메일 전송</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script>
@@ -12,27 +12,34 @@
       const area = document.getElementById("area").value;
       const duration = document.getElementById("duration").value;
       const amount = document.getElementById("amount").value;
-      const output = document.getElementById("output");
+      const result = `📄 계약자: ${name}\n작물: ${crop}\n면적: ${area}㎡\n기간: ${duration}\n계약금액: ${amount}원\n\n※ 위 조건에 따라 스마트팜 계약이 성립됩니다.`;
 
-      const resultText = `📄 계약자: ${name}\n작물: ${crop}\n면적: ${area}㎡\n기간: ${duration}\n계약금액: ${amount}원\n\n※ 위 조건에 따라 스마트팜 계약이 성립됩니다.`;
-      output.innerText = resultText;
-
-      // 저장용 텍스트를 숨겨진 textarea에 복사
-      document.getElementById("pdfText").value = resultText;
+      document.getElementById("output").innerText = result;
+      document.getElementById("pdfText").value = result;
     }
 
     function downloadPDF() {
       const text = document.getElementById("pdfText").value;
-      const blob = new Blob([text], {{ type: 'application/pdf' }});
+      const blob = new Blob([text], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = "agrinexus_contract.pdf";
       link.click();
     }
+
+    function sendEmail() {
+      const email = document.getElementById("email").value;
+      const content = document.getElementById("pdfText").value;
+      if (email && content) {
+        alert("✅ 계약서가 다음 이메일로 전송되었습니다: " + email + "\n(시뮬레이션)");
+      } else {
+        alert("⚠️ 이메일 주소와 계약 내용을 모두 입력해주세요.");
+      }
+    }
   </script>
 </head>
 <body class="bg-gray-900 text-white">
-  <header class="bg-blue-800 text-center p-6 text-2xl font-bold">계약서 자동 생성</header>
+  <header class="bg-blue-800 text-center p-6 text-2xl font-bold">계약서 자동 생성 + 이메일 전송</header>
   <main class="max-w-xl mx-auto p-8">
     <div class="grid gap-4">
       <input id="name" type="text" placeholder="계약자 이름" class="p-2 rounded text-gray-800" />
@@ -44,6 +51,12 @@
       <button onclick="downloadPDF()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">📄 PDF 다운로드</button>
     </div>
     <pre id="output" class="mt-6 p-4 bg-gray-800 rounded text-blue-300 text-lg font-medium whitespace-pre-wrap"></pre>
+
+    <div class="mt-8 grid gap-4">
+      <input id="email" type="email" placeholder="이메일 주소 입력" class="p-2 rounded text-gray-800" />
+      <button onclick="sendEmail()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded">📧 이메일로 계약서 보내기</button>
+    </div>
+
     <textarea id="pdfText" class="hidden"></textarea>
   </main>
 </body>
