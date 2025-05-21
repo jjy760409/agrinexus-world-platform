@@ -6,43 +6,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body style="background: url('./assets/bg.jpg') center center / cover no-repeat;" class="text-white font-sans">
-  <header class="bg-gray-800 bg-opacity-80 text-center p-6 text-3xl font-bold shadow">AgriNexus World</header>
-  <main class="p-8 max-w-6xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-6">🚀 프리미엄 기능 바로가기</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <a href="./src/smartfarm/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-green-700 transition text-center">
-        <img src="./assets/smartfarm_icon.png" alt="Smart Farm" class="h-16 mx-auto mb-3">
-        <p class="text-lg font-semibold">스마트팜 시스템</p>
-        <p class="text-sm text-gray-300">고급 제어 및 작물 추천</p>
-      </a>
-      <a href="./src/contract/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-blue-700 transition text-center">
-        <img src="./assets/contract_icon.png" alt="Contract" class="h-16 mx-auto mb-3">
-        <p class="text-lg font-semibold">계약서 생성</p>
-        <p class="text-sm text-gray-300">자동 계약서 PDF + 이메일 + 서명</p>
-      </a>
-      <a href="./src/report/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-purple-700 transition text-center">
-        <div class="text-5xl mb-3">📊</div>
-        <p class="text-lg font-semibold">보고서 출력</p>
-        <p class="text-sm text-gray-300">수익 분석 시각화</p>
-      </a>
-      <a href="./src/ai/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-green-600 transition text-center">
-        <div class="text-5xl mb-3">🤖</div>
-        <p class="text-lg font-semibold">AI 분석 생성기</p>
-        <p class="text-sm text-gray-300">GPT 스타일 작물 분석</p>
-      </a>
-      <a href="./src/export/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-pink-600 transition text-center">
-        <div class="text-5xl mb-3">🌍</div>
-        <p class="text-lg font-semibold">국가별 문서 자동화</p>
-        <p class="text-sm text-gray-300">단위/통화 자동 변환</p>
-      </a>
-      <a href="./src/admin/index.html" class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-lg shadow hover:bg-gray-700 transition text-center">
-        <div class="text-5xl mb-3">🔐</div>
-        <p class="text-lg font-semibold">관리자 페이지</p>
-        <p class="text-sm text-gray-300">통계 + 로그인 보호</p>
-      </a>
+<body class="bg-gray-900 text-white font-sans">
+  <header class="flex justify-between items-center px-8 py-6 bg-gray-800 shadow">
+    <h1 class="text-2xl font-bold">AgriNexus World</h1>
+    <div class="space-x-4">
+      <a href="#" class="text-sm hover:underline">채팅 가입 정보</a>
+      <button class="bg-blue-600 text-white px-4 py-1 rounded">등록하세요</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto text-center py-12 px-6">
+    <h2 class="text-3xl font-bold mb-2">AI 기반 농업 솔루션</h2>
+    <p class="text-gray-400 mb-6">AI의 힘을 활용하여 농업 운영을 최적화하고 혁신하세요.</p>
+    <button class="bg-teal-500 text-white px-6 py-2 rounded font-semibold mb-12">시작</button>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">스마트 팜</h3>
+        <p class="text-sm text-gray-300">스마트 농업 운영 모니터링 및 관리</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">물류 시스템</h3>
+        <p class="text-sm text-gray-300">각 국가에 필요한 수출 서류 최적화</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">계약 관리</h3>
+        <p class="text-sm text-gray-300">농업 계약 자동화 및 관리</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">수익 예측</h3>
+        <p class="text-sm text-gray-300">지역 및 시장을 기반으로 작물 수익을 추정</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">수출 서류</h3>
+        <p class="text-sm text-gray-300">농작물에 필요한 수출 서류 생성</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">활성 사용자</h3>
+        <p class="text-sm text-gray-300"><span class="text-teal-400">1,234</span> 온라인</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold mb-1">자가 학습 시스템</h3>
+        <p class="text-sm text-gray-300">AI를 개선하고 시간이 지나며 기능을 발전</p>
+      </div>
     </div>
   </main>
-  <footer class="text-center text-gray-400 text-sm mt-12">© 2025 AgriNexus World. All rights reserved.</footer>
+
+  <footer class="text-center text-gray-500 text-sm py-6">
+    © 2025 AgriNexus World. All rights reserved.
+  </footer>
 </body>
 </html>
