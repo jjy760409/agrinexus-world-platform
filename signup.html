@@ -1,1 +1,35 @@
-<h1>Signup - GPT 자동화 적용됨 ✅</h1>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 - AgriNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-md mx-auto p-8">
+    <h1 class="text-2xl font-bold mb-4 text-center">🚀 무료 회원가입</h1>
+    <p class="text-sm text-gray-400 text-center mb-6">가입하면 모든 기능을 무료로 즉시 이용할 수 있습니다.</p>
+    <form onsubmit="signupUser(event)" class="grid gap-4">
+      <input id="name" type="text" placeholder="이름" class="p-2 rounded text-gray-800" required />
+      <input id="email" type="email" placeholder="이메일" class="p-2 rounded text-gray-800" required />
+      <input id="password" type="password" placeholder="비밀번호" class="p-2 rounded text-gray-800" required />
+      <button class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded" type="submit">가입하기</button>
+    </form>
+    <p id="signupStatus" class="text-sm text-green-400 mt-4 text-center"></p>
+    <p class="text-center mt-6 text-sm text-gray-500">이미 계정이 있으신가요? <a href="login.html" class="underline text-blue-400">로그인</a></p>
+  </main>
+
+  <script>
+    function signupUser(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const pw = document.getElementById("password").value.trim();
+      const user = { name, email, pw };
+      localStorage.setItem("agrinexus_user", JSON.stringify(user));
+      document.getElementById("signupStatus").innerText = "✅ 회원가입이 완료되었습니다!";
+    }
+  </script>
+</body>
+</html>
