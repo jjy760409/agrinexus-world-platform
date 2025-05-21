@@ -5,66 +5,21 @@
   <title>AgriNexus World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#111827">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js');
-      });
-    }
-  </script>
-
 </head>
 <body class="bg-gray-900 text-white font-sans">
-  <header class="flex justify-between items-center px-8 py-6 bg-gray-800 shadow">
-    <h1 class="text-2xl font-bold">AgriNexus World</h1>
-    <div class="space-x-4">
-      <a href="#" class="text-sm hover:underline">채팅 가입 정보</a>
-      <button class="bg-blue-600 text-white px-4 py-1 rounded">등록하세요</button>
-    </div>
+  <header class="bg-gray-800 flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold">AgriNexus World</h1>
+    <div id="userInfo" class="text-sm text-green-400"></div>
   </header>
-
-  <main class="max-w-6xl mx-auto text-center py-12 px-6">
-    <h2 class="text-3xl font-bold mb-2">AI 기반 농업 솔루션</h2>
-    <p class="text-gray-400 mb-6">AI의 힘을 활용하여 농업 운영을 최적화하고 혁신하세요.</p>
-    <button class="bg-teal-500 text-white px-6 py-2 rounded font-semibold mb-12">시작</button>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-      <a href="./src/smartfarm/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-green-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">🌱 스마트 팜</h3>
-        <p class="text-sm text-gray-300">작물 추천, 조건 선택, 피드백 입력</p>
-      </a>
-      <a href="./src/logistics/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-blue-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">🚛 물류 시스템</h3>
-        <p class="text-sm text-gray-300">수출 문서 최적화 및 국가별 대응</p>
-      </a>
-      <a href="./src/contract/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-purple-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">📄 계약서 생성</h3>
-        <p class="text-sm text-gray-300">PDF 다운로드, 이메일 전송, 서명</p>
-      </a>
-      <a href="./src/report/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-pink-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">📊 수익 예측 보고서</h3>
-        <p class="text-sm text-gray-300">차트 시각화 및 분석 기능</p>
-      </a>
-      <a href="./src/ai/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-yellow-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">🤖 AI 분석 생성기</h3>
-        <p class="text-sm text-gray-300">GPT 스타일 문장 생성 및 결과 분석</p>
-      </a>
-      <a href="./src/export/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-teal-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">🌍 국가별 문서 자동화</h3>
-        <p class="text-sm text-gray-300">단위/통화/포맷 자동 적용</p>
-      </a>
-      <a href="./src/admin/index.html" class="bg-gray-800 rounded-xl p-6 shadow hover:bg-red-700 transition block">
-        <h3 class="text-lg font-semibold mb-1">🔐 관리자 전용</h3>
-        <p class="text-sm text-gray-300">통계 대시보드 + 로그인 보호</p>
-      </a>
-    </div>
+  <main class="text-center py-10">
+    <h2 class="text-2xl font-semibold mb-4">🌱 스마트 농업 플랫폼</h2>
+    <p class="text-gray-400 mb-6">AI, 자동화, 위성 기술이 결합된 세계 최고 스마트팜 시스템</p>
   </main>
-
-  <footer class="text-center text-gray-500 text-sm py-6">
-    © 2025 AgriNexus World. All rights reserved.
-  </footer>
+  <script>
+    const user = JSON.parse(localStorage.getItem("agrinexus_user"));
+    if (user && user.name) {
+      document.getElementById("userInfo").innerText = `👋 ${user.name}님, 환영합니다`;
+    }
+  </script>
 </body>
 </html>
