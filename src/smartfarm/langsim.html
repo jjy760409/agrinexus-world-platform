@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>다국어 스마트팜 환경 시뮬레이터</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+<main class="max-w-xl mx-auto p-6">
+  <h1 class="text-xl font-bold mb-4">🌍 다국어 스마트팜 환경 시뮬레이터</h1>
+  <select id="lang" onchange="simulate()" class="w-full p-2 rounded text-gray-800">
+    <option value="">-- 언어 선택 --</option>
+    <option value="ko">🇰🇷 한국어</option>
+    <option value="en">🇺🇸 English</option>
+    <option value="ja">🇯🇵 日本語</option>
+    <option value="de">🇩🇪 Deutsch</option>
+  </select>
+  <div id="langResult" class="mt-4 p-4 bg-gray-800 text-sm rounded text-green-300"></div>
+</main>
+<script>
+  function simulate() {
+    const lang = document.getElementById("lang").value;
+    const box = document.getElementById("langResult");
+    const map = {
+      ko: "스마트팜 환경은 실내/실외 설치가 가능하며, 기후에 따라 최적화된 설정을 지원합니다.",
+      en: "Smartfarm environments can be installed indoor/outdoor, optimized based on climate.",
+      ja: "スマートファームは屋内外に設置可能で、気候に応じて最適化されます。",
+      de: "Smartfarms können drinnen oder draußen installiert werden und sind klimatisch optimiert."
+    };
+    box.innerText = map[lang] || "";
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>모바일 센서 기반 실측 입력</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+<main class="max-w-xl mx-auto p-6">
+  <h1 class="text-xl font-bold mb-4">📱 모바일 센서 기반 실시간 입력 시뮬레이터</h1>
+  <button onclick="getMotion()" class="bg-blue-600 text-white px-4 py-2 rounded w-full">센서 데이터 수집 시작</button>
+  <pre id="output" class="mt-4 bg-gray-800 p-4 rounded text-green-300 text-sm"></pre>
+</main>
+<script>
+  function getMotion() {
+    if ('DeviceMotionEvent' in window) {
+      window.addEventListener('devicemotion', e => {
+        const acc = e.accelerationIncludingGravity;
+        document.getElementById("output").innerText =
+          `가속도 X: ${acc.x?.toFixed(2)}\n가속도 Y: ${acc.y?.toFixed(2)}\n가속도 Z: ${acc.z?.toFixed(2)}`;
+      });
+    } else {
+      document.getElementById("output").innerText = "⚠️ 센서 지원 불가 (모바일 브라우저에서 테스트하세요)";
+    }
+  }
+</script>
+</body>
+</html>

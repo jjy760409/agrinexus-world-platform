@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>GPT 기반 스마트팜 도면 설계기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+<main class="max-w-2xl mx-auto p-6">
+  <h1 class="text-xl font-bold mb-4">📐 GPT 기반 스마트팜 도면 자동 설계</h1>
+  <input id="designInput" placeholder="설계할 환경 또는 장소 입력 (예: 창고, 옥상 등)" class="w-full p-2 text-gray-800 rounded mb-4">
+  <button onclick="runGPTDesign()" class="bg-green-600 text-white px-4 py-2 rounded w-full">GPT 설계 실행</button>
+  <pre id="gptOutput" class="mt-4 p-4 bg-gray-800 rounded text-green-300 text-sm whitespace-pre-wrap"></pre>
+</main>
+<script>
+  async function runGPTDesign() {
+    const input = document.getElementById("designInput").value.trim();
+    const box = document.getElementById("gptOutput");
+    box.innerText = "GPT 설계 중...";
+    const prompt = `너는 스마트팜 설계 전문가야. "${input}" 공간에 최적화된 구조, 장비, 센서, 배선 구성, 시공 절차를 한 줄씩 설명해줘.`;
+
+    try {
+      const res = await axios.post("https://api.openai.com/v1/chat/completions", {
+        model: "gpt-4",
+        messages: [{ role: "user", content: prompt }]
+      }, {
+        headers: {
+          "Authorization": "Bearer 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",
+          "Content-Type": "application/json"
+        }
+      });
+      box.innerText = res.data.choices[0].message.content.trim();
+    } catch (e) {
+      box.innerText = "❌ GPT 도면 설계 오류: " + e.message;
+    }
+  }
+</script>
+</body>
+</html>
