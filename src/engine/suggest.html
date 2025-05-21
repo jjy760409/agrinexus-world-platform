@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기능 제안기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <main class="max-w-xl mx-auto p-6">
+    <h1 class="text-xl font-bold mb-4 text-center">🤖 사용자 조건 기반 기능 제안</h1>
+    <select id="condition" class="w-full p-2 rounded text-gray-800 mb-4">
+      <option value="">-- 조건 선택 --</option>
+      <option value="indoor">실내 공간에 설치</option>
+      <option value="export">수출 문서 자동화 필요</option>
+      <option value="ai">AI 분석 중요</option>
+      <option value="visual">위성 시각화 필요</option>
+    </select>
+    <button onclick="suggest()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded w-full">기능 제안 보기</button>
+    <div id="suggestion" class="mt-4 text-sm text-green-300 bg-gray-800 p-4 rounded"></div>
+  </main>
+  <script>
+    function suggest() {
+      const cond = document.getElementById("condition").value;
+      const box = document.getElementById("suggestion");
+      const map = {
+        indoor: "추천 기능: 스마트팜 설계, LED 추천, 실내 설치 설비, 환경 자동 감지",
+        export: "추천 기능: 계약서 자동 생성, 국가별 문서 자동화, 메일 발송",
+        ai: "추천 기능: GPT 분석기, AI 기반 작물 분석, AI 추천 시뮬레이션",
+        visual: "추천 기능: Mapbox 위성 시각화, 지역 기반 지도 분석"
+      };
+      box.innerText = map[cond] || "조건을 선택해주세요.";
+    }
+  </script>
+</body>
+</html>
