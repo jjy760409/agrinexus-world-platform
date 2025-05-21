@@ -1,1 +1,64 @@
-<!-- 관리자 대시보드 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus 관리자 대시보드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="bg-gray-800 text-center p-6 text-2xl font-bold">📊 관리자 대시보드</header>
+  <main class="max-w-6xl mx-auto p-6 grid gap-8 grid-cols-1 md:grid-cols-2">
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">✅ 기능별 사용 통계</h2>
+      <ul class="list-disc ml-6 text-sm text-gray-300">
+        <li>계약서 생성 요청: 24회</li>
+        <li>작물 추천 결과 보기: 38회</li>
+        <li>보고서 그래프 출력: 17회</li>
+        <li>PDF 다운로드: 12회</li>
+        <li>이메일 제출 시도: 9회</li>
+      </ul>
+    </section>
+
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">📈 일간 기능 클릭 수</h2>
+      <canvas id="adminChart"></canvas>
+    </section>
+  </main>
+
+  <script>
+    const ctx = document.getElementById('adminChart').getContext('2d');
+    const adminChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['월', '화', '수', '목', '금', '토', '일'],
+        datasets: [{
+          label: '기능 클릭 수',
+          data: [5, 9, 12, 6, 8, 11, 7],
+          backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: { color: '#fff' }
+          },
+          x: {
+            ticks: { color: '#fff' }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: '#fff' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
