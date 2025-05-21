@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus Gaia 기반 글로벌 자동화 시스템</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+<main class="max-w-5xl mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-4 text-center">🌍 Gaia 기반 글로벌 스마트팜 자동화 통합 시스템</h1>
+  <div class="grid gap-4 md:grid-cols-2">
+    <div>
+      <label class="block mb-1">설치 지역 (국가 또는 도시):</label>
+      <input id="region" class="w-full p-2 text-gray-800 rounded" placeholder="예: South Korea, California, Kenya">
+    </div>
+    <div>
+      <label class="block mb-1">환경 조건:</label>
+      <input id="env" class="w-full p-2 text-gray-800 rounded" placeholder="예: 고온다습, 해풍, 건조지대 등">
+    </div>
+    <div>
+      <label class="block mb-1">설치 유형:</label>
+      <select id="type" class="w-full p-2 text-gray-800 rounded">
+        <option value="">-- 선택 --</option>
+        <option value="indoor">실내</option>
+        <option value="outdoor">실외</option>
+        <option value="rooftop">옥상</option>
+        <option value="greenhouse">온실</option>
+        <option value="warehouse">창고</option>
+        <option value="underground">지하</option>
+      </select>
+    </div>
+    <div>
+      <label class="block mb-1">관심 항목:</label>
+      <select id="focus" class="w-full p-2 text-gray-800 rounded">
+        <option value="">-- 선택 --</option>
+        <option value="seed">종자 추천</option>
+        <option value="logistics">물류/배송 흐름</option>
+        <option value="funding">정부지원/정책</option>
+        <option value="investment">투자/금융</option>
+        <option value="weather">기상/위성 정보</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="runGaia()" class="mt-6 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded w-full">🚀 설계 + 분석 실행</button>
+  <pre id="gaiaResult" class="mt-4 p-4 bg-gray-800 rounded text-green-300 text-sm whitespace-pre-wrap">🌐 시스템 결과가 여기에 표시됩니다...</pre>
+</main>
+<script>
+async function runGaia() {
+  const region = document.getElementById("region").value.trim();
+  const env = document.getElementById("env").value.trim();
+  const type = document.getElementById("type").value.trim();
+  const focus = document.getElementById("focus").value.trim();
+  const prompt = `너는 글로벌 스마트팜 구축 전문가야. 설치 지역: ${region}, 환경: ${env}, 유형: ${type}, 관심영역: ${focus}에 기반해
+  1) 설치 설계 요약
+  2) 재배/수확/가공/물류/배송 흐름
+  3) 해당 지역에 적합한 종자 추천
+  4) 정책/정부지원/금융 제안
+  5) 투자자/기관/조직 매칭 추천
+  을 항목별로 분석해서 보여줘.`;
+
+  const box = document.getElementById("gaiaResult");
+  box.innerText = "Gaia 글로벌 분석 중...";
+
+  try {
+    const res = await axios.post("https://api.openai.com/v1/chat/completions", {
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }]
+    }, {
+      headers: {
+        Authorization: "Bearer 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",
+        "Content-Type": "application/json"
+      }
+    });
+    box.innerText = res.data.choices[0].message.content.trim();
+  } catch (e) {
+    box.innerText = "❌ Gaia 분석 실패: " + e.message;
+  }
+}
+</script>
+</body>
+</html>
