@@ -2,29 +2,48 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus 관리자 대시보드</title>
+  <title>AgriNexus 관리자 로그인</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function checkLogin() {
+      const input = document.getElementById('adminPass').value;
+      if (input === 'agrinexus2025') {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        alert("❌ 비밀번호가 일치하지 않습니다.");
+      }
+    }
+  </script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-  <header class="bg-gray-800 text-center p-6 text-2xl font-bold">📊 관리자 대시보드</header>
-  <main class="max-w-6xl mx-auto p-6 grid gap-8 grid-cols-1 md:grid-cols-2">
-    <section class="bg-gray-800 p-4 rounded shadow">
-      <h2 class="text-xl font-semibold mb-2">✅ 기능별 사용 통계</h2>
-      <ul class="list-disc ml-6 text-sm text-gray-300">
-        <li>계약서 생성 요청: 24회</li>
-        <li>작물 추천 결과 보기: 38회</li>
-        <li>보고서 그래프 출력: 17회</li>
-        <li>PDF 다운로드: 12회</li>
-        <li>이메일 제출 시도: 9회</li>
-      </ul>
-    </section>
+  <header class="bg-gray-800 text-center p-6 text-2xl font-bold">🔐 관리자 로그인</header>
+  <main class="max-w-xl mx-auto p-6">
+    <div id="loginBox" class="text-center">
+      <p class="mb-4">관리자 전용 페이지입니다. 비밀번호를 입력하세요.</p>
+      <input id="adminPass" type="password" placeholder="비밀번호 입력" class="p-2 text-gray-800 rounded" />
+      <button onclick="checkLogin()" class="ml-2 bg-blue-600 px-4 py-2 rounded text-white">로그인</button>
+    </div>
 
-    <section class="bg-gray-800 p-4 rounded shadow">
-      <h2 class="text-xl font-semibold mb-2">📈 일간 기능 클릭 수</h2>
-      <canvas id="adminChart"></canvas>
-    </section>
+    <div id="dashboard" class="hidden">
+      <section class="mt-6 bg-gray-800 p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">📈 기능 통계</h2>
+        <ul class="list-disc ml-6 text-sm text-gray-300">
+          <li>계약 생성: 24</li>
+          <li>작물 추천: 38</li>
+          <li>보고서 출력: 17</li>
+          <li>PDF 다운로드: 12</li>
+          <li>이메일 전송: 9</li>
+        </ul>
+      </section>
+
+      <section class="mt-6 bg-gray-800 p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">📊 클릭 추이</h2>
+        <canvas id="adminChart"></canvas>
+      </section>
+    </div>
   </main>
 
   <script>
