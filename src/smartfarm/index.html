@@ -58,6 +58,27 @@
       추천 보기
     </button>
     <div id="result" class="mt-6 p-4 bg-gray-800 rounded text-green-300 text-lg font-medium"></div>
-  </main>
+  
+<section class="mt-12">
+  <h3 class="text-xl font-semibold mb-2">📝 사용자 피드백</h3>
+  <textarea id="feedback" placeholder="이 기능에 대한 의견을 남겨주세요." class="w-full p-2 text-gray-800 rounded mb-2"></textarea>
+  <button onclick="submitFeedback()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded">제출하기</button>
+  <p id="feedbackMsg" class="mt-2 text-green-400"></p>
+</section>
+
+<script>
+  function submitFeedback() {
+    const feedback = document.getElementById("feedback").value;
+    const msg = document.getElementById("feedbackMsg");
+    if (feedback.trim() !== "") {
+      msg.innerText = "✅ 피드백이 저장되었습니다. 감사합니다!";
+      document.getElementById("feedback").value = "";
+    } else {
+      msg.innerText = "⚠️ 내용을 입력해주세요.";
+    }
+  }
+</script>
+
+</main>
 </body>
 </html>
