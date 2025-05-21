@@ -1,51 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>AgriNexus World</title>
+    <title>AgriNexus 세계</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-white">
-    <header class="flex justify-between items-center p-6 bg-gray-800 shadow">
-        <h1 class="text-2xl font-bold">AgriNexus World</h1>
+    <header class="flex justify-between items-center p-6 bg-gray-800">
+        <h1 class="text-2xl font-bold">AgriNexus 세계</h1>
         <nav class="space-x-4">
-            <a href="#" class="hover:underline">About</a>
-            <a href="#" class="hover:underline">AI</a>
-            <a href="#" class="hover:underline">Logistics</a>
-            <a href="#" class="hover:underline">Reports</a>
-            <a href="#" class="hover:underline">Sign In</a>
+            <span>AI 물류 보고서 로그인 정보</span>
         </nav>
     </header>
-    <main class="text-center py-16 px-6">
-        <h2 class="text-4xl font-extrabold mb-4">AI-Powered Agricultural Solutions</h2>
-        <p class="text-lg mb-6">Optimize smart farming with cutting-edge AI, logistics and data systems.</p>
-        <a href="#" class="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded">Get Started</a>
-        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">Smart Farm</h3>
-                <p class="text-sm">Manage and monitor your smart farming system.</p>
-            </div>
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">Logistics System</h3>
-                <p class="text-sm">Optimize export and internal delivery.</p>
-            </div>
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">Revenue Prediction</h3>
-                <p class="text-sm">Forecast and analyze crop-based income.</p>
-            </div>
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">Contract Center</h3>
-                <p class="text-sm">Auto-generate legal and export contracts.</p>
-            </div>
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">Export Docs</h3>
-                <p class="text-sm">Country-based document generation system.</p>
-            </div>
-            <div class="p-6 bg-gray-800 rounded shadow">
-                <h3 class="text-xl font-semibold">AI Learning</h3>
-                <p class="text-sm">Self-evolving platform logic and optimization.</p>
-            </div>
+    <main class="text-center py-12 px-6">
+        <h2 class="text-4xl font-bold mb-4">AI 기반 농업 솔루션</h2>
+        <p class="mb-6 text-lg">최첨단 AI, 물류 및 데이터 시스템으로 스마트 농업을 최적화합니다.</p>
+        <a href="#" class="bg-teal-500 hover:bg-teal-400 text-white px-6 py-2 rounded font-bold">시작</a>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
+            <a href="./pages/smartfarm.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">스마트 팜</h3>
+                <p class="mt-2 text-sm">스마트 농업 시스템을 관리하고 모니터링하십시오.</p>
+            </a>
+            <a href="./pages/logistics.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">물류 시스템</h3>
+                <p class="mt-2 text-sm">수출 및 내부 납품을 최적화합니다.</p>
+            </a>
+            <a href="./pages/report.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">수익 예측</h3>
+                <p class="mt-2 text-sm">작물 기반 소득을 예측하고 분석합니다.</p>
+            </a>
+            <a href="./pages/contract.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">계약 센터</h3>
+                <p class="mt-2 text-sm">법률 및 수출 계약서를 자동으로 생성합니다.</p>
+            </a>
+            <a href="./pages/export.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">Docs 내보내기</h3>
+                <p class="mt-2 text-sm">국가 기반 문서 생성 시스템.</p>
+            </a>
+            <a href="./pages/ai.html" class="block p-6 bg-gray-800 hover:bg-teal-600 rounded-lg shadow">
+                <h3 class="text-xl font-bold">AI 학습</h3>
+                <p class="mt-2 text-sm">스스로 진화하는 플랫폼 로직 및 최적화.</p>
+            </a>
         </div>
     </main>
 </body>
