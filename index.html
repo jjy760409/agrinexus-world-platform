@@ -5,6 +5,17 @@
   <title>AgriNexus World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111827">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
+
 </head>
 <body class="bg-gray-900 text-white font-sans">
   <header class="flex justify-between items-center px-8 py-6 bg-gray-800 shadow">
