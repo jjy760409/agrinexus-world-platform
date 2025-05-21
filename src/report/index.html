@@ -1,1 +1,54 @@
-<!-- src/report 기능 페이지 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>보고서 시각화</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="bg-purple-800 text-center p-6 text-2xl font-bold">수익 예측 보고서</header>
+  <main class="max-w-3xl mx-auto p-8">
+    <p class="mb-6 text-lg text-gray-300">📊 아래 그래프는 작물별 예상 수익 예측 결과입니다.</p>
+    <canvas id="reportChart" class="bg-white rounded p-4"></canvas>
+  </main>
+  <script>
+    const ctx = document.getElementById('reportChart').getContext('2d');
+    const reportChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['상추', '토마토', '시금치', '고추', '딸기'],
+        datasets: [{
+          label: '예상 수익 (만원)',
+          data: [120, 150, 100, 80, 200],
+          backgroundColor: ['#34d399', '#f87171', '#60a5fa', '#facc15', '#a78bfa']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#fff'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#fff'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#fff'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
