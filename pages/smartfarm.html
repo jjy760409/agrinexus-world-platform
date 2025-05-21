@@ -2,15 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Smartfarm | AgriNexus World</title>
+    <title>Smart Farm | AgriNexus World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        function showRecommendation() {
+            const option = document.getElementById('cropOption').value;
+            const resultBox = document.getElementById('result');
+            let message = '';
+            if (option === 'lettuce') {
+                message = '추천 작물: 상추 – 빠른 생장, 여름 대비 적합';
+            } else if (option === 'tomato') {
+                message = '추천 작물: 토마토 – 고수익, 수출 가능성 높음';
+            } else if (option === 'spinach') {
+                message = '추천 작물: 시금치 – 단기 회전 수확 최적화';
+            }
+            resultBox.innerText = message;
+        }
+    </script>
 </head>
 <body class="bg-gray-900 text-white">
-    <header class="p-6 bg-gray-800 shadow text-center text-2xl font-bold">AgriNexus World - Smartfarm</header>
-    <main class="p-10 text-center">
-        <h2 class="text-3xl font-semibold mb-4">Smartfarm</h2>
-        <p class="text-lg">Smart Farm - Monitor and manage your smart farming operations.</p>
+    <header class="p-6 bg-gray-800 shadow text-center text-2xl font-bold">AgriNexus World - Smart Farm</header>
+    <main class="p-10 text-center space-y-6">
+        <h2 class="text-3xl font-semibold">작물 선택 기반 추천</h2>
+        <p class="text-lg">아래에서 재배 작물 옵션을 선택하면 AI 추천 결과가 표시됩니다.</p>
+        <select id="cropOption" class="p-2 text-black rounded">
+            <option value="">-- 작물 선택 --</option>
+            <option value="lettuce">상추 (Lettuce)</option>
+            <option value="tomato">토마토 (Tomato)</option>
+            <option value="spinach">시금치 (Spinach)</option>
+        </select>
+        <button onclick="showRecommendation()" class="ml-2 bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded">추천 보기</button>
+        <div id="result" class="mt-6 text-xl font-medium text-green-300"></div>
     </main>
 </body>
 </html>
