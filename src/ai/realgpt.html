@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>실시간 GPT 작물 분석</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <header class="bg-green-800 text-center p-6 text-2xl font-bold">🤖 실시간 GPT 작물 분석</header>
+  <main class="max-w-xl mx-auto p-6">
+    <div class="grid gap-4 mb-6">
+      <input id="crop" type="text" placeholder="작물명 (예: 토마토)" class="p-2 rounded text-gray-800" />
+      <input id="condition" type="text" placeholder="환경 조건 (예: 고온 다습)" class="p-2 rounded text-gray-800" />
+      <input id="area" type="number" placeholder="면적 (㎡)" class="p-2 rounded text-gray-800" />
+      <button onclick="runGPT()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">GPT 분석 실행</button>
+    </div>
+    <div id="gptResult" class="mt-6 p-4 bg-gray-800 rounded text-green-300 whitespace-pre-wrap text-sm font-medium">GPT 분석 결과가 여기에 표시됩니다...</div>
+  </main>
+
+  <script>
+    async function runGPT() {
+      const crop = document.getElementById("crop").value.trim();
+      const cond = document.getElementById("condition").value.trim();
+      const area = document.getElementById("area").value.trim();
+      const resultBox = document.getElementById("gptResult");
+      resultBox.innerText = "🔄 GPT 분석 중...";
+
+      const prompt = `당신은 농업 전문가입니다. "${crop}" 작물을 ${area}㎡ 규모로 "${cond}" 환경 조건에서 재배할 경우, 스마트팜 기반 수익성, 주의점, 기술 추천을 GPT 스타일로 분석해주세요.`;
+
+      try {
+        const response = await axios.post("https://api.openai.com/v1/chat/completions", {
+          model: "gpt-4",
+          messages: [{ role: "user", content: prompt }],
+        }, {
+          headers: {
+            "Authorization": "Bearer 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",
+            "Content-Type": "application/json"
+          }
+        });
+        resultBox.innerText = response.data.choices[0].message.content.trim();
+      } catch (error) {
+        resultBox.innerText = "❌ GPT 응답 오류 발생: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
