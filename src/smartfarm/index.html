@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>스마트팜 작물 추천</title>
+  <title>스마트팜 작물 추천 + 피드백 저장</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script>
@@ -12,73 +12,59 @@
       if (value === "") {
         result.innerText = "작물을 선택해주세요.";
       } else {
-        result.innerText = "추천 작물: " + value + " 🌿 — 이 작물은 스마트팜 환경에서 재배가 매우 적합합니다.";
+        result.innerText = "🌿 추천 작물: " + value + " - 스마트팜 재배에 적합합니다.";
       }
     }
+
+    function submitFeedback() {
+      const feedback = document.getElementById("feedback").value;
+      const msg = document.getElementById("feedbackMsg");
+      if (feedback.trim() !== "") {
+        let history = localStorage.getItem("agrinexus_feedbacks") || "[]";
+        const data = JSON.parse(history);
+        data.push({ feedback, time: new Date().toLocaleString() });
+        localStorage.setItem("agrinexus_feedbacks", JSON.stringify(data));
+        msg.innerText = "✅ 피드백이 저장되었습니다.";
+        document.getElementById("feedback").value = "";
+        showFeedbackHistory();
+      } else {
+        msg.innerText = "⚠️ 내용을 입력해주세요.";
+      }
+    }
+
+    function showFeedbackHistory() {
+      const historyBox = document.getElementById("feedbackHistory");
+      const history = JSON.parse(localStorage.getItem("agrinexus_feedbacks") || "[]");
+      historyBox.innerHTML = history.map(item => `<li class='mb-1'>🕒 ${item.time}: ${item.feedback}</li>`).join("");
+    }
+
+    window.onload = showFeedbackHistory;
   </script>
 </head>
-<body class="bg-gray-900 text-white">
-  <header class="bg-green-800 text-center p-6 text-2xl font-bold">스마트팜 작물 추천</header>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="bg-green-800 text-center p-6 text-2xl font-bold">🌱 스마트팜 작물 추천 + 피드백 저장</header>
   <main class="max-w-2xl mx-auto p-8">
-    <label for="cropSelect" class="block mb-4 text-lg font-semibold">재배할 작물을 선택하세요:</label>
+    <label for="cropSelect" class="block mb-4 text-lg font-semibold">작물을 선택하세요:</label>
     <select id="cropSelect" class="w-full p-2 rounded text-gray-800">
       <option value="">-- 작물 선택 --</option>
       <option value="상추">상추</option>
-<option value="토마토">토마토</option>
-<option value="시금치">시금치</option>
-<option value="파프리카">파프리카</option>
-<option value="오이">오이</option>
-<option value="가지">가지</option>
-<option value="수박">수박</option>
-<option value="멜론">멜론</option>
-<option value="배추">배추</option>
-<option value="양상추">양상추</option>
-<option value="브로콜리">브로콜리</option>
-<option value="당근">당근</option>
-<option value="고추">고추</option>
-<option value="청경채">청경채</option>
-<option value="쑥갓">쑥갓</option>
-<option value="아스파라거스">아스파라거스</option>
-<option value="생강">생강</option>
-<option value="마늘">마늘</option>
-<option value="양파">양파</option>
-<option value="옥수수">옥수수</option>
-<option value="콩">콩</option>
-<option value="보리">보리</option>
-<option value="밀">밀</option>
-<option value="호박">호박</option>
-<option value="딸기">딸기</option>
-<option value="블루베리">블루베리</option>
-<option value="참외">참외</option>
-<option value="바질">바질</option>
-<option value="로즈마리">로즈마리</option>
-<option value="고수">고수</option>
+      <option value="토마토">토마토</option>
+      <option value="시금치">시금치</option>
     </select>
-    <button onclick="showRecommendation()" class="mt-4 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">
-      추천 보기
-    </button>
-    <div id="result" class="mt-6 p-4 bg-gray-800 rounded text-green-300 text-lg font-medium"></div>
-  
-<section class="mt-12">
-  <h3 class="text-xl font-semibold mb-2">📝 사용자 피드백</h3>
-  <textarea id="feedback" placeholder="이 기능에 대한 의견을 남겨주세요." class="w-full p-2 text-gray-800 rounded mb-2"></textarea>
-  <button onclick="submitFeedback()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded">제출하기</button>
-  <p id="feedbackMsg" class="mt-2 text-green-400"></p>
-</section>
+    <button onclick="showRecommendation()" class="mt-4 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">추천 보기</button>
+    <div id="result" class="mt-4 text-green-300 font-medium"></div>
 
-<script>
-  function submitFeedback() {
-    const feedback = document.getElementById("feedback").value;
-    const msg = document.getElementById("feedbackMsg");
-    if (feedback.trim() !== "") {
-      msg.innerText = "✅ 피드백이 저장되었습니다. 감사합니다!";
-      document.getElementById("feedback").value = "";
-    } else {
-      msg.innerText = "⚠️ 내용을 입력해주세요.";
-    }
-  }
-</script>
+    <section class="mt-10">
+      <h3 class="text-lg font-semibold mb-2">📝 피드백 남기기</h3>
+      <textarea id="feedback" placeholder="이 기능에 대한 의견을 남겨주세요." class="w-full p-2 text-gray-800 rounded mb-2"></textarea>
+      <button onclick="submitFeedback()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded">제출하기</button>
+      <p id="feedbackMsg" class="mt-2 text-green-400"></p>
+    </section>
 
-</main>
+    <section class="mt-10">
+      <h3 class="text-lg font-semibold mb-2">📚 저장된 피드백 목록</h3>
+      <ul id="feedbackHistory" class="text-sm text-gray-300 list-disc ml-5"></ul>
+    </section>
+  </main>
 </body>
 </html>
