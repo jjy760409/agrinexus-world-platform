@@ -5,25 +5,44 @@
   <title>AgriNexus World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<script>
+  function toggleLanguage() {
+    const elements = document.querySelectorAll("[data-ko], [data-en]");
+    const lang = document.documentElement.lang === "ko" ? "en" : "ko";
+    document.documentElement.lang = lang;
+    elements.forEach(el => {
+      el.innerText = el.getAttribute("data-" + lang);
+    });
+    const button = document.getElementById("langToggle");
+    button.innerText = lang === "ko" ? "🇰🇷 한국어" : "🇺🇸 English";
+  }
+</script>
+
 </head>
 <body class="bg-gray-900 text-white font-sans">
   <header class="bg-gray-800 text-center p-6 text-3xl font-bold">AgriNexus World</header>
-  <main class="p-10 max-w-6xl mx-auto">
+  
+<div class="text-right p-4">
+  <button id="langToggle" onclick="toggleLanguage()" class="bg-gray-700 text-white px-4 py-2 rounded">🇺🇸 English</button>
+</div>
+
+<main class="p-10 max-w-6xl mx-auto">
     <h2 class="text-2xl font-semibold mb-6">🚀 프리미엄 기능 바로가기</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
       <a href="./src/smartfarm/index.html" class="bg-gray-800 p-6 rounded shadow hover:bg-green-700 transition">
         <img src="./assets/smartfarm_icon.png" alt="Smart Farm" class="h-16 mx-auto mb-3">
-        <p class="text-lg font-semibold">스마트팜 시스템</p>
+        <p class="text-lg font-semibold"><span data-ko="스마트팜 시스템" data-en="Smart Farm System">스마트팜 시스템</span></p>
         <p class="text-sm text-gray-300">고급 제어 및 작물 추천</p>
       </a>
       <a href="./src/contract/index.html" class="bg-gray-800 p-6 rounded shadow hover:bg-blue-700 transition">
         <img src="./assets/contract_icon.png" alt="Contract" class="h-16 mx-auto mb-3">
-        <p class="text-lg font-semibold">계약서 생성</p>
+        <p class="text-lg font-semibold"><span data-ko="계약서 생성" data-en="Contract Generator">계약서 생성</span></p>
         <p class="text-sm text-gray-300">자동 계약서 PDF 변환</p>
       </a>
       <a href="./src/report/index.html" class="bg-gray-800 p-6 rounded shadow hover:bg-purple-700 transition">
         <div class="text-5xl">📊</div>
-        <p class="text-lg font-semibold">보고서 출력</p>
+        <p class="text-lg font-semibold"><span data-ko="보고서 출력" data-en="Report Output">보고서 출력</span></p>
         <p class="text-sm text-gray-300">수익 및 분석 시각화</p>
       </a>
     </div>
