@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>위성 기반 스마트팜 시각화</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css' rel='stylesheet' />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    #map {{
+      width: 100%;
+      height: 500px;
+    }}
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+  <header class="bg-indigo-800 text-center p-6 text-2xl font-bold">🛰️ 실시간 위성 시각화</header>
+  <main class="max-w-6xl mx-auto p-6">
+    <p class="mb-4 text-sm text-gray-300">아래 지도는 위성기반 농지 위치 시각화를 지원합니다.</p>
+    <div id="map" class="rounded shadow"></div>
+  </main>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjbGd5eHJ5ZXYwMWQ3M2ZuaGtwMW5xM2tlIn0.DQYKNwrGvpsfz4JGybEcsw';
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      center: [127.7669, 35.9078], // Korea
+      zoom: 5
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+  </script>
+</body>
+</html>
