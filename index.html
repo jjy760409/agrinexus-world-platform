@@ -2,25 +2,36 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus World - 연결된 메인 디자인</title>
+  <title>AgriNexus World - 통합 실사용 플랫폼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI 기반 스마트팜, 글로벌 물류, 실시간 분석 플랫폼">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-white">
-<main class="max-w-6xl mx-auto p-6">
+<main class="max-w-5xl mx-auto p-6">
   <header class="text-center mb-10">
-    <h1 class="text-3xl font-bold mb-2">🌍 AgriNexus World</h1>
-    <p class="text-gray-400">AI + 스마트팜 + 물류 + 글로벌 자동화 시스템</p>
+    <h1 class="text-4xl font-bold">🌍 AgriNexus World</h1>
+    <p class="text-gray-400 text-sm mt-2">AI + 스마트팜 + 글로벌 물류 자동화 플랫폼</p>
   </header>
 
-  <h2 class="text-lg font-semibold mb-2">🧠 스마트팜 주요 기능</h2>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-    <a href="src/smartfarm/plan.html" class="bg-gray-800 p-3 rounded hover:bg-green-600">환경 자동 설계</a>
-    <a href="src/smartfarm/gptdesign.html" class="bg-gray-800 p-3 rounded hover:bg-green-600">GPT 도면 생성</a>
-    <a href="src/smartfarm/build.html" class="bg-gray-800 p-3 rounded hover:bg-green-600">시공 시뮬레이터</a>
-    <a href="src/smartfarm/recommend.html" class="bg-gray-800 p-3 rounded hover:bg-green-600">장비 추천</a>
-    <a href="src/smartfarm/features.html" class="bg-gray-800 p-3 rounded hover:bg-green-600">전체 기능 명세</a>
+    <a href="src/smartfarm/plan.html" class="bg-gray-800 p-4 rounded hover:bg-green-600">
+      환경 설계<br><span class="text-xs text-gray-400">설치 조건에 따라 설계 추천</span>
+    </a>
+    <a href="src/logistics/route.html" class="bg-gray-800 p-4 rounded hover:bg-blue-600">
+      배송 경로 분석<br><span class="text-xs text-gray-400">출발지-도착지 기반 최적 경로</span>
+    </a>
+    <a href="src/ai/realgpt.html" class="bg-gray-800 p-4 rounded hover:bg-pink-600">
+      GPT 분석기<br><span class="text-xs text-gray-400">실시간 작물 조건 분석</span>
+    </a>
+    <a href="src/global/gaia.html" class="bg-gray-800 p-4 rounded hover:bg-purple-600">
+      Gaia 설계 시스템<br><span class="text-xs text-gray-400">전세계 자동화 설계 시스템</span>
+    </a>
+    <a href="src/cs/index.html" class="bg-gray-800 p-4 rounded hover:bg-yellow-600">
+      고객지원 시스템<br><span class="text-xs text-gray-400">문의 유형 선택 → GPT 응답</span>
+    </a>
+    <a href="src/admin/dashboard.html" class="bg-gray-800 p-4 rounded hover:bg-indigo-600">
+      관리자 대시보드<br><span class="text-xs text-gray-400">기능 통계 및 제어</span>
+    </a>
   </div>
 </main>
 </body>
