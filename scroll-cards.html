@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriNexus 기능 카드바</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="기능별 카드바 · 클릭 → 실행 · 스마트팜 · 물류 · AI · 고객지원">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .cardbar {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+      scroll-snap-type: x mandatory;
+    }
+    .cardbar a {
+      scroll-snap-align: start;
+      min-width: 220px;
+      background: #1f2937;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+      color: white;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-950 text-white">
+<main class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-2xl font-bold mb-6 text-center">🌐 AgriNexus World 기능 카드바</h1>
+  <p class="text-sm text-center text-gray-400 mb-6">모든 기능을 스크롤 카드로 연결된 구조로 빠르게 접근</p>
+
+  <div class="cardbar">
+    <a href="src/smartfarm/plan.html">🌱 환경 설계<br><span class="text-xs text-gray-300">설치 조건 분석</span></a>
+    <a href="src/smartfarm/gptdesign.html">🧠 GPT 도면<br><span class="text-xs text-gray-300">AI 자동 설계</span></a>
+    <a href="src/smartfarm/build.html">🏗️ 시공 흐름<br><span class="text-xs text-gray-300">단계별 시뮬레이션</span></a>
+    <a href="src/logistics/route.html">🚛 배송 분석<br><span class="text-xs text-gray-300">경로 자동 추천</span></a>
+    <a href="src/logistics/cost.html">💰 물류비 계산<br><span class="text-xs text-gray-300">자동 요금 산출</span></a>
+    <a href="src/ai/realgpt.html">🤖 GPT 분석기<br><span class="text-xs text-gray-300">조건 기반 응답</span></a>
+    <a href="src/global/gaia.html">🌍 Gaia 설계<br><span class="text-xs text-gray-300">국가 기반 분석</span></a>
+    <a href="src/cs/index.html">💬 고객지원<br><span class="text-xs text-gray-300">문의 → AI 응답</span></a>
+    <a href="src/admin/dashboard.html">📊 관리자<br><span class="text-xs text-gray-300">기능 통계</span></a>
+  </div>
+</main>
+</body>
+</html>
