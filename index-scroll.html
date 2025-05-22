@@ -1,128 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>AgriNexus - 기능 카드 확장</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .scroll-container {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-      scroll-snap-type: x mandatory;
-    }
-    .card {
-      scroll-snap-align: start;
-      min-width: 220px;
-      background: #1f2937;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-align: center;
-      color: white;
-      flex-shrink: 0;
-    }
-  </style>
+<head><meta charset="UTF-8">
+<title>AgriNexus 사용자 생태계</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  scroll-snap-type: x mandatory;
+}
+.card {
+  scroll-snap-align: start;
+  min-width: 220px;
+  background: #1f2937;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  color: white;
+  flex-shrink: 0;
+}
+</style>
 </head>
 <body class="bg-gray-900 text-white">
 <main class="max-w-6xl mx-auto px-6 py-10">
-  <h1 class="text-3xl font-bold text-center mb-6">🏢 운영 인프라 · 문서 자동화 기능</h1>
+  <h1 class="text-3xl font-bold text-center mb-6">🧩 사용자 운영 기능</h1>
   <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📦 기능 목록</h2>
     <div class="scroll-container">
-      <a href="src/data/upload.html" class="card">📊 데이터 업로드</a>
-      <a href="src/system/infrastructure.html" class="card">🏭 인프라 상태</a>
-      <a href="src/tools/convert.html" class="card">📄 문서 변환</a>
-      <a href="src/payment/invoice.html" class="card">🧾 세금계산서</a>
-      <a href="src/user/members.html" class="card">💼 멤버십</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🏛️ 기관 · 교육 · 실행 자동화</h2>
-    <div class="scroll-container">
-      <a href="src/public/partner.html" class="card">🏛️ 제휴 신청</a>
-      <a href="src/edu/course.html" class="card">📚 교육 과정</a>
-      <a href="src/ai/autoexec.html" class="card">🤖 AI 실행기</a>
-      <a href="src/tools/download.html" class="card">📤 보고서 다운로드</a>
-      <a href="src/store/register.html" class="card">🏷️ 브랜드 등록</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🚀 세계 혁신 기능 (말도 안 되는 기술)</h2>
-    <div class="scroll-container">
-      <a href="src/future/farmgenerator.html" class="card">🧠 AI 농장 생성</a>
-      <a href="src/future/satfinder.html" class="card">🛰️ 위성 농지 분석</a>
-      <a href="src/future/foodrisk.html" class="card">🧬 식량 위기 예측</a>
-      <a href="src/future/tradeai.html" class="card">🧾 AI 무역 자동화</a>
-      <a href="src/future/rdmap.html" class="card">🌐 R&D 지도</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🌐 AI 협상 · 국제 분석 · 위성 확장</h2>
-    <div class="scroll-container">
-      <a href="src/ai/agent.html" class="card">🤖 계약 대리인</a>
-      <a href="src/public/matcher.html" class="card">📡 기관 매칭</a>
-      <a href="src/future/globalscan.html" class="card">🛰️ 글로벌 스캔</a>
-      <a href="src/law/summarizer.html" class="card">🧾 법령 요약</a>
-      <a href="src/future/aifarmmap.html" class="card">🗺️ AI 농장 지도</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🌐 비즈니스 · 결제 · 파트너십</h2>
-    <div class="scroll-container">
-      <a href="src/payment/gateway.html" class="card">💳 결제 모듈</a>
-      <a href="src/global/finance.html" class="card">🏦 금융 지원국</a>
-      <a href="src/tools/esign.html" class="card">🧾 전자 서명</a>
-      <a href="src/public/partners.html" class="card">🤝 파트너 등록</a>
-      <a href="src/brand/prcenter.html" class="card">📢 PR 센터</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">💼 AI 수익성 · ESG · 피드백 자동화</h2>
-    <div class="scroll-container">
-      <a href="src/ai/economy.html" class="card">💰 수익/비용 분석</a>
-      <a href="src/esg/checker.html" class="card">🌱 ESG 평가</a>
-      <a href="src/system/history.html" class="card">🔄 업데이트 이력</a>
-      <a href="src/ai/feedback.html" class="card">🧠 고객 인터뷰</a>
-      <a href="src/user/feedbackmap.html" class="card">📥 피드백 지도</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📢 실사용 전시 기능 · 다운로드 · 인증</h2>
-    <div class="scroll-container">
-      <a href="src/media/autovideo.html" class="card">🎥 AI 영상</a>
-      <a href="src/contract/dashboard.html" class="card">🧾 계약 대시보드</a>
-      <a href="src/admin/usergeo.html" class="card">🌍 활동 지도</a>
-      <a href="src/public/badges.html" class="card">🤝 파트너 뱃지</a>
-      <a href="src/tools/hub.html" class="card">📥 다운로드 허브</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🧠 AI 설치 인식 · 법률 · 정부 지원</h2>
-    <div class="scroll-container">
-      <a href="src/smartfarm/spotcheck.html" class="card">🔍 설치 분석</a>
-      <a href="src/law/viewer.html" class="card">📜 계약서 해석</a>
-      <a href="src/public/support.html" class="card">🧾 정부 지원</a>
-      <a href="src/tools/qrexec.html" class="card">🌐 QR 실행</a>
-      <a href="src/map/partnermap.html" class="card">🗺️ 파트너 지도</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📡 실시간 분석 · 추천 · 글로벌 자동 콘텐츠</h2>
-    <div class="scroll-container">
-      <a href="src/admin/stats.html" class="card">📊 기능 통계</a>
-      <a href="src/media/scriptgen.html" class="card">🎞️ 영상 대본 생성</a>
-      <a href="src/ai/recommend.html" class="card">🤖 기능 추천</a>
-      <a href="src/dev/api.html" class="card">🔌 API 연동</a>
-      <a href="src/brand/translate.html" class="card">🌐 홍보 번역기</a>
+      <a href="src/user/login.html" class="card">🔐 로그인</a>
+      <a href="src/tools/templates.html" class="card">📝 문서 생성</a>
+      <a href="src/user/chat.html" class="card">💬 채팅</a>
+      <a href="src/user/usage.html" class="card">📊 리포트</a>
+      <a href="src/pwa/install.html" class="card">📱 앱 설치</a>
     </div>
   </section>
 </main>
