@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+  <meta charset="UTF-8"><title>AgriNexus 기능 검색</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function filterFeatures() {
+      let q = document.getElementById('search').value.toLowerCase();
+      document.querySelectorAll('.feature-item').forEach(el => {
+        el.style.display = el.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+      });
+    }
+  </script>
+</head><body class="bg-gray-900 text-white">
+<main class="max-w-4xl mx-auto px-6 py-10">
+  <h1 class="text-2xl font-bold mb-4">🔍 기능 검색</h1>
+  <input type="text" id="search" onkeyup="filterFeatures()" placeholder="기능명을 입력하세요..." class="w-full p-2 rounded text-black mb-6">
+  <ul class="space-y-2 text-sm">
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/ai/chatbot.html">🧠 AI 상담봇</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/admin/overview.html">📊 실시간 대시보드</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/investor/report.html">📈 투자자 보고서</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/media/player.html">📹 기능 영상 보기</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/seed/lab.html">🧬 종자 추천 실험실</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/email/welcome.html">📬 환영 메일</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/ai/profit.html">🔮 수익 예측기</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/system/energy.html">⚡ 에너지 분석</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/admin/security.html">🛡️ 보안 리포트</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/contract/compare.html">🧾 계약 비교</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/ai/summarizer.html">🧠 데이터 요약</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/tools/viewer.html">🗂️ 파일 뷰어</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/admin/apilogs.html">🔗 API 로그</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/global/compliance.html">🏅 인증 체크</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/community/forum.html">💬 사용자 커뮤니티</a></li>
+<li class="feature-item bg-gray-800 p-3 rounded"><a class="text-green-400 underline" href="src/help/functions.html">📦 기능 도움말</a></li>
+</ul></main></body></html>
