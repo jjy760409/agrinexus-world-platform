@@ -2,119 +2,41 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus World - 스크롤 카드 플랫폼</title>
+  <title>AgriNexus - 기능 확장 카드바</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="기능별 카드바 UI · 상/하 스크롤 · 클릭 실행 · 글로벌 사용 가능">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     .scroll-container {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 1rem;
-      margin-top: 1rem;
+      padding: 1rem;
+      scroll-snap-type: x mandatory;
     }
     .card {
-      flex: 1 1 300px;
+      scroll-snap-align: start;
+      min-width: 220px;
       background: #1f2937;
-      color: white;
       border-radius: 0.5rem;
       padding: 1rem;
-      transition: all 0.2s ease-in-out;
       text-align: center;
-    }
-    .card:hover {
-      background-color: #2dd4bf;
-      color: black;
+      color: white;
+      flex-shrink: 0;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white font-sans">
-<main class="max-w-6xl mx-auto px-6 py-10">
-  <header class="text-center mb-10">
-    <h1 class="text-4xl font-bold mb-3">🌍 AgriNexus World</h1>
-    <p class="text-sm text-gray-400">스크롤로 기능을 탐색하고 클릭해 체험할 수 있는 글로벌 스마트 플랫폼</p>
-  </header>
-
+<body class="bg-gray-900 text-white">
+<main class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold mb-6 text-center">🌍 AgriNexus 확장 기능 카드</h1>
   <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🌱 스마트팜</h2>
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📊 실사용 확장 기능</h2>
     <div class="scroll-container">
-      <a href="src/smartfarm/plan.html" class="card">환경 설계</a>
-      <a href="src/smartfarm/gptdesign.html" class="card">GPT 도면 생성</a>
-      <a href="src/smartfarm/build.html" class="card">시공 흐름</a>
-      <a href="src/smartfarm/recommend.html" class="card">장비 추천</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🚛 물류 시스템</h2>
-    <div class="scroll-container">
-      <a href="src/logistics/route.html" class="card">배송 경로 분석</a>
-      <a href="src/logistics/cost.html" class="card">물류비 계산기</a>
-      <a href="src/logistics/customs.html" class="card">통관 정보</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🌍 글로벌 · AI · 분석</h2>
-    <div class="scroll-container">
-      <a href="src/ai/realgpt.html" class="card">GPT 분석기</a>
-      <a href="src/global/gaia.html" class="card">Gaia 글로벌 설계</a>
-      <a href="src/engine/suggest.html" class="card">기능 추천</a>
-      <a href="src/engine/compare.html" class="card">기능 비교</a>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📋 관리자 / 고객지원</h2>
-    <div class="scroll-container">
-      <a href="src/cs/index.html" class="card">💬 고객 지원</a>
-      <a href="src/admin/dashboard.html" class="card">📊 관리자 대시보드</a>
-      <a href="overview.html" class="card">📂 전체 기능 요약</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">📄 계약 · 보고 · 문서</h2>
-    <div class="scroll-container">
-      <a href="src/contract/index.html" class="card">📄 계약서 생성기<br><span class="text-xs text-gray-300">PDF + 이메일 전송</span></a>
-      <a href="src/report/index.html" class="card">📈 수익 예측 리포트<br><span class="text-xs text-gray-300">AI 기반 분석</span></a>
-      <a href="src/global/docs.html" class="card">🌐 국가 문서 자동화<br><span class="text-xs text-gray-300">단위/포맷 설정</span></a>
-      <a href="src/blog/auto.html" class="card">✍️ 블로그 자동 생성<br><span class="text-xs text-gray-300">GPT 마케팅 콘텐츠</span></a>
-      <a href="src/poster/index.html" class="card">📢 기능 포스터<br><span class="text-xs text-gray-300">기능별 요약 이미지</span></a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🆕 최신 추가 기능</h2>
-    <div class="scroll-container">
-      <a href="src/estimate/index.html" class="card">🧾 견적서 PDF 생성</a>
-      <a href="src/weather/index.html" class="card">🌤️ 기후 정보</a>
-      <a href="src/feedback/index.html" class="card">📥 피드백 수집</a>
-      <a href="src/admin/logs.html" class="card">📈 기록 조회</a>
-      <a href="src/admin/settings.html" class="card">🔒 관리자 설정</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🧠 고급 확장 기능</h2>
-    <div class="scroll-container">
-      <a href="src/contract/summary.html" class="card">🧠 계약 요약</a>
-      <a href="src/brand/compare.html" class="card">🏷️ 브랜드 비교</a>
-      <a href="src/api/partners.html" class="card">🔗 API 연동</a>
-      <a href="src/global/policy.html" class="card">📋 정책 DB</a>
-      <a href="src/email/send.html" class="card">📤 이메일 발송</a>
-      <a href="src/admin/check.html" class="card">🧩 기능 진단</a>
-    </div>
-  </section>
-
-  <section class="mb-16">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600 pb-1">🚀 차세대 글로벌 기능</h2>
-    <div class="scroll-container">
-      <a href="src/map/satellite.html" class="card">📡 위성 지도</a>
-      <a href="src/proposal/auto.html" class="card">🧾 제안서 생성</a>
-      <a href="src/ai/behavior.html" class="card">🧠 행동 추천</a>
-      <a href="src/seed/analyze.html" class="card">🌾 종자 분석</a>
-      <a href="src/system/recover.html" class="card">♻️ 복구 시스템</a>
+      <a href="src/media/demo.html" class="card">📹 기능 영상</a>
+      <a href="src/smartfarm/3dbuild.html" class="card">🏗️ 3D 시공</a>
+      <a href="src/ai/scenario.html" class="card">🧑‍🌾 자동 시나리오</a>
+      <a href="src/investor/report.html" class="card">📈 투자 보고서</a>
+      <a href="src/admin/history.html" class="card">🔄 기능 히스토리</a>
     </div>
   </section>
 </main>
