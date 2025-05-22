@@ -2,66 +2,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>AgriNexus World - 실사용 통합 리디자인</title>
+  <title>AgriNexus World - 반응형 메인</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI 스마트팜 · 물류 자동화 · 글로벌 설계 · 고객 지원 통합 시스템">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-950 text-white">
+<body class="bg-gray-900 text-white">
 <main class="max-w-6xl mx-auto p-6">
   <header class="text-center mb-10">
     <h1 class="text-4xl font-bold">🌍 AgriNexus World</h1>
-    <p class="text-sm text-gray-400 mt-2">AI 기반 농업 자동화 솔루션</p>
+    <p class="text-sm text-gray-400 mt-2">AI 기반 글로벌 스마트팜 자동화 플랫폼</p>
   </header>
 
-  <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4">🌱 스마트팜 기능</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-      <a href="src/smartfarm/plan.html" class="bg-gray-800 p-5 rounded hover:bg-green-600 transition">
-        ✅ 환경 자동 설계<br><span class="text-xs text-gray-400">설치 조건에 따라 자동 설계</span>
-      </a>
-      <a href="src/smartfarm/gptdesign.html" class="bg-gray-800 p-5 rounded hover:bg-green-600 transition">
-        🧠 GPT 설계 생성기<br><span class="text-xs text-gray-400">AI 기반 도면 설계 제안</span>
-      </a>
-      <a href="src/smartfarm/build.html" class="bg-gray-800 p-5 rounded hover:bg-green-600 transition">
-        🏗️ 시공 시뮬레이터<br><span class="text-xs text-gray-400">설치 단계별 흐름 안내</span>
-      </a>
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">🌱 스마트팜</h2>
+    <div class="flex flex-wrap gap-4">
+      <a href="src/smartfarm/plan.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600 transition">환경 자동 설계</a>
+      <a href="src/smartfarm/gptdesign.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600 transition">GPT 설계</a>
+      <a href="src/smartfarm/build.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600 transition">시공 절차</a>
     </div>
   </section>
 
-  <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4">🚛 물류 시스템</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-      <a href="src/logistics/route.html" class="bg-gray-800 p-5 rounded hover:bg-blue-600 transition">
-        🚚 배송 경로 분석<br><span class="text-xs text-gray-400">출발지-도착지 최적 경로</span>
-      </a>
-      <a href="src/logistics/cost.html" class="bg-gray-800 p-5 rounded hover:bg-blue-600 transition">
-        💰 물류비 계산기<br><span class="text-xs text-gray-400">거리/무게 기반 자동 비용 계산</span>
-      </a>
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">🚚 물류</h2>
+    <div class="flex flex-wrap gap-4">
+      <a href="src/logistics/route.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-blue-600 transition">배송 경로 분석</a>
+      <a href="src/logistics/cost.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-blue-600 transition">물류비 계산기</a>
     </div>
   </section>
 
-  <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4">🧠 AI + 글로벌 설계</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-      <a href="src/ai/realgpt.html" class="bg-gray-800 p-5 rounded hover:bg-pink-600 transition">
-        🤖 GPT 분석기<br><span class="text-xs text-gray-400">작물/조건 입력 → AI 분석 문장 생성</span>
-      </a>
-      <a href="src/global/gaia.html" class="bg-gray-800 p-5 rounded hover:bg-purple-600 transition">
-        🌍 Gaia 글로벌 설계기<br><span class="text-xs text-gray-400">국가/환경 기반 자동화 설계</span>
-      </a>
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">🧠 AI + 글로벌</h2>
+    <div class="flex flex-wrap gap-4">
+      <a href="src/ai/realgpt.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-pink-600 transition">GPT 분석</a>
+      <a href="src/global/gaia.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-purple-600 transition">Gaia 설계</a>
     </div>
   </section>
 
   <section>
-    <h2 class="text-2xl font-semibold mb-4">📋 관리자 / 고객지원</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-      <a href="src/admin/dashboard.html" class="bg-gray-800 p-5 rounded hover:bg-indigo-600 transition">
-        📊 관리자 대시보드<br><span class="text-xs text-gray-400">기능 설정 / 통계 확인</span>
-      </a>
-      <a href="src/cs/index.html" class="bg-gray-800 p-5 rounded hover:bg-yellow-600 transition">
-        💬 고객지원 시스템<br><span class="text-xs text-gray-400">GPT 자동 응답 고객 서비스</span>
-      </a>
+    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">📋 고객지원 / 관리자</h2>
+    <div class="flex flex-wrap gap-4">
+      <a href="src/cs/index.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-yellow-600 transition">고객지원</a>
+      <a href="src/admin/dashboard.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-indigo-600 transition">관리자 대시보드</a>
     </div>
   </section>
 </main>
