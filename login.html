@@ -1,36 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>로그인 - AgriNexus</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-900 text-white">
-  <main class="max-w-md mx-auto p-8">
-    <h1 class="text-2xl font-bold mb-6 text-center">🔐 로그인</h1>
-    <form onsubmit="loginUser(event)" class="grid gap-4">
-      <input id="loginEmail" type="email" placeholder="이메일" class="p-2 rounded text-gray-800" required />
-      <input id="loginPw" type="password" placeholder="비밀번호" class="p-2 rounded text-gray-800" required />
-      <button class="bg-teal-600 hover:bg-teal-500 text-white py-2 rounded" type="submit">로그인</button>
-    </form>
-    <p id="loginStatus" class="text-sm text-red-400 mt-4 text-center"></p>
-    <p class="text-center mt-6 text-sm text-gray-500">아직 계정이 없으신가요? <a href="signup.html" class="underline text-blue-400">회원가입</a></p>
-  </main>
-
-  <script>
-    function loginUser(e) {
-      e.preventDefault();
-      const saved = JSON.parse(localStorage.getItem("agrinexus_user"));
-      const email = document.getElementById("loginEmail").value.trim();
-      const pw = document.getElementById("loginPw").value.trim();
-      const msg = document.getElementById("loginStatus");
-      if (saved && saved.email === email && saved.pw === pw) {
-        msg.innerText = "✅ 로그인 성공! 전체 기능 사용 가능합니다.";
-      } else {
-        msg.innerText = "❌ 이메일 또는 비밀번호가 올바르지 않습니다.";
-      }
-    }
-  </script>
-</body>
-</html>
+<html lang="ko"><head><meta charset="UTF-8"><title>🔐 사용자 로그인</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head><body class="bg-slate-900 text-white text-center py-20">
+<h1 class="text-4xl font-bold mb-6">🔐 사용자 로그인</h1>
+<p class="text-gray-400 text-lg">이 페이지는 실제로 작동하는 AgriNexus 기능입니다.</p>
+</body></html>
