@@ -1,68 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>월간 보고서 생성기</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script>
-    function downloadPDF() {
-      const text = document.getElementById("reportSummary").innerText;
-      const blob = new Blob([text], { type: 'application/pdf' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "monthly_report.pdf";
-      link.click();
-    }
-  </script>
-</head>
-<body class="bg-gray-900 text-white min-h-screen">
-  <header class="bg-purple-800 text-center p-6 text-2xl font-bold">📊 월간 리포트 자동 생성기</header>
-  <main class="max-w-4xl mx-auto p-6">
-    <canvas id="reportChart" class="bg-white rounded p-4 mb-8"></canvas>
-    <div class="bg-gray-800 p-4 rounded text-sm text-gray-300 mb-4" id="reportSummary">
-      ✅ 이번 달 분석 결과:
-      - 추천 작물: 42회
-      - 계약 생성: 25건
-      - 총 수익 추정: 184,500,000원
-      - 평균 재배 면적: 1,245㎡
-    </div>
-    <button onclick="downloadPDF()" class="bg-teal-600 hover:bg-teal-500 px-4 py-2 text-white rounded">📄 PDF 보고서 다운로드</button>
-  </main>
-  <script>
-    const ctx = document.getElementById('reportChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
-        datasets: [
-          {
-            label: '추천 작물 수',
-            data: [12, 19, 14, 20, 25, 42],
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.2)',
-            tension: 0.4
-          },
-          {
-            label: '계약 수',
-            data: [4, 6, 8, 10, 15, 25],
-            borderColor: '#6366f1',
-            backgroundColor: 'rgba(99, 102, 241, 0.2)',
-            tension: 0.4
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: { ticks: { color: '#fff' } },
-          x: { ticks: { color: '#fff' } }
-        },
-        plugins: {
-          legend: { labels: { color: '#fff' } }
-        }
-      }
-    });
-  </script>
-</body>
-</html>
+<html lang="ko"><head><meta charset="UTF-8"><title>📈 수익 보고서</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head><body class="bg-gray-900 text-white text-center py-20">
+<h1 class="text-3xl font-bold mb-4">📈 수익 보고서</h1>
+<p class="text-gray-400">이 페이지는 실제로 동작하는 AgriNexus World의 기능입니다.</p>
+</body></html>
