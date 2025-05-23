@@ -1,78 +1,38 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>AgriNexus World · 업그레이드 UI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .nav {
-      background-color: #1e293b;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-weight: bold;
-    }
-    .card {
-      background: linear-gradient(to right, #10b981, #3b82f6);
-      color: white;
-      padding: 1.25rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      text-align: center;
-      transition: transform 0.2s ease-in-out;
-    }
-    .card:hover {
-      transform: scale(1.05);
-      background: linear-gradient(to right, #3b82f6, #10b981);
-    }
-  </style>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<title>AgriNexus World — 기능 대시보드</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+.card {
+  background: #1e293b;
+  color: white;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+  background: #10b981;
+  color: black;
+  transform: scale(1.05);
+}
+</style>
 </head>
 <body class="bg-slate-900 text-white">
-<div class="nav">🌍 AgriNexus World — 모든 기능을 한눈에</div>
-
-<main class="max-w-7xl mx-auto p-6">
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-6 text-emerald-400 border-b border-gray-600">📘 스마트팜 + 계약</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <a class="card" href="src/smartfarm/plan.html">🌱 스마트팜 설계<br><span class="text-sm">설치 + 환경 분석</span></a>
-      <a class="card" href="src/contract/index.html">📄 계약서 생성<br><span class="text-sm">자동 문서화</span></a>
-      <a class="card" href="src/contract/dashboard.html">📊 계약 대시보드</a>
-      <a class="card" href="src/smartfarm/spotcheck.html">🔍 설치 장소 분석</a>
-    </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-6 text-sky-400 border-b border-gray-600">📦 물류 + 문서 + 분석</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <a class="card" href="src/logistics/route.html">🚚 물류 경로</a>
-      <a class="card" href="src/report/index.html">📈 수익 보고서</a>
-      <a class="card" href="src/tools/templates.html">📝 문서 템플릿</a>
-      <a class="card" href="src/global/docs.html">🌐 글로벌 문서</a>
-    </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-400 border-b border-gray-600">🤖 AI 분석 + 자동화</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <a class="card" href="src/ai/realgpt.html">🤖 GPT 분석</a>
-      <a class="card" href="src/ai/autopilot.html">🧠 자율 운영</a>
-      <a class="card" href="src/ai/strategy.html">📊 전략 리포트</a>
-      <a class="card" href="src/ai/feedback.html">💬 고객 인터뷰</a>
-    </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-6 text-orange-400 border-b border-gray-600">🧩 운영 + 보안 + 사용자</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <a class="card" href="src/admin/dashboard.html">🔒 관리자</a>
-      <a class="card" href="src/user/login.html">🔐 로그인</a>
-      <a class="card" href="src/system/emergency.html">🚨 긴급 대응</a>
-      <a class="card" href="src/system/security.html">🛡️ 보안 설정</a>
-    </div>
-  </section>
-
+<main class="max-w-6xl mx-auto px-6 py-12">
+<h1 class="text-4xl font-bold mb-10 text-center">🌍 AgriNexus World</h1>
+<p class="text-center mb-10 text-gray-400">세계 최초 스마트팜 + 계약 + 물류 + 분석 + AI 플랫폼</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  <a class="card" href="functions/smartfarm-plan.html">🌱 스마트팜 설계</a>
+  <a class="card" href="functions/contract-generate.html">📄 계약서 생성</a>
+  <a class="card" href="functions/logistics-route.html">🚚 물류 분석</a>
+  <a class="card" href="functions/report-profit.html">📈 수익 리포트</a>
+  <a class="card" href="functions/ai-gpt.html">🤖 GPT 분석</a>
+  <a class="card" href="functions/system-dashboard.html">📊 관리자 대시보드</a>
+  <a class="card" href="functions/user-login.html">🔐 사용자 로그인</a>
+</div>
 </main>
 </body>
 </html>
