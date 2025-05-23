@@ -1,54 +1,69 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
   <meta charset="UTF-8">
-  <title>AgriNexus World - 기능 연결 완성형 메인</title>
+  <title>AgriNexus World 기능 대시보드</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI 스마트팜 · 글로벌 물류 · 분석 · 계약 · 고객지원 통합 자동화 플랫폼">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    html, body { scroll-behavior: smooth; }
+    .card {
+      background-color: #1f2937;
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      background-color: #10b981;
+      color: black;
+      transform: scale(1.05);
+    }
   </style>
 </head>
-<body class="bg-gray-950 text-white">
-<main class="max-w-6xl mx-auto p-6">
-  <header class="text-center mb-10">
-    <h1 class="text-4xl font-bold">🌍 AgriNexus World</h1>
-    <p class="text-sm text-gray-400">기능 연결 완료 · 클릭 → 즉시 작동 · 실제 사용자 경험 중심</p>
-  </header>
+<body class="bg-gray-900 text-white">
+<main class="max-w-7xl mx-auto p-6">
+  <h1 class="text-3xl font-bold text-center mb-10">🌍 AgriNexus World 기능 대시보드</h1>
 
   <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">📦 스마트팜 기능</h2>
-    <div class="flex flex-wrap gap-4">
-      <a href="src/smartfarm/plan.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600">✅ 환경 자동 설계</a>
-      <a href="src/smartfarm/gptdesign.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600">🧠 GPT 도면 생성</a>
-      <a href="src/smartfarm/build.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-green-600">🏗️ 시공 시뮬레이터</a>
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600">📘 스마트팜 / 계약</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a class="card" href="src/smartfarm/plan.html">🌱 스마트팜 설계</a>
+      <a class="card" href="src/contract/index.html">📄 계약서 생성</a>
+      <a class="card" href="src/contract/dashboard.html">📊 계약 대시보드</a>
+      <a class="card" href="src/smartfarm/spotcheck.html">🔍 설치 장소 분석</a>
     </div>
   </section>
 
   <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">🚚 물류 기능</h2>
-    <div class="flex flex-wrap gap-4">
-      <a href="src/logistics/route.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-blue-600">🚛 배송 경로 분석</a>
-      <a href="src/logistics/cost.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-blue-600">💰 물류비 계산기</a>
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600">📦 물류 / 문서 / 분석</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a class="card" href="src/logistics/route.html">🚚 물류 분석</a>
+      <a class="card" href="src/report/index.html">📈 수익 보고서</a>
+      <a class="card" href="src/tools/templates.html">📝 문서 템플릿</a>
+      <a class="card" href="src/global/docs.html">🌐 문서 자동화</a>
     </div>
   </section>
 
   <section class="mb-10">
-    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">🌍 글로벌 + AI</h2>
-    <div class="flex flex-wrap gap-4">
-      <a href="src/global/gaia.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-purple-600">🌐 Gaia 설계 시스템</a>
-      <a href="src/ai/realgpt.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-pink-600">🤖 GPT 분석기</a>
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600">🤖 AI 분석 / GPT / 자동화</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a class="card" href="src/ai/realgpt.html">🤖 GPT 분석</a>
+      <a class="card" href="src/ai/autopilot.html">🧠 자율 운영</a>
+      <a class="card" href="src/ai/strategy.html">🧾 전략 리포트</a>
+      <a class="card" href="src/ai/feedback.html">🧠 고객 인터뷰</a>
     </div>
   </section>
 
-  <section>
-    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">📋 고객센터 + 관리자</h2>
-    <div class="flex flex-wrap gap-4">
-      <a href="src/cs/index.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-yellow-600">💬 고객 지원</a>
-      <a href="src/admin/dashboard.html" class="w-full md:w-[30%] bg-gray-800 p-4 rounded hover:bg-indigo-600">📊 관리자 대시보드</a>
+  <section class="mb-10">
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-600">🧩 운영 / 사용자 / 보안</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a class="card" href="src/admin/dashboard.html">🔒 관리자</a>
+      <a class="card" href="src/user/login.html">🔐 로그인</a>
+      <a class="card" href="src/system/emergency.html">🚨 긴급 대응</a>
+      <a class="card" href="src/system/security.html">🛡️ 보안 설정</a>
     </div>
   </section>
+
 </main>
 </body>
 </html>
